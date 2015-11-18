@@ -6,7 +6,7 @@ import java.util.Set;
 
 import sjtu.se.encryption.Format;
 import sjtu.se.matching.Match;
-//≥Ã÷Œ«´
+//Á®ãÊ≤ªË∞¶
 //import sjtu.se.service.Server;
 import sjtu.se.userInformation.BaseInfo;
 import sjtu.se.userInformation.ContactCard;
@@ -53,11 +53,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.example.bluetoothtry.R;
 
 public class Search extends Activity {
-	
+
 	private static final int REQUEST_FOR_ENABLE = 1;
-	
+
 	private Context ctx;
-	
+
 	public BluetoothAdapter mBluetoothAdapter;
 	public DevBluetoothAdapter DeviceListAdapter;
 	public DevBluetoothAdapter HistoryDevListAdapter;
@@ -68,7 +68,7 @@ public class Search extends Activity {
 	private ListView HistoryDeviceList;
 	private ListView RecommendDeviceList;
 	private ArrayList<DevBluetooth> OldRecommendList;
-	
+
 	private Information overt_user;
 	private Information full_user;
 	private Want want1;
@@ -79,11 +79,11 @@ public class Search extends Activity {
 	private Want want6;
 	private Want want7;
 	private Want want8;
-	
+
 	private Handler handler;
-	
+
 	private int CMD = 0;
-	
+
 	private class DevBluetooth{
 		public String Address;
 		public String Information;
@@ -95,29 +95,29 @@ public class Search extends Activity {
 			Info = new Information(i);
 			FoundTime = new Date();
 		};
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			DevBluetooth tmp = (DevBluetooth)obj;
 			return (this.Address.equals(tmp.Address) && this.Information.equals(tmp.Information));
 		};
 	};
-	
+
 	static class ViewHolder{
 		public TextView address;
 		public TextView information;
 	};
-	
+
 	public class DevBluetoothAdapter extends BaseAdapter{
 
 		private LayoutInflater mInflater = null;
 		private ArrayList<DevBluetooth> lst;
-		
+
 		public DevBluetoothAdapter(Context context, ArrayList<DevBluetooth> l){
 			this.lst = l;
 			this.mInflater = LayoutInflater.from(context);
 		}
-		
+
 		@Override
 		public int getCount() {
 			return lst.size();
@@ -150,11 +150,11 @@ public class Search extends Activity {
 			holder.information.setText(lst.get(position).Address);
 			return convertView;
 		}
-		
+
 		public ArrayList<DevBluetooth> getList(){
 			return lst;
 		}
-		
+
 		public void add(String Addr, String Info, Information in){
 			int size = lst.size();
 			for (int i=0; i<size;i++){
@@ -167,7 +167,7 @@ public class Search extends Activity {
 			lst.add(new DevBluetooth(Addr, Info, in));
 			this.notifyDataSetChanged();
 		}
-		
+
 		public void reset(){
 			int size = lst.size();
 			for (int i=0;i<size;i++){
@@ -180,7 +180,7 @@ public class Search extends Activity {
 			}
 			this.notifyDataSetChanged();
 		}
-		
+
 	};
 
 	public static ArrayList<DevBluetooth> getAddition(ArrayList<DevBluetooth> formal, ArrayList<DevBluetooth> later){
@@ -193,16 +193,16 @@ public class Search extends Activity {
 		for (DevBluetooth dev : later){
 			if (!formal.contains(dev)){
 				ret.add(dev);
-			}	
+			}
 			//System.out.println(formal.get(0).Info.baseinfo.Nick + " --- " + dev.Info.baseinfo.Nick);
 		}
 		return ret;
 	}
-	
+
 	private void OpenBluetooth (){
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null){
-			Toast.makeText(this, "±æª˙√ª”–’“µΩ¿∂—¿…Ë±∏ªÚ«˝∂Ø£°", Toast.LENGTH_SHORT).show();	
+			Toast.makeText(this, "Êú¨Êú∫Ê≤°ÊúâÊâæÂà∞ËìùÁâôËÆæÂ§áÊàñÈ©±Âä®ÔºÅ", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		if (!mBluetoothAdapter.isEnabled()){
@@ -219,14 +219,14 @@ public class Search extends Activity {
 	/*public void OriginName(){
 		mBluetoothAdapter.setName(savedName);
 	}*/
-	
+
 	private void Rename(){
 		//mBluetoothAdapter.setName("Hello Paler! I am here! Can you see me? ahh?");
 		//this.recreate();
 		updateBaseInfo();
 		updateContactInfo();
 		updateEducationInfo();
-		updateHobbyInfo();	
+		updateHobbyInfo();
 		//System.out.println("ALLLLLLL Begin !-----------");
 		String newname = Format.DoFormat(overt_user);
 		//System.out.println(Format.DeFormat(newname).keywords);
@@ -241,34 +241,34 @@ public class Search extends Activity {
 		//Format.printInfo(Format.DeFormat(newname));
 		//System.out.println("ALLLLLLL Done !-----------");
 		mBluetoothAdapter.setName(newname);
-		
+
 		String str = mBluetoothAdapter.getName();
 		//System.out.println("length : " + str.getBytes().length);
 		//System.out.println(str);
 		//Format.printInfo(Format.DeFormat(str));
 		//System.out.println("************End************");
 	}
-	
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		switch (requestCode){
-		case REQUEST_FOR_ENABLE:{
-			switch (resultCode){
-			case RESULT_OK:{
-				ActivityControlCenter.savedName = mBluetoothAdapter.getName();
-				Rename();
-				Toast.makeText(this, "¿∂—¿“—æ≠ø™∆Ù", Toast.LENGTH_SHORT).show();
-				break;
+			case REQUEST_FOR_ENABLE:{
+				switch (resultCode){
+					case RESULT_OK:{
+						ActivityControlCenter.savedName = mBluetoothAdapter.getName();
+						Rename();
+						Toast.makeText(this, "ËìùÁâôÂ∑≤ÁªèÂºÄÂêØ", Toast.LENGTH_SHORT).show();
+						break;
+					}
+					case RESULT_CANCELED:{
+						Toast.makeText(this, "‰∏çÂÖÅËÆ∏ËìùÁâôÂºÄÂêØ", Toast.LENGTH_SHORT).show();
+						finish();
+						break;
+					}
+				}
 			}
-			case RESULT_CANCELED:{
-				Toast.makeText(this, "≤ª‘ –Ì¿∂—¿ø™∆Ù", Toast.LENGTH_SHORT).show();
-				finish();
-				break;
-			}
-			}
-		}
 		}
 	}
-	
+
 	protected void getPairedDevice(){
 		Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
 		for (BluetoothDevice device : devices) {
@@ -277,10 +277,10 @@ public class Search extends Activity {
 			Information info = Format.DeFormat(btname);
 			if (info != null)
 				HistoryDevListAdapter.add(device.getAddress(), device.getName(), info);
-	    }
+		}
 		//HistoryDevListAdapter.notifyDataSetChanged();
 	}
-	
+
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -295,9 +295,9 @@ public class Search extends Activity {
 				System.out.println("new -> " + btname);
 				//System.out.println("length : " + btname.getBytes().length);
 				System.out.println("********End*********");
-			
+
 				Information info = Format.DeFormat(btname);
-				
+
 				if (info != null){
 					DeviceListAdapter.add(device.getAddress(), device.getName(), info);
 					//Format.printInfo(info);
@@ -317,7 +317,7 @@ public class Search extends Activity {
 			if (action.equals(ActivityControlCenter.ACTIVITY_EXIT_ACTION)){
 				finish();
 			}
-			//≥Ã÷Œ«´
+			//Á®ãÊ≤ªË∞¶
 			/*if (action.equals(ActivityControlCenter.ACTION_LAUNCHED)){
 				CMD = 2;
 				Bundle bundle = new Bundle();
@@ -331,56 +331,56 @@ public class Search extends Activity {
 			}*/
 		}
 	};
-	
+
 	protected void getUnpairedDevice(){
 		if (mBluetoothAdapter.isDiscovering()){
 			mBluetoothAdapter.cancelDiscovery();
 		}
-		
+
 		mBluetoothAdapter.startDiscovery();
 	}
 
 	protected void doDiscovery(){
 		getUnpairedDevice();
 	}
-	
+
 	protected void recommendNotify(ArrayList<DevBluetooth> change){
 		if (change.isEmpty())
 			return;
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-		
+
 		int icon = R.drawable.icon5;
-		CharSequence tickerText = "∏ΩΩ¸”–ƒ„ø…ƒ‹∏––À»§µƒ»À≈∂";
+		CharSequence tickerText = "ÈôÑËøëÊúâ‰Ω†ÂèØËÉΩÊÑüÂÖ¥Ë∂£ÁöÑ‰∫∫Âì¶";
 		long when = System.currentTimeMillis();
 		Notification notification = new Notification(icon, tickerText, when);
-		
+
 		Context context = getApplicationContext();
-		CharSequence contentTitle = "ƒ„ø…ƒ‹∏––À»§µƒ»À£¨øÏ»•ø¥ø¥∞…";
+		CharSequence contentTitle = "‰Ω†ÂèØËÉΩÊÑüÂÖ¥Ë∂£ÁöÑ‰∫∫ÔºåÂø´ÂéªÁúãÁúãÂêß";
 		String tmp = "";
 		for (DevBluetooth dev : change){
 			tmp += dev.Info.baseinfo.Nick + ", ";
 		}
 		CharSequence contentText = tmp;
-		
+
 		Intent notificationIntent = new Intent(this, Search.class);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		
+
 		mNotificationManager.notify(1, notification);
 		myShake();
 	}
-	
+
 	protected void myShake(){
 		Vibrator vibrator;
-		
+
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		long [] pattern = {100,400,100,400};
 		vibrator.vibrate(pattern, -1);
 		//vibrator.cancel();
 	}
-	
+
 	@SuppressLint("NewApi")
 	public void ShowDeviceList(View view){
 		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayClicked);
@@ -393,7 +393,7 @@ public class Search extends Activity {
 		RecommendDeviceList.setVisibility(View.GONE);
 		DeviceList.setVisibility(View.VISIBLE);
 	}
-	
+
 	@SuppressLint("NewApi")
 	public void ShowRecommendDeviceList(View view){
 		((Button)findViewById(R.id.RecommendShowDev)).setBackground(ActivityControlCenter.dayClicked);
@@ -406,7 +406,7 @@ public class Search extends Activity {
 		HistoryDeviceList.setVisibility(View.GONE);
 		RecommendDeviceList.setVisibility(View.VISIBLE);
 	}
-	
+
 	@SuppressLint("NewApi")
 	public void ShowHistoryDeviceList(View view){
 		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayClicked);
@@ -421,7 +421,7 @@ public class Search extends Activity {
 		getPairedDevice();
 	}
 
-	//≥Ã÷Œ«´
+	//Á®ãÊ≤ªË∞¶
 	/*private void setDeviceListClick(){
 		DeviceList.setOnItemClickListener(new OnItemClickListener(){
 
@@ -462,9 +462,9 @@ public class Search extends Activity {
 				AlertDialog.Builder builder = new Builder(ctx);
 				String nick = ((DevBluetooth)DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
 				final String address = ((DevBluetooth)DeviceListAdapter.getItem(position)).Address;
-				builder.setMessage("»∑∂®”Î"+ address +"Ω®¡¢¡¨Ω”√¥£ø");
-				builder.setTitle("Ã· æ");
-				builder.setPositiveButton("»∑∂®", new OnClickListener(){
+				builder.setMessage("Á°ÆÂÆö‰∏é"+ address +"Âª∫Á´ãËøûÊé•‰πàÔºü");
+				builder.setTitle("ÊèêÁ§∫");
+				builder.setPositiveButton("Á°ÆÂÆö", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
@@ -481,7 +481,7 @@ public class Search extends Activity {
 						dialog.dismiss();
 					}
 				});
-				builder.setNegativeButton("»°œ˚", new OnClickListener(){
+				builder.setNegativeButton("ÂèñÊ∂à", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
@@ -494,7 +494,7 @@ public class Search extends Activity {
 		});
 	}*/
 
-	//≥Ã÷Œ«´
+	//Á®ãÊ≤ªË∞¶
 	/*private void setRecommendDeviceListClick(){
 		RecommendDeviceList.setOnItemClickListener(new OnItemClickListener(){
 
@@ -534,9 +534,9 @@ public class Search extends Activity {
 				AlertDialog.Builder builder = new Builder(ctx);
 				String nick = ((DevBluetooth)RecommendDevListAdapter.getItem(position)).Info.baseinfo.Nick;
 				final String address = ((DevBluetooth)RecommendDevListAdapter.getItem(position)).Address;
-				builder.setMessage("»∑∂®”Î"+ address +"Ω®¡¢¡¨Ω”√¥£ø");
-				builder.setTitle("Ã· æ");
-				builder.setPositiveButton("»∑∂®", new OnClickListener(){
+				builder.setMessage("Á°ÆÂÆö‰∏é"+ address +"Âª∫Á´ãËøûÊé•‰πàÔºü");
+				builder.setTitle("ÊèêÁ§∫");
+				builder.setPositiveButton("Á°ÆÂÆö", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
@@ -553,7 +553,7 @@ public class Search extends Activity {
 						dialog.dismiss();
 					}
 				});
-				builder.setNegativeButton("»°œ˚", new OnClickListener(){
+				builder.setNegativeButton("ÂèñÊ∂à", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
@@ -566,7 +566,7 @@ public class Search extends Activity {
 		});
 	}*/
 
-	//≥Ã÷Œ«´
+	//Á®ãÊ≤ªË∞¶
 	/*private void setHistoryDeviceListClick(){
 		HistoryDeviceList.setOnItemClickListener(new OnItemClickListener(){
 
@@ -599,52 +599,52 @@ public class Search extends Activity {
 			
 		});
 	}*/
-	
+
 	@SuppressLint("NewApi")
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {	
+	protected void onCreate(Bundle savedInstanceState) {
 
 		// do initial things
 		//SystemSettings.dayOrNight(this);
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-	
+
 		ctx = this;
 		overt_user = new Information();
 		overt_user.baseinfo = new BaseInfo();
 		overt_user.contactinfo = new ContactInfo();
 		overt_user.edu = new Education();
 		overt_user.hobby = new Hobby();
-		
+
 		full_user = new Information();
-		
+
 		DeviceList = (ListView)findViewById(R.id.DeviceList);
 		HistoryDeviceList = (ListView)findViewById(R.id.HistoryDeviceList);
 		RecommendDeviceList = (ListView)findViewById(R.id.RecommendDeviceList);
-		//≥Ã÷Œ«´
+		//Á®ãÊ≤ªË∞¶
 		//setDeviceListClick();
 		//setRecommendDeviceListClick();
 		//setHistoryDeviceListClick();
-		
+
 		DeviceListAdapter = new DevBluetoothAdapter(this, new ArrayList<DevBluetooth>());
 		HistoryDevListAdapter = new DevBluetoothAdapter(this, new ArrayList<DevBluetooth>());
 		HistoryDeviceList.setVisibility(View.GONE);
 		RecommendDevListAdapter = new DevBluetoothAdapter(this, new ArrayList<DevBluetooth>());
 		RecommendDeviceList.setVisibility(View.GONE);
-		
+
 		OldRecommendList = new ArrayList<DevBluetooth>();
-		
+
 		DeviceList.setAdapter(DeviceListAdapter);
 		HistoryDeviceList.setAdapter(HistoryDevListAdapter);
 		RecommendDeviceList.setAdapter(RecommendDevListAdapter);
-		
+
 		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayClicked);
 		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayNormal);
 		((Button)findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
 		((Button)findViewById(R.id.RecommendShowDev)).setBackground(ActivityControlCenter.dayNormal);
 		((Button)findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
-		
+
 		intentFilter = new IntentFilter();
 		intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
 		intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
@@ -653,7 +653,7 @@ public class Search extends Activity {
 		intentFilter.addAction(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED);
 		intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
 		intentFilter.addAction(ActivityControlCenter.ACTION_LAUNCHED);
-	
+
 		this.registerReceiver(receiver, intentFilter);
 		OpenBluetooth();
 		
@@ -662,12 +662,12 @@ public class Search extends Activity {
 		contact.phone = "13312345678";
 		contact.email = "test@sjtu.edu.cn";
 		ContactInterface.insert(contact, ctx);*/
-		
-		// ∆Ù∂Ø∑˛ŒÒ
-		//≥Ã÷Œ«´
+
+		// ÂêØÂä®ÊúçÂä°
+		//Á®ãÊ≤ªË∞¶
 		/*Intent intent = new Intent(Search.this, Server.class);
 		startService(intent);*/
-		
+
 		//getPairedDevice();
 		//System.out.println( "localdevicename : "+mBluetoothAdapter.getName()+" localdeviceAddress : "+mBluetoothAdapter.getAddress());
 		handler = new Handler(){
@@ -679,34 +679,34 @@ public class Search extends Activity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				switch(msg.what){
-				case 0:{
-					DeviceListAdapter.reset();
-					RecommendDevListAdapter.reset();
-					recommendNotify(Search.getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
-					//System.out.println("handle message~~~~~~~" + OldRecommendList.size() + " " + RecommendDevListAdapter.getList().size());
-					OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
-					doDiscovery();
-					Message message = this.obtainMessage(CMD);
-					this.sendMessageDelayed(message, 25000);
-					break;
-				}
-				case 1:{
-					recreate();
-					break;
-				}
-				case 2:{
-					mBluetoothAdapter.cancelDiscovery();
-					break;
-				}
+					case 0:{
+						DeviceListAdapter.reset();
+						RecommendDevListAdapter.reset();
+						recommendNotify(Search.getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
+						//System.out.println("handle message~~~~~~~" + OldRecommendList.size() + " " + RecommendDevListAdapter.getList().size());
+						OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
+						doDiscovery();
+						Message message = this.obtainMessage(CMD);
+						this.sendMessageDelayed(message, 25000);
+						break;
+					}
+					case 1:{
+						recreate();
+						break;
+					}
+					case 2:{
+						mBluetoothAdapter.cancelDiscovery();
+						break;
+					}
 				}
 			}
 		};
-		
+
 		Message message = handler.obtainMessage(0);
-		handler.sendMessageDelayed(message, 0); 
+		handler.sendMessageDelayed(message, 0);
 	}
 
-	//≥Ã÷Œ«´
+	//Á®ãÊ≤ªË∞¶
 	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -750,19 +750,19 @@ public class Search extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}*/
-	
+
 	protected void onDestroy() {
-        super.onDestroy();
+		super.onDestroy();
 
-        // Make sure we're not doing discovery anymore
-        if (mBluetoothAdapter != null) {
-        	mBluetoothAdapter.cancelDiscovery();
-        }
+		// Make sure we're not doing discovery anymore
+		if (mBluetoothAdapter != null) {
+			mBluetoothAdapter.cancelDiscovery();
+		}
 
-        // Unregister broadcast listeners
-        this.unregisterReceiver(receiver);
-    }
-	
+		// Unregister broadcast listeners
+		this.unregisterReceiver(receiver);
+	}
+
 	private void updateBaseInfo(){
 		SharedPreferences sp = getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
 		// base information
@@ -771,143 +771,143 @@ public class Search extends Activity {
 		else
 			overt_user.baseinfo.Name = "";
 		full_user.baseinfo.Name = sp.getString(ActivityControlCenter.KEY_NAME, "");
-		
+
 		overt_user.baseinfo.Nick = sp.getString(ActivityControlCenter.KEY_NICK, "");
 		full_user.baseinfo.Nick = sp.getString(ActivityControlCenter.KEY_NICK, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_GENDER_OVERT, false))
 			overt_user.baseinfo.Gender = sp.getString(ActivityControlCenter.KEY_GENDER, "");
 		else
 			overt_user.baseinfo.Gender = "";
 		full_user.baseinfo.Gender = sp.getString(ActivityControlCenter.KEY_GENDER, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, false))
 			overt_user.baseinfo.BirthDay = sp.getString(ActivityControlCenter.KEY_BIRTHDAY, "");
 		else
 			overt_user.baseinfo.BirthDay = "";
 		full_user.baseinfo.BirthDay = sp.getString(ActivityControlCenter.KEY_BIRTHDAY, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, false))
 			overt_user.baseinfo.Homeland = sp.getString(ActivityControlCenter.KEY_HOMELAND, "");
 		else
 			overt_user.baseinfo.Homeland = "";
 		full_user.baseinfo.Homeland = sp.getString(ActivityControlCenter.KEY_HOMELAND, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, false))
 			overt_user.baseinfo.Location = sp.getString(ActivityControlCenter.KEY_LOCATION, "");
 		else
 			overt_user.baseinfo.Location = "";
 		full_user.baseinfo.Location = sp.getString(ActivityControlCenter.KEY_LOCATION, "");
 
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, false)){
 			overt_user.keywords = sp.getString(ActivityControlCenter.KEY_KEYWORDS, "");
 		}
 		else
 			overt_user.keywords = "";
-		
+
 		full_user.keywords = sp.getString(ActivityControlCenter.KEY_KEYWORDS, "");
-		
+
 	}
 
 	private void updateContactInfo(){
 		SharedPreferences sp = getSharedPreferences(ActivityControlCenter.PERSONAL_CONTACT_INFO, 0);
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_PHONE_OVERT, false))
 			overt_user.contactinfo.Phone = sp.getString(ActivityControlCenter.KEY_PHONE, "");
 		else
 			overt_user.contactinfo.Phone = "";
 		full_user.contactinfo.Phone = sp.getString(ActivityControlCenter.KEY_PHONE, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_QQ_OVERT, false))
 			overt_user.contactinfo.QQ = sp.getString(ActivityControlCenter.KEY_QQ, "");
 		else
 			overt_user.contactinfo.QQ = "";
 		full_user.contactinfo.QQ = sp.getString(ActivityControlCenter.KEY_QQ, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_EMAIL_OVERT, false))
 			overt_user.contactinfo.E_Mail = sp.getString(ActivityControlCenter.KEY_EMAIL, "");
 		else
 			overt_user.contactinfo.E_Mail = "";
 		full_user.contactinfo.E_Mail = sp.getString(ActivityControlCenter.KEY_EMAIL, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_WEIBO_OVERT, false))
 			overt_user.contactinfo.Weibo = sp.getString(ActivityControlCenter.KEY_WEIBO, "");
 		else
 			overt_user.contactinfo.Weibo = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_SOCIALNET_OVERT, false))
 			overt_user.contactinfo.Social_Network = sp.getString(ActivityControlCenter.KEY_SOCIALNET, "");
 		else
 			overt_user.contactinfo.Social_Network  = "";
 	}
-	
+
 	private void updateEducationInfo(){
 		SharedPreferences sp = getSharedPreferences(ActivityControlCenter.PERSONAL_EDUCATION_INFO, 0);
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_COLLEGE_OVERT, false))
 			overt_user.edu.College = sp.getString(ActivityControlCenter.KEY_COLLEGE, "");
 		else
 			overt_user.edu.College = "";
 		full_user.edu.College = sp.getString(ActivityControlCenter.KEY_COLLEGE, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_HIGH_OVERT, false))
 			overt_user.edu.High_School = sp.getString(ActivityControlCenter.KEY_HIGH, "");
 		else
 			overt_user.edu.High_School = "";
 		full_user.edu.High_School = sp.getString(ActivityControlCenter.KEY_HIGH, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_MIDDLE_OVERT, false))
 			overt_user.edu.Middle_School = sp.getString(ActivityControlCenter.KEY_MIDDLE, "");
 		else
 			overt_user.edu.Middle_School = "";
 		full_user.edu.Middle_School = sp.getString(ActivityControlCenter.KEY_MIDDLE, "");
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_PRIMARY_OVERT, false))
 			overt_user.edu.Primary_School = sp.getString(ActivityControlCenter.KEY_PRIMARY, "");
 		else
 			overt_user.edu.Primary_School = "";
 		full_user.edu.Primary_School = sp.getString(ActivityControlCenter.KEY_PRIMARY, "");
 	}
-	
+
 	private void updateHobbyInfo(){
 		SharedPreferences sp = getSharedPreferences(ActivityControlCenter.PERSONAL_HOBBY_INFO, 0);
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_GAME_OVERT, false))
 			overt_user.hobby.Game = sp.getString(ActivityControlCenter.KEY_GAME, "");
 		else
 			overt_user.hobby.Game = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_SPORT_OVERT, false))
 			overt_user.hobby.Sport = sp.getString(ActivityControlCenter.KEY_SPORT, "");
 		else
 			overt_user.hobby.Sport = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_COMIC_OVERT, false))
 			overt_user.hobby.Comic = sp.getString(ActivityControlCenter.KEY_COMIC, "");
 		else
 			overt_user.hobby.Comic = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_MUSIC_OVERT, false))
 			overt_user.hobby.Music = sp.getString(ActivityControlCenter.KEY_MUSIC, "");
 		else
 			overt_user.hobby.Music = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_BOOKS_OVERT, false))
 			overt_user.hobby.Books = sp.getString(ActivityControlCenter.KEY_BOOKS, "");
 		else
 			overt_user.hobby.Books = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_MOVIE_OVERT, false))
 			overt_user.hobby.Movie = sp.getString(ActivityControlCenter.KEY_MOVIE, "");
 		else
 			overt_user.hobby.Movie = "";
-		
+
 		if (sp.getBoolean(ActivityControlCenter.KEY_OTHER_OVERT, false))
 			overt_user.hobby.Other = sp.getString(ActivityControlCenter.KEY_OTHER, "");
 		else
 			overt_user.hobby.Other = "";
-		
+
 		full_user.hobby.Game = sp.getString(ActivityControlCenter.KEY_GAME, "");
 		full_user.hobby.Sport = sp.getString(ActivityControlCenter.KEY_SPORT, "");
 		full_user.hobby.Comic = sp.getString(ActivityControlCenter.KEY_COMIC, "");
@@ -916,7 +916,7 @@ public class Search extends Activity {
 		full_user.hobby.Movie = sp.getString(ActivityControlCenter.KEY_MOVIE, "");
 		full_user.hobby.Other = sp.getString(ActivityControlCenter.KEY_OTHER, "");
 	}
-	
+
 	private void updateWants(){
 		SharedPreferences sp = getSharedPreferences(ActivityControlCenter.WANT_SETTINGS,0);
 		String str;
@@ -925,54 +925,54 @@ public class Search extends Activity {
 			want1 = Want.parseWant(str);
 		else
 			want1 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_2, "");
 		if (!str.equals(""))
 			want2 = Want.parseWant(str);
 		else
 			want2 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_3, "");
 		if (!str.equals(""))
 			want3 = Want.parseWant(str);
 		else
 			want3 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_4, "");
 		if (!str.equals(""))
 			want4 = Want.parseWant(str);
 		else
 			want4 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_5, "");
 		if (!str.equals(""))
 			want5 = Want.parseWant(str);
 		else
 			want5 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_6, "");
 		if (!str.equals(""))
 			want6 = Want.parseWant(str);
 		else
 			want6 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_7, "");
 		if (!str.equals(""))
 			want7 = Want.parseWant(str);
 		else
 			want7 = new Want();
-		
+
 		str = sp.getString(ActivityControlCenter.KEY_WANT_8, "");
 		if (!str.equals(""))
 			want8 = Want.parseWant(str);
 		else
 			want8 = new Want();
 	}
-	
+
 	protected void onResume(){
 		super.onResume();
 		if (ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED){
-			Rename();	
+			Rename();
 			ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = false;
 		}
 		if (ActivityControlCenter.WANTS_MAY_CHANGED){
