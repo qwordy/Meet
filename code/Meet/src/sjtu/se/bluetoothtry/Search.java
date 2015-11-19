@@ -8,11 +8,6 @@ import sjtu.se.encryption.Format;
 import sjtu.se.matching.Match;
 //程治谦
 //import sjtu.se.service.Server;
-import sjtu.se.userInformation.BaseInfo;
-import sjtu.se.userInformation.ContactCard;
-import sjtu.se.userInformation.ContactInfo;
-import sjtu.se.userInformation.Education;
-import sjtu.se.userInformation.Hobby;
 import sjtu.se.userInformation.Information;
 import sjtu.se.userInformation.Want;
 import android.annotation.SuppressLint;
@@ -56,33 +51,33 @@ public class Search extends Activity {
 
 	private static final int REQUEST_FOR_ENABLE = 1;
 
-	private Context ctx;
+    private int CMD = 0;
 
-	private int CMD = 0;
+    private Want want1;
+    private Want want2;
+    private Want want3;
+    private Want want4;
+    private Want want5;
+    private Want want6;
+    private Want want7;
+    private Want want8;
 
-	private static Handler handler;
+    private Information overt_user;
+    private Information full_user;
+
+    private Context ctx;
+    private Handler handler;
+    private IntentFilter intentFilter;
 
 	public BluetoothAdapter mBluetoothAdapter;
 	public DevBluetoothAdapter DeviceListAdapter;
 	public DevBluetoothAdapter HistoryDevListAdapter;
 	public DevBluetoothAdapter RecommendDevListAdapter;
 
-	private IntentFilter intentFilter;
 	private ListView DeviceList;
 	private ListView HistoryDeviceList;
 	private ListView RecommendDeviceList;
 	private ArrayList<DevBluetooth> OldRecommendList;
-
-	private Information overt_user;
-	private Information full_user;
-	private Want want1;
-	private Want want2;
-	private Want want3;
-	private Want want4;
-	private Want want5;
-	private Want want6;
-	private Want want7;
-	private Want want8;
 
 	static class ViewHolder{
 		public TextView address;
@@ -172,7 +167,7 @@ public class Search extends Activity {
 			int size = lst.size();
 			for (int i=0;i<size;i++){
 				DevBluetooth dev = lst.get(i);
-				if ((new Date()).getTime() - dev.FoundTime.getTime() >= 45000){
+				if ((new Date()).getTime() - dev.FoundTime.getTime() >= 10000){
 					lst.remove(i);
 					size--;
 					i--;
@@ -186,24 +181,17 @@ public class Search extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		// do initial things
-		//SystemSettings.dayOrNight(this);
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 
 		ctx = this;
 		overt_user = new Information();
-		overt_user.baseinfo = new BaseInfo();
-		overt_user.contactinfo = new ContactInfo();
-		overt_user.edu = new Education();
-		overt_user.hobby = new Hobby();
-
-		full_user = new Information();
+		full_user  = new Information();
 
 		DeviceList = (ListView)findViewById(R.id.DeviceList);
 		HistoryDeviceList = (ListView)findViewById(R.id.HistoryDeviceList);
 		RecommendDeviceList = (ListView)findViewById(R.id.RecommendDeviceList);
+
 		//程治谦
 		//setDeviceListClick();
 		//setRecommendDeviceListClick();
@@ -240,6 +228,9 @@ public class Search extends Activity {
 		OpenBluetooth();
 		Rename();
 
+        want1 = new Want();
+        want1.keywords = "orange";
+
 		/*ContactCard contact = new ContactCard();
 		contact.name = "Paler";
 		contact.phone = "13312345678";
@@ -248,11 +239,12 @@ public class Search extends Activity {
 
 		// 启动服务
 		//程治谦
-		/*Intent intent = new Intent(Search.this, Server.class);
-		startService(intent);*/
+		//Intent intent = new Intent(Search.this, Server.class);
+		//startService(intent);
 
 		//getPairedDevice();
 		//System.out.println( "localdevicename : "+mBluetoothAdapter.getName()+" localdeviceAddress : "+mBluetoothAdapter.getAddress());
+
 		handler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
@@ -264,9 +256,10 @@ public class Search extends Activity {
 						recommendNotify(Search.getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
 						//System.out.println("handle message~~~~~~~" + OldRecommendList.size() + " " + RecommendDevListAdapter.getList().size());
 						OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
+						Rename();
 						doDiscovery();
 						Message message = this.obtainMessage(CMD);
-						this.sendMessageDelayed(message, 25000);
+						this.sendMessageDelayed(message, 5000);
 						break;
 					}
 					case 1:{
@@ -345,43 +338,38 @@ public class Search extends Activity {
 			Intent Intentenabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(Intentenabler,REQUEST_FOR_ENABLE);
 		}
-		else{
-			ActivityControlCenter.savedName = mBluetoothAdapter.getName();
-		}
+        ActivityControlCenter.savedName = mBluetoothAdapter.getName();
 		ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
 	}
-	
-	public void OriginName(){
-		mBluetoothAdapter.setName(ActivityControlCenter.savedName);
-	}
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch (requestCode){
+            case REQUEST_FOR_ENABLE:{
+                switch (resultCode){
+                    case RESULT_OK:{
+                        ActivityControlCenter.savedName = mBluetoothAdapter.getName();
+                        Rename();
+                        Toast.makeText(this, "蓝牙已经开启", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case RESULT_CANCELED:{
+                        Toast.makeText(this, "不允许蓝牙开启", Toast.LENGTH_SHORT).show();
+                        finish();
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
 	private void Rename(){
-		//mBluetoothAdapter.setName("Hello Paler! I am here! Can you see me? ahh?");
-		//this.recreate();
 		updateBaseInfo();
 		updateContactInfo();
 		updateEducationInfo();
 		updateHobbyInfo();
-		//System.out.println("ALLLLLLL Begin !-----------");
-		String newname = Format.DoFormat(overt_user);
-		//System.out.println(Format.DeFormat(newname).keywords);
-		//System.out.println("************Before************");
-		//System.out.println("length : " + newname.getBytes().length);
-		//System.out.println(newname);
-		//Format.printInfo(overt_user);
-		//System.out.println("************After************");
-		//System.out.println("----------");
-		//System.out.println(newname);
-		//System.out.println("----------");
-		//Format.printInfo(Format.DeFormat(newname));
-		//System.out.println("ALLLLLLL Done !-----------");
-		mBluetoothAdapter.setName(newname);
 
-		String str = mBluetoothAdapter.getName();
-		//System.out.println("length : " + str.getBytes().length);
-		//System.out.println(str);
-		//Format.printInfo(Format.DeFormat(str));
-		//System.out.println("************End************");
+		String newname = Format.DoFormat(overt_user);
+        mBluetoothAdapter.setName(newname);
 	}
 
 	protected void doDiscovery(){
@@ -404,11 +392,13 @@ public class Search extends Activity {
 
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "你可能感兴趣的人，快去看看吧";
-		String tmp = "";
+
+		String name = "";
 		for (DevBluetooth dev : change){
-			tmp += dev.Info.baseinfo.Nick + ", ";
+			name += dev.Info.baseinfo.Nick + ", ";
 		}
-		CharSequence contentText = tmp;
+        name =name.substring(0,name.length()-2);
+		CharSequence contentText = name;
 
 		Intent notificationIntent = new Intent(this, Search.class);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -416,14 +406,12 @@ public class Search extends Activity {
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		mNotificationManager.notify(1, notification);
-		myShake();
+		Shake();
 	}
 
-	protected void myShake(){
-		Vibrator vibrator;
-
-		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		long [] pattern = {100,400,100,400};
+	protected void Shake(){
+		Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		long [] pattern = {100,400,100,400,100,400};
 		vibrator.vibrate(pattern, -1);
 		//vibrator.cancel();
 	}
@@ -478,26 +466,6 @@ public class Search extends Activity {
 		}
 		// Unregister broadcast listeners
 		this.unregisterReceiver(receiver);
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		switch (requestCode){
-			case REQUEST_FOR_ENABLE:{
-				switch (resultCode){
-					case RESULT_OK:{
-						ActivityControlCenter.savedName = mBluetoothAdapter.getName();
-						Rename();
-						Toast.makeText(this, "蓝牙已经开启", Toast.LENGTH_SHORT).show();
-						break;
-					}
-					case RESULT_CANCELED:{
-						Toast.makeText(this, "不允许蓝牙开启", Toast.LENGTH_SHORT).show();
-						finish();
-						break;
-					}
-				}
-			}
-		}
 	}
 
 	private void updateBaseInfo(){
@@ -733,7 +701,8 @@ public class Search extends Activity {
 	}
 
 	@SuppressLint("NewApi")
-	public void ShowHistoryDeviceList(View view){
+	public void ShowHistoryDeviceList(View view)
+	{
 		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayClicked);
 		((Button)findViewById(R.id.FindShowDev)).setTextColor(Color.BLACK);
 		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayNormal);

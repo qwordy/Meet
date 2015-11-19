@@ -2,7 +2,7 @@ package sjtu.se.userInformation;
 
 public class Want {
 	public String tableName;
-	public String gender; // 0 1 
+	public String gender;   // 0男 1女
 	public String ageRange; // 20-22
 	public String Homeland;
 	public String Location;
