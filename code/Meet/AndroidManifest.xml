@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.bluetoothtry"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.NFC"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon5"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
+        <activity
+            android:name="sjtu.se.Activity.Search"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name="sjtu.se.service.Server" >
+        </service>
+
+        <activity
+            android:name="sjtu.se.Activity.Setting.SystemSettings"
+            android:label="@string/title_activity_system_settings"
+            android:parentActivityName="android.preference.PreferenceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="android.preference.PreferenceActivity" />
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Information.BaseInfoSettings"
+            android:label="@string/title_activity_personal_information" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Information.ContactInfoSettings"
+            android:label="@string/title_activity_contact_information" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Information.EducationInfoSettings"
+            android:label="@string/title_activity_education_information" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Information.HobbyInfoSettings"
+            android:label="@string/title_activity_hobby_information" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Information.ShowInformation"
+            android:label="@string/title_activity_show_information" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Want.WantSettings"
+            android:label="@string/title_activity_want_settings" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.Want.ShowWants"
+            android:label="@string/title_activity_show_wants" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.ChatPlatform"
+            android:label="@string/title_activity_chat_platform" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.ContactCard.ContactCardSettings"
+            android:label="@string/title_activity_contact_card_settings" >
+        </activity>
+        <activity
+            android:name="sjtu.se.Activity.ContactCard.ShowContactCard"
+            android:label="@string/title_activity_show_contact_card"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/sjtu.se.bluetoothtry" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
