@@ -423,11 +423,17 @@ public class Search extends Activity {
 		if (formal.isEmpty() && later.isEmpty()){
 			return ret;
 		}
-		for (DevBluetooth dev : later){
-			if (!formal.contains(dev)){
-				ret.add(dev);
-			}
-		}
+
+        for (DevBluetooth dev : later) {
+            int status = 0;
+            for (DevBluetooth old : formal) {
+                if (old.Address.equals(dev.Address))
+                    status = 1;
+            }
+            if (status == 0)
+                ret.add(dev);
+        }
+
 		return ret;
 	}
 

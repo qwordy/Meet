@@ -45,22 +45,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ShowWants.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Want/ShowWants.java">
+      <file leaf-file-name="Search.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Search.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WantSettings.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Want/WantSettings.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.119512">
-              <caret line="94" column="0" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="-1.2657895">
+              <caret line="491" column="75" selection-start-line="491" selection-start-column="75" selection-end-line="491" selection-end-column="75" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="class#ViewHolder#0;class#Search#0" expanded="false" />
+                <element signature="class#DevBluetooth#0;class#Search#0" expanded="false" />
+                <element signature="method#equals#0;class#DevBluetooth#0;class#Search#0" expanded="false" />
+                <element signature="method#getView#0;class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
+                <element signature="method#add#0;class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
+                <element signature="method#reset#0;class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
+                <element signature="method#getAddition#0;class#Search#0" expanded="false" />
+                <element signature="method#getPairedDevice#0;class#Search#0" expanded="false" />
+                <element signature="method#updateContactInfo#0;class#Search#0" expanded="false" />
+                <element signature="method#updateEducationInfo#0;class#Search#0" expanded="false" />
+                <element signature="method#updateHobbyInfo#0;class#Search#0" expanded="false" />
+                <element signature="method#updateWants#0;class#Search#0" expanded="false" />
+                <element signature="method#ShowDeviceList#0;class#Search#0" expanded="false" />
+                <element signature="method#ShowRecommendDeviceList#0;class#Search#0" expanded="false" />
+                <element signature="method#ShowHistoryDeviceList#0;class#Search#0" expanded="false" />
+                <element signature="method#setDeviceListClick#0;class#Search#0" expanded="false" />
+                <element signature="method#setRecommendDeviceListClick#0;class#Search#0" expanded="false" />
+                <element signature="method#setHistoryDeviceListClick#0;class#Search#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,7 +124,6 @@
         <option value="$PROJECT_DIR$/res/menu/show_information.xml" />
         <option value="$PROJECT_DIR$/res/menu/want_settings.xml" />
         <option value="$PROJECT_DIR$/res/menu/base_information.xml" />
-        <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Search.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Want/ShowWants.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Setting/SystemSettings.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Information/ShowInformation.java" />
@@ -126,6 +135,7 @@
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/ContactCard/ShowContactCard.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/ContactCard/ContactCardSettings.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Want/WantSettings.java" />
+        <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Search.java" />
       </list>
     </option>
   </component>
@@ -177,6 +187,10 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Meet" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -360,7 +374,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="FullScreen" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/1/meet/code/Meet" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../src/Meet" />
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
@@ -637,8 +651,14 @@
           <line>2</line>
           <properties />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/sjtu/se/Activity/Search.java</url>
+          <line>142</line>
+          <properties />
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="45" />
+      <option name="time" value="46" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1058,16 +1078,8 @@
         <state vertical-scroll-proportion="-0.48292682">
           <caret line="348" column="5" selection-start-line="348" selection-start-column="5" selection-end-line="348" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Information/ShowInformation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.48292682">
-          <caret line="190" column="5" selection-start-line="190" selection-start-column="5" selection-end-line="190" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1079,27 +1091,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Want/ShowWants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.7414634">
+          <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Want/WantSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.7292683">
+          <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Information/ShowInformation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.414634">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/ChatPlatform.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.7341464">
-          <caret line="580" column="13" selection-start-line="580" selection-start-column="13" selection-end-line="580" selection-end-column="13" />
+        <state vertical-scroll-proportion="-0.50487804">
+          <caret line="535" column="49" selection-start-line="535" selection-start-column="49" selection-end-line="535" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Search.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41707316">
-          <caret line="912" column="9" selection-start-line="912" selection-start-column="9" selection-end-line="912" selection-end-column="9" />
+        <state vertical-scroll-proportion="-1.2657895">
+          <caret line="491" column="75" selection-start-line="491" selection-start-column="75" selection-end-line="491" selection-end-column="75" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="class#ViewHolder#0;class#Search#0" expanded="false" />
             <element signature="class#DevBluetooth#0;class#Search#0" expanded="false" />
             <element signature="method#equals#0;class#DevBluetooth#0;class#Search#0" expanded="false" />
-            <element signature="class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
             <element signature="method#getView#0;class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
             <element signature="method#add#0;class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
             <element signature="method#reset#0;class#DevBluetoothAdapter#0;class#Search#0" expanded="false" />
+            <element signature="method#getAddition#0;class#Search#0" expanded="false" />
+            <element signature="method#getPairedDevice#0;class#Search#0" expanded="false" />
             <element signature="method#updateContactInfo#0;class#Search#0" expanded="false" />
             <element signature="method#updateEducationInfo#0;class#Search#0" expanded="false" />
             <element signature="method#updateHobbyInfo#0;class#Search#0" expanded="false" />
@@ -1111,22 +1148,6 @@
             <element signature="method#setRecommendDeviceListClick#0;class#Search#0" expanded="false" />
             <element signature="method#setHistoryDeviceListClick#0;class#Search#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Want/ShowWants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sjtu/se/Activity/Want/WantSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.119512">
-          <caret line="94" column="0" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
