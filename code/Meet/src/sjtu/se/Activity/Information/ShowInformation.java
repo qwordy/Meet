@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Information;
 
+import android.view.KeyEvent;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
@@ -179,6 +180,14 @@ public class ShowInformation extends Activity {
 		setContactInfo();
 		setEducationInfo();
 		setHobbyInfo();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

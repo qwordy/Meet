@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Information;
 
+import android.view.*;
 import com.example.bluetoothtry.R;
 
 import android.app.Activity;
@@ -9,11 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -206,9 +202,9 @@ public class HobbyInfoSettings extends Activity {
 	}
 
 	public void setHobbyInfoGameOvertListener(){
-		item_game_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+		item_game_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// TODO Auto-generated method stub
 				SharedPreferences.Editor editor = hobbyInfo.edit();
 				editor.putBoolean(ActivityControlCenter.KEY_GAME_OVERT, isChecked);
@@ -342,6 +338,14 @@ public class HobbyInfoSettings extends Activity {
 		item_other_overt = (Switch) findViewById(R.id.hobby_info_other_overt);
 		item_other_overt.setChecked(hobbyInfo.getBoolean(ActivityControlCenter.KEY_OTHER_OVERT, false));
 		setHobbyInfoOtherOvertListener();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

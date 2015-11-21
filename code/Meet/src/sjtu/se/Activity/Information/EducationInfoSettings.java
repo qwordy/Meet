@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Information;
 
+import android.view.*;
 import com.example.bluetoothtry.R;
 
 import android.app.Activity;
@@ -9,11 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -131,9 +127,9 @@ public class EducationInfoSettings extends Activity {
 	}
 
 	public void setEducationInfoCollegeOvertListener(){
-		item_college_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+		item_college_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// TODO Auto-generated method stub
 				SharedPreferences.Editor editor = educationInfo.edit();
 				editor.putBoolean(ActivityControlCenter.KEY_COLLEGE_OVERT, isChecked);
@@ -213,6 +209,14 @@ public class EducationInfoSettings extends Activity {
 		item_primary_overt = (Switch) findViewById(R.id.education_info_primary_overt);
 		item_primary_overt.setChecked(educationInfo.getBoolean(ActivityControlCenter.KEY_PRIMARY_OVERT, false));
 		setEducationInfoPrimaryOvertListener();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

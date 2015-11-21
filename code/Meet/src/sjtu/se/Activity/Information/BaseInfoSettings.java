@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Information;
 
+import android.view.*;
 import com.example.bluetoothtry.R;
 
 import android.app.Activity;
@@ -9,11 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
@@ -108,29 +104,28 @@ public class BaseInfoSettings extends Activity {
 		final DatePicker dp = new DatePicker(ctx);
 		new AlertDialog.Builder(ctx).setTitle("选择生日").setView(dp)
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int which) {
+			public void onClick(DialogInterface dialog, int which) {
 				int y = dp.getYear();
-				int m = dp.getMonth()+1;
+				int m = dp.getMonth() + 1;
 				int d = dp.getDayOfMonth();
 				String mdate;
-				if(m<10){
-					if(d<10)
-						mdate = String.valueOf(y)+"-0"+String.valueOf(m)+"-0"+String.valueOf(d);
+				if (m < 10) {
+					if (d < 10)
+						mdate = String.valueOf(y) + "-0" + String.valueOf(m) + "-0" + String.valueOf(d);
 					else
-						mdate = String.valueOf(y)+"-0"+String.valueOf(m)+"-"+String.valueOf(d);
-					}
-				else{
-					if(d<10)
-						mdate = String.valueOf(y)+"-"+String.valueOf(m)+"-0"+String.valueOf(d);
+						mdate = String.valueOf(y) + "-0" + String.valueOf(m) + "-" + String.valueOf(d);
+				} else {
+					if (d < 10)
+						mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-0" + String.valueOf(d);
 					else
-						mdate = String.valueOf(y)+"-"+String.valueOf(m)+"-"+String.valueOf(d);
-					}
+						mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-" + String.valueOf(d);
+				}
 				SharedPreferences.Editor editor = baseInfo.edit();
 				editor.putString(ActivityControlCenter.KEY_BIRTHDAY, mdate);
 				editor.commit();
 				item_birthday.setText(mdate);
-				}
-			}).setNegativeButton("返回", new DialogInterface.OnClickListener() {
+			}
+		}).setNegativeButton("返回", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		}).show();
@@ -154,8 +149,9 @@ public class BaseInfoSettings extends Activity {
 				item_homeland.setText(str);
 			}
 		})
-		.setNegativeButton("取消",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int which) {}
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+			}
 		}).show();
 	}
 
@@ -204,9 +200,9 @@ public class BaseInfoSettings extends Activity {
 	}
 
 	public void setBaseInfoNameOvertListener(){
-		item_name_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+		item_name_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// TODO Auto-generated method stub
 				SharedPreferences.Editor editor = baseInfo.edit();
 				editor.putBoolean(ActivityControlCenter.KEY_NAME_OVERT, isChecked);
@@ -336,6 +332,14 @@ public class BaseInfoSettings extends Activity {
 		item_keywords_overt = (Switch) findViewById(R.id.base_info_keywords_overt);
 		item_keywords_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, false));
 		setBaseInfoKeywordsOvertListener();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

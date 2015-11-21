@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Want;
 
+import android.view.*;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Want;
 import sjtu.se.Activity.Setting.SystemSettings;
@@ -10,13 +11,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.content.Intent;
 
 public class ShowWants extends Activity {
@@ -67,7 +63,7 @@ public class ShowWants extends Activity {
 
     public void wantGenderEdit(View view){
         new AlertDialog.Builder(this).setTitle("选择性别")
-                .setSingleChoiceItems(new String[] { "男", "女" }, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(new String[]{"男", "女"}, 0, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String str = String.valueOf(which);
                         want.gender = str;
@@ -102,7 +98,7 @@ public class ShowWants extends Activity {
         }
 
         new AlertDialog.Builder(ctx).setTitle("设置年龄范围").setView(layout)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Auto-generated method stub
@@ -122,8 +118,9 @@ public class ShowWants extends Activity {
                         age.setText(str);
                     }
                 })
-                .setNegativeButton("取消",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int which) {}
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
                 }).show();
     }
 
@@ -375,6 +372,14 @@ public class ShowWants extends Activity {
             want = new Want();
 
         this.updateWants();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

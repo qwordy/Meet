@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Information;
 
+import android.view.KeyEvent;
 import com.example.bluetoothtry.R;
 
 import android.app.Activity;
@@ -150,9 +151,9 @@ public class ContactInfoSettings extends Activity {
     }
 
     public void setContactInfoPhoneOvertListener(){
-        item_phone_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+        item_phone_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // TODO Auto-generated method stub
                 SharedPreferences.Editor editor = contactInfo.edit();
                 editor.putBoolean(ActivityControlCenter.KEY_PHONE_OVERT, isChecked);
@@ -251,6 +252,14 @@ public class ContactInfoSettings extends Activity {
         item_socialnet_overt = (Switch) findViewById(R.id.contact_info_socialnet_overt);
         item_socialnet_overt.setChecked(contactInfo.getBoolean(ActivityControlCenter.KEY_SOCIALNET_OVERT, false));
         setContactInfoSocialnetOvertListener();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

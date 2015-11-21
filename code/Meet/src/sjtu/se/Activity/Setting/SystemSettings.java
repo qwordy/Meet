@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Setting;
 
+import android.view.KeyEvent;
 import com.example.bluetoothtry.R;
 
 import android.content.BroadcastReceiver;
@@ -70,6 +71,14 @@ public class SystemSettings extends PreferenceActivity {
 			context.setTheme(android.R.style.Theme_Holo);
 		else
 			context.setTheme(android.R.style.Theme_Holo_Light);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

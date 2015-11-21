@@ -49,6 +49,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.view.KeyEvent;
 
 import com.example.bluetoothtry.R;
 
@@ -713,32 +714,32 @@ public class Search extends Activity {
 
 	//程治谦
 	private void setDeviceListClick(){
-		DeviceList.setOnItemClickListener(new OnItemClickListener(){
+		DeviceList.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				String addr = ((DevBluetooth)DeviceListAdapter.getItem(position)).Address;
-				SharedPreferences sp = getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
-				String res = sp.getString(addr, "Not found");
-				if (!res.equals("Not found")){
-					Information info = Information.parseInformation(res);
-					if (info != null){
-						Bundle bundle = new Bundle();
-						bundle.putParcelable("information", info);
-						Intent intent=new Intent(Search.this, ShowInformation.class); 
-						intent.putExtras(bundle);
-						ctx.startActivity(intent);
-						return;
-					}
-				}
-				Bundle bundle = new Bundle();
-				Information info = new Information(((DevBluetooth)DeviceListAdapter.getItem(position)).Info);
-				bundle.putParcelable("information", info);
-				Intent intent=new Intent(Search.this, ShowInformation.class); 
-				intent.putExtras(bundle);
-				ctx.startActivity(intent);	
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                String addr = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
+                SharedPreferences sp = getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
+                String res = sp.getString(addr, "Not found");
+                if (!res.equals("Not found")) {
+                    Information info = Information.parseInformation(res);
+                    if (info != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("information", info);
+                        Intent intent = new Intent(Search.this, ShowInformation.class);
+                        intent.putExtras(bundle);
+                        ctx.startActivity(intent);
+                        return;
+                    }
+                }
+                Bundle bundle = new Bundle();
+                Information info = new Information(((DevBluetooth) DeviceListAdapter.getItem(position)).Info);
+                bundle.putParcelable("information", info);
+                Intent intent = new Intent(Search.this, ShowInformation.class);
+                intent.putExtras(bundle);
+                ctx.startActivity(intent);
 			}
 		});
 
@@ -883,6 +884,14 @@ public class Search extends Activity {
 
         });
     }
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {

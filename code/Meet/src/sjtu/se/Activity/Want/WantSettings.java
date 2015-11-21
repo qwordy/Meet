@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Want;
 
+import android.view.KeyEvent;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Want;
 import sjtu.se.Activity.Setting.SystemSettings;
@@ -88,6 +89,7 @@ public class WantSettings extends Activity {
 
     private void updateText(){
         String defult = "新建";
+        String unname = "未命名";
         String txt = "";
         Want want = null;
 
@@ -95,6 +97,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want1.setText(defult);
+        else if(want.tableName.equals(""))
+            want1.setText(unname);
         else
             want1.setText(want.tableName);
 
@@ -102,6 +106,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want2.setText(defult);
+        else if(want.tableName.equals(""))
+            want2.setText(unname);
         else
             want2.setText(want.tableName);
 
@@ -109,6 +115,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want3.setText(defult);
+        else if(want.tableName.equals(""))
+            want3.setText(unname);
         else
             want3.setText(want.tableName);
 
@@ -116,6 +124,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want4.setText(defult);
+        else if(want.tableName.equals(""))
+            want4.setText(unname);
         else
             want4.setText(want.tableName);
 
@@ -123,6 +133,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want5.setText(defult);
+        else if(want.tableName.equals(""))
+            want5.setText(unname);
         else
             want5.setText(want.tableName);
 
@@ -130,6 +142,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want6.setText(defult);
+        else if(want.tableName.equals(""))
+            want6.setText(unname);
         else
             want6.setText(want.tableName);
 
@@ -137,6 +151,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want7.setText(defult);
+        else if(want.tableName.equals(""))
+            want7.setText(unname);
         else
             want7.setText(want.tableName);
 
@@ -144,6 +160,8 @@ public class WantSettings extends Activity {
         want = Want.parseWant(txt);
         if (want == null)
             want8.setText(defult);
+        else if(want.tableName.equals(""))
+            want8.setText(unname);
         else
             want8.setText(want.tableName);
     }
@@ -174,6 +192,14 @@ public class WantSettings extends Activity {
         super.onResume();
         //System.out.println("Resuming........................................");
         this.updateText();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
