@@ -7,6 +7,7 @@ import java.util.Set;
 //程治谦
 //import sjtu.se.service.Server;
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
+import sjtu.se.Activity.ContactCard.ContactCardSettings;
 import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SystemSettings;
@@ -243,9 +244,6 @@ public class Search extends Activity {
 		contact.phone = "13312345678";
 		contact.email = "test@sjtu.edu.cn";
 		ContactInterface.insert(contact, ctx);*/
-
-		//getPairedDevice();
-		//System.out.println( "localdevicename : "+mBluetoothAdapter.getName()+" localdeviceAddress : "+mBluetoothAdapter.getAddress());
 
 		handler = new Handler(){
 			@Override
@@ -925,11 +923,11 @@ public class Search extends Activity {
 			this.startActivity(new Intent(Search.this, WantSettings.class));
 			return true;
 		}
-		/*if (id == R.id.action_contact){
+		if (id == R.id.action_contact){
 			this.startActivity(new Intent(Search.this, ContactCardSettings.class));
 			return true;
 		}
-		if (id == R.id.action_logout){
+		/*if (id == R.id.action_logout){
 			ActivityControlCenter.SetOriginName();
 			Intent intent = new Intent(Search.this, Server.class);
 			this.stopService(intent);
