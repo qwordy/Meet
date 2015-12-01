@@ -923,10 +923,10 @@ public class Search extends Activity {
 			this.startActivity(new Intent(Search.this, WantSettings.class));
 			return true;
 		}
-		if (id == R.id.action_contact){
+		/*if (id == R.id.action_contact){
 			this.startActivity(new Intent(Search.this, ContactCardSettings.class));
 			return true;
-		}
+		}*/
 		/*if (id == R.id.action_logout){
 			ActivityControlCenter.SetOriginName();
 			Intent intent = new Intent(Search.this, Server.class);
@@ -938,6 +938,9 @@ public class Search extends Activity {
 			//ActivityControlCenter.AllExit();
 			//finish();
 		}*/
+		if (id == R.id.action_logout) {
+			super.finish();
+		}
 		return super.onOptionsItemSelected(item);
 	}
 }

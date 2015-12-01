@@ -2,14 +2,19 @@
 <resources>
 
     <string name="app_name">MEET</string>
+    <!-- top menu -->
+    <string name="action_news">消息</string>
     <string name="action_settings">系统设置</string>
+    <string name="action_personal">个人资料</string>
+    <!--<string name="action_contact">我的名片</string>-->
+    <string name="action_want">我的需求</string>
+    <string name="action_logout">退出</string>
+
     <string name="on">开启</string>
     <string name="off">关闭</string>
     <string name="title_activity_system_settings">系统设置</string>
-    <string name="action_personal">个人资料</string>
     <string name="overt">公开</string>
     <string name="hide">隐藏</string>
-    <string name="action_logout">退出</string>
     <string name="devBtn">附近的人</string>
     <string name="hisBtn">曾经关注</string>
     <string name="RecBtn">为您推荐</string>
@@ -20,12 +25,10 @@
     <string name="title_activity_show_information">TA的资料</string>
     <string name="title_activity_want_settings">我的需求</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_want">我的需求</string>
     <string name="title_activity_show_wants">我的需求</string>
     <string name="title_activity_chat_platform">聊天</string>
     <string name="title_activity_contact_card_settings">我的名片</string>
     <string name="title_activity_show_contact_card">我的名片</string>
-    <string name="action_contact">我的名片</string>
     <string name="send_contact">递送名片</string>
     <string name="action_information">TA的信息</string>
 
