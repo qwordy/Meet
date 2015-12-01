@@ -107,6 +107,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/src/sjtu/se/userInformation/Information.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/userInformation/Want.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/service/Server.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/bluetoothtry/Search.java" />
@@ -134,6 +135,7 @@
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Information/ContactInformation.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Information/EducationInformation.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Information/HobbyInformation.java" />
+        <option value="$PROJECT_DIR$/src/sjtu/se/Util/ContactInterface.java" />
         <option value="$PROJECT_DIR$/res/menu/contact_card_settings.xml" />
         <option value="$PROJECT_DIR$/res/menu/contact_information.xml" />
         <option value="$PROJECT_DIR$/res/menu/education_information.xml" />
@@ -152,12 +154,10 @@
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Information/ContactInfoSettings.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Information/BaseInfoSettings.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/ChatPlatform.java" />
-        <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Want/WantSettings.java" />
-        <option value="$PROJECT_DIR$/src/sjtu/se/Util/Server.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/ContactCard/ShowContactCard.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/ContactCard/ContactCardSettings.java" />
+        <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Want/WantSettings.java" />
         <option value="$PROJECT_DIR$/src/sjtu/se/Activity/Search.java" />
-        <option value="$PROJECT_DIR$/src/sjtu/se/Util/ContactInterface.java" />
       </list>
     </option>
   </component>
@@ -412,7 +412,7 @@
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="7231b557" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="990ea3fd" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Galaxy_Nexus_API_15" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -615,7 +615,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -697,7 +697,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/sjtu/se/Activity/Search.java</url>
-          <line>143</line>
+          <line>142</line>
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
