@@ -7,6 +7,7 @@ import java.util.Set;
 //程治谦
 //import sjtu.se.service.Server;
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
+import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.ContactCard.ContactCardSettings;
 import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Information.ShowInformation;
@@ -747,7 +748,7 @@ public class Search extends Activity {
 			}
 		});
 
-		/*DeviceList.setOnItemLongClickListener(new OnItemLongClickListener(){
+		DeviceList.setOnItemLongClickListener(new OnItemLongClickListener(){
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -761,8 +762,7 @@ public class Search extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						
-						CMD = 2;
+						/*CMD = 2;
 						
 						Bundle bundle = new Bundle();
 						bundle.putParcelable("information", overt_user);
@@ -771,7 +771,10 @@ public class Search extends Activity {
 						intent.putExtra("isclient", true);
 						intent.putExtras(bundle);
 						ctx.startActivity(intent);
-						dialog.dismiss();
+						dialog.dismiss();*/
+                        Intent intent = new Intent(Search.this, ChatActivity.class);
+                        ctx.startActivity(intent);
+                        dialog.dismiss();
 					}
 				});
 				builder.setNegativeButton("取消", new OnClickListener(){
@@ -784,7 +787,7 @@ public class Search extends Activity {
 				builder.create().show();
 				return true;
 			}
-		});*/
+		});
     }
 
     private void setRecommendDeviceListClick() {
