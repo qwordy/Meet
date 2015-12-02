@@ -6,7 +6,7 @@ import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
 import sjtu.se.UserInformation.Information;
 
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 
 import android.app.Activity;
 import android.content.Intent;

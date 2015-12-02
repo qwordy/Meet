@@ -1,7 +1,7 @@
 package sjtu.se.Activity.Information;
 
 import android.view.*;
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

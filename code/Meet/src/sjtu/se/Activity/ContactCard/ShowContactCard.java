@@ -6,7 +6,7 @@ import sjtu.se.Util.ContactInterface;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.ContactCard;
 
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

@@ -1,7 +1,7 @@
 package sjtu.se.Activity.Setting;
 
 import android.view.KeyEvent;
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

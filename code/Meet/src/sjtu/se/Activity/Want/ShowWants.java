@@ -4,7 +4,7 @@ import android.view.*;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Want;
 import sjtu.se.Activity.Setting.SystemSettings;
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

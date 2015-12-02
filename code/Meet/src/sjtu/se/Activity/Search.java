@@ -52,7 +52,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.view.KeyEvent;
 
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 
 public class Search extends Activity {
 

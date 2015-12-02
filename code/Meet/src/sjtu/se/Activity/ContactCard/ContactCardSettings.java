@@ -5,7 +5,7 @@ import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.UserInformation.ContactCard;
 
-import com.example.bluetoothtry.R;
+import sjtu.se.Meet.R;
 
 import android.app.Activity;
 import android.content.Context;
