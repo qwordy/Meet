@@ -33,11 +33,13 @@ public class Notify {
         notification.flags |= Notification.FLAG_AUTO_CANCEL; // 点击清除按钮或点击通知后会自动消失
         notification.defaults |= Notification.DEFAULT_LIGHTS;
         notification.vibrate = new long[]{300, 500};
-        notification.setLatestEventInfo(context, "BluetoothChat", msg, contentIntent);
+        notification.setLatestEventInfo(context, "Meet遇见", msg, contentIntent);
        /* // 定制我们要在状态栏显示的通知样式
 		builder = new Notification(context);
 		builder.setContentIntent(contentIntent)
-		 	.setSmallIcon(R.drawable.ic_launcher)//设置状态栏里面的图标（小图标） 　　　　　　　　　　　　　　　　　　　　.setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.i5))//下拉下拉列表里面的图标（大图标） 　　　　　　　.setTicker("this is bitch!") //设置状态栏的显示的信息
+		 	.setSmallIcon(R.drawable.ic_launcher)//设置状态栏里面的图标（小图标） 　　　　　　　　　　　　　　　　　　　　
+		 	.setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.i5))//下拉下拉列表里面的图标（大图标） 　　
+		 	.setTicker("this is bitch!") //设置状态栏的显示的信息
 		 	.setWhen(System.currentTimeMillis())//设置时间发生时间
 		 	.setAutoCancel(true)//设置可以清除
 		 	.setContentTitle("This is ContentTitle")//设置下拉列表里的标题

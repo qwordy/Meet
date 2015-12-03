@@ -14,10 +14,10 @@ import android.test.AndroidTestCase;
 
 public class ContactInterface extends AndroidTestCase {
 
-	/*public static void insert(String str, Context ctx){
+	public static void insert(String str, Context ctx){
 		ContactCard contact = ContactCard.parseContactCard(str);
 		ContactInterface.insert(contact, ctx);
-	}*/
+	}
 
 	public static void insert (ContactCard contact, Context ctx){
 		if (contact == null)
