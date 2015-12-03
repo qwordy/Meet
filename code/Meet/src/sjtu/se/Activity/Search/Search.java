@@ -1,4 +1,4 @@
-package sjtu.se.Activity;
+package sjtu.se.Activity.Search;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,8 +7,8 @@ import java.util.Set;
 //程治谦
 //import sjtu.se.service.Server;
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
+import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
-import sjtu.se.Activity.ContactCard.ContactCardSettings;
 import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SystemSettings;
@@ -87,106 +87,6 @@ public class Search extends Activity {
 	private ListView HistoryDeviceList;
 	private ListView RecommendDeviceList;
 	private ArrayList<DevBluetooth> OldRecommendList;
-
-	static class ViewHolder{
-		public TextView address;
-		public TextView information;
-	};
-
-	private class DevBluetooth{
-		public String Address;
-		public String Information;
-		public Information Info;
-		public Date FoundTime;
-        public BluetoothDevice mRemoteDevice;
-		public DevBluetooth(String addr, String info, Information i,BluetoothDevice device){
-			Address = addr;
-			Information = info;
-			Info = new Information(i);
-			FoundTime = new Date();
-            mRemoteDevice = device;
-		};
-
-		@Override
-		public boolean equals(Object obj) {
-			DevBluetooth tmp = (DevBluetooth)obj;
-			return (this.Address.equals(tmp.Address) && this.Information.equals(tmp.Information));
-		};
-	};
-
-	public class DevBluetoothAdapter extends BaseAdapter{
-
-		private LayoutInflater mInflater = null;
-		private ArrayList<DevBluetooth> lst;
-
-		public DevBluetoothAdapter(Context context, ArrayList<DevBluetooth> l){
-			this.lst = l;
-			this.mInflater = LayoutInflater.from(context);
-		}
-
-		@Override
-		public int getCount() {
-			return lst.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return lst.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		public ArrayList<DevBluetooth> getList(){
-			return lst;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder holder = null;
-			if(convertView == null){
-				holder = new ViewHolder();
-				convertView = mInflater.inflate(R.layout.device_list_item, null);
-				holder.address = (TextView)convertView.findViewById(R.id.Address);
-				holder.information = (TextView)convertView.findViewById(R.id.Information);
-				convertView.setTag(holder);
-			}
-			else{
-				holder = (ViewHolder)convertView.getTag();
-			}
-			holder.address.setText(lst.get(position).Info.baseinfo.Nick);
-			holder.information.setText(lst.get(position).Address);
-			return convertView;
-		}
-
-		public void add(String Addr, String Info, Information in,BluetoothDevice device){
-			int size = lst.size();
-			for (int i=0; i<size;i++){
-				if (Addr.equals(lst.get(i).Address)){
-					lst.set(i, new DevBluetooth(Addr, Info, in, device));
-					this.notifyDataSetChanged();
-					return;
-				}
-			}
-			lst.add(new DevBluetooth(Addr, Info, in, device));
-			this.notifyDataSetChanged();
-		}
-
-		public void reset(){
-			int size = lst.size();
-			for (int i=0;i<size;i++){
-				DevBluetooth dev = lst.get(i);
-				if ((new Date()).getTime() - dev.FoundTime.getTime() >= 10000){
-					lst.remove(i);
-					size--;
-					i--;
-				}
-			}
-			this.notifyDataSetChanged();
-		}
-	};
 
 	@SuppressLint("NewApi")
 	@Override
