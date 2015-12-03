@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="sjtu.se.Activity.Search"
+    tools:context="sjtu.se.Activity.Search.Search"
     tools:ignore="MergeRootFrame" >
 
     <ListView
