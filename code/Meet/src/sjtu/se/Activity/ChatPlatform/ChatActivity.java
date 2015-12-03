@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -22,13 +23,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -85,7 +80,9 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-		
+
+		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+
 		// 获得蓝牙管理器
 		/*mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
@@ -110,7 +107,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 			@Override
 			public void onClick(View v) {
 				// 点击输入框后，隐藏表情，显示输入法
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.showSoftInput(mInput, 0);
 				showEmoPanel(false);
 			}
@@ -132,6 +129,11 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 			startServiceAsServer();
 		}*/
 		startServiceAsServer();
+
+		mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
+		if(mRemoteDevice == null)
+			return;
+		TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
 		//---------------------------------------------------------------------
 	}
 
@@ -443,8 +445,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	protected void onDestroy() {
 		super.onDestroy();
 		// 关闭蓝牙
-		if(mBluetoothAdapter.isEnabled())
-			mBluetoothAdapter.disable();
+		//if(mBluetoothAdapter.isEnabled())
+		//	mBluetoothAdapter.disable();
 		// 停止服务
 		TaskService.stop(this);
 	}
@@ -644,15 +646,16 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0,1,0,"选择周围用户");
-		menu.add(0,2,0,"设置在线用户名");
+		//menu.add(0,1,0,"选择周围用户");
+		//menu.add(0,2,0,"设置在线用户名");
 		//menu.add(0,3,0,"下载最新客户端");
+        getMenuInflater().inflate(R.menu.chat_platform, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()){
+		/*switch(item.getItemId()){
 		case 1:
 			startActivityForResult(new Intent(this, SelectDevice.class), REQUES_SELECT_BT_CODE);
 			break;
@@ -671,10 +674,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 			dlg.show();
 			break;
 			
-		/*case 3:
+		case 3:
 			startActivity(new Intent(this, DownloadActivity.class));
-			break;*/
-		}
+			break;
+		}*/
 		
 		return super.onOptionsItemSelected(item);
 	}

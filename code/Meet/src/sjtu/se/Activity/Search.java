@@ -78,6 +78,7 @@ public class Search extends Activity {
     private IntentFilter intentFilter;
 
 	public BluetoothAdapter mBluetoothAdapter;
+
 	public DevBluetoothAdapter DeviceListAdapter;
 	public DevBluetoothAdapter HistoryDevListAdapter;
 	public DevBluetoothAdapter RecommendDevListAdapter;
@@ -97,11 +98,13 @@ public class Search extends Activity {
 		public String Information;
 		public Information Info;
 		public Date FoundTime;
-		public DevBluetooth(String addr, String info, Information i){
+        public BluetoothDevice mRemoteDevice;
+		public DevBluetooth(String addr, String info, Information i,BluetoothDevice device){
 			Address = addr;
 			Information = info;
 			Info = new Information(i);
 			FoundTime = new Date();
+            mRemoteDevice = device;
 		};
 
 		@Override
@@ -158,16 +161,16 @@ public class Search extends Activity {
 			return convertView;
 		}
 
-		public void add(String Addr, String Info, Information in){
+		public void add(String Addr, String Info, Information in,BluetoothDevice device){
 			int size = lst.size();
 			for (int i=0; i<size;i++){
 				if (Addr.equals(lst.get(i).Address)){
-					lst.set(i, new DevBluetooth(Addr, Info, in));
+					lst.set(i, new DevBluetooth(Addr, Info, in, device));
 					this.notifyDataSetChanged();
 					return;
 				}
 			}
-			lst.add(new DevBluetooth(Addr, Info, in));
+			lst.add(new DevBluetooth(Addr, Info, in, device));
 			this.notifyDataSetChanged();
 		}
 
@@ -296,7 +299,7 @@ public class Search extends Activity {
 				Information info = Format.DeFormat(btname);
 
 				if (info != null){
-					DeviceListAdapter.add(device.getAddress(), device.getName(), info);
+					DeviceListAdapter.add(device.getAddress(), device.getName(), info, device);
 					if (Match.isInterest(info, full_user) ||
 							Match.isWanted(info, want1) ||
 							Match.isWanted(info, want2) ||
@@ -306,7 +309,7 @@ public class Search extends Activity {
 							Match.isWanted(info, want6) ||
 							Match.isWanted(info, want7) ||
 							Match.isWanted(info, want8)){
-						RecommendDevListAdapter.add(device.getAddress(), device.getName(), info);
+						RecommendDevListAdapter.add(device.getAddress(), device.getName(), info, device);
 					}
 				}
 			}
@@ -442,7 +445,7 @@ public class Search extends Activity {
 			String btname = device.getName();
 			Information info = Format.DeFormat(btname);
 			if (info != null)
-				HistoryDevListAdapter.add(device.getAddress(), device.getName(), info);
+				HistoryDevListAdapter.add(device.getAddress(), device.getName(), info, device);
 		}
 	}
 
@@ -756,7 +759,7 @@ public class Search extends Activity {
 				AlertDialog.Builder builder = new Builder(ctx);
 				String nick = ((DevBluetooth)DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
 				final String address = ((DevBluetooth)DeviceListAdapter.getItem(position)).Address;
-				builder.setMessage("确定与"+ address +"建立连接么？");
+				builder.setMessage("确定与 "+ nick +" 建立连接么？");
 				builder.setTitle("提示");
 				builder.setPositiveButton("确定", new OnClickListener(){
 					@Override
@@ -766,13 +769,14 @@ public class Search extends Activity {
 						
 						Bundle bundle = new Bundle();
 						bundle.putParcelable("information", overt_user);
-						Intent intent = new Intent(Search.this, ChatPlatform.class);
+						Intent intent = new Intent(Search.this, ChatActivity.class);
 						intent.putExtra("address", address);
 						intent.putExtra("isclient", true);
 						intent.putExtras(bundle);
 						ctx.startActivity(intent);
 						dialog.dismiss();*/
                         Intent intent = new Intent(Search.this, ChatActivity.class);
+                        intent.putExtra("DEVICE", ((DevBluetooth)DeviceListAdapter.getItem(position)).mRemoteDevice);
                         ctx.startActivity(intent);
                         dialog.dismiss();
 					}
@@ -897,6 +901,9 @@ public class Search extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return true;
 		}
+        /*if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }*/
 		return super.onKeyDown(keyCode, event);
 	}
 
