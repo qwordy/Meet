@@ -1,4 +1,4 @@
-package sjtu.se.Activity.ChatPlatform.task;
+package sjtu.se.Util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -20,16 +20,48 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import sjtu.se.Activity.ChatPlatform.UI.ChatListViewAdapter;
-import sjtu.se.Activity.ChatPlatform.protocol.DataProtocol;
-import sjtu.se.Activity.ChatPlatform.protocol.Message;
-import sjtu.se.Activity.ChatPlatform.sound.SoundEffect;
+import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
 
 /**
  * 任务处理服务
- * @author Administrator
  */
 public class TaskService extends Service {
+
+	public static class Task {
+		public static final int TASK_START_ACCEPT = 1;
+		public static final int TASK_START_CONN_THREAD = 2;
+		public static final int TASK_SEND_MSG = 3;
+		public static final int TASK_GET_REMOTE_STATE = 4;
+		public static final int TASK_RECV_MSG = 5;
+		public static final int TASK_RECV_FILE = 6;
+		/** mParam[0]：path */
+		public static final int TASK_SEND_FILE = 7;
+		public static final int TASK_PROGRESS = 8;
+
+
+		// 任务ID
+		private int mTaskID;
+		// 任务参数列表
+		public Object[] mParams;
+
+		private Handler mH;
+
+
+		public Task(Handler handler, int taskID, Object[] params){
+			this.mH = handler;
+			this.mTaskID = taskID;
+			this.mParams = params;
+		}
+
+		public Handler getHandler(){
+			return this.mH;
+		}
+
+		public int getTaskID(){
+			return mTaskID;
+		}
+	}
+
 	public static final int BT_STAT_WAIT = 0;
 	public static final int BT_STAT_CONN = 1;
 	public static final int BT_STAT_ONLINE = 2;
@@ -412,7 +444,7 @@ public class TaskService extends Service {
 			} catch (UnsupportedEncodingException e2) {
 			}
 			int size;
-			Message msg;
+			DataProtocol.Message msg;
 			android.os.Message handlerMsg;
 			buffer = new byte[1024];
 

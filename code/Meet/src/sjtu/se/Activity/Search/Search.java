@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Set;
 
 //程治谦
-//import sjtu.se.service.Server;
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
@@ -138,17 +137,6 @@ public class Search extends Activity {
 		OpenBluetooth();
 		Rename();
 
-		// 启动服务
-		//程治谦
-		//Intent intent = new Intent(Search.this, Server.class);
-		//startService(intent);
-
-        /*ContactCard contact = new ContactCard();
-		contact.name = "Paler";
-		contact.phone = "13312345678";
-		contact.email = "test@sjtu.edu.cn";
-		ContactInterface.insert(contact, ctx);*/
-
 		handler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
@@ -157,11 +145,13 @@ public class Search extends Activity {
 					case 0:{
 						DeviceListAdapter.reset();
 						RecommendDevListAdapter.reset();
+
 						recommendNotify(Search.getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
-						//System.out.println("handle message~~~~~~~" + OldRecommendList.size() + " " + RecommendDevListAdapter.getList().size());
 						OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
+
 						Rename();
 						doDiscovery();
+
 						Message message = this.obtainMessage(CMD);
 						this.sendMessageDelayed(message, 5000);
 						break;
@@ -185,12 +175,11 @@ public class Search extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+
 			if (action.equals(BluetoothDevice.ACTION_FOUND)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				//String btname = device.getName();
 				String addr = device.getAddress();
 				String btname = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
-				//String btname = mBluetoothAdapter.getRemoteDevice(addr).getName();
 				System.out.println("********New*********");
 				System.out.println("new -> " + btname);
 				//System.out.println("length : " + btname.getBytes().length);
@@ -241,8 +230,11 @@ public class Search extends Activity {
 			Intent Intentenabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(Intentenabler,REQUEST_FOR_ENABLE);
 		}
-        ActivityControlCenter.savedName = mBluetoothAdapter.getName();
-		ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
+        else {
+            ActivityControlCenter.savedName = mBluetoothAdapter.getName();
+            ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
+        }
+
 	}
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -251,6 +243,7 @@ public class Search extends Activity {
                 switch (resultCode){
                     case RESULT_OK:{
                         ActivityControlCenter.savedName = mBluetoothAdapter.getName();
+                        ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
                         Rename();
                         Toast.makeText(this, "蓝牙已经开启", Toast.LENGTH_SHORT).show();
                         break;
@@ -801,9 +794,6 @@ public class Search extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return true;
 		}
-        /*if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;
-        }*/
 		return super.onKeyDown(keyCode, event);
 	}
 

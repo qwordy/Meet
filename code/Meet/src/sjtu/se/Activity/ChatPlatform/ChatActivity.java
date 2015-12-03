@@ -4,14 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,12 +32,10 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-import sjtu.se.Activity.ChatPlatform.UI.ChatListViewAdapter;
-import sjtu.se.Activity.ChatPlatform.UI.DrawerHScrollView;
-import sjtu.se.Activity.ChatPlatform.sound.SoundEffect;
-import sjtu.se.Activity.ChatPlatform.task.Task;
-import sjtu.se.Activity.ChatPlatform.task.TaskService;
-import sjtu.se.Activity.ChatPlatform.utils.Utils;
+import sjtu.se.Util.SoundEffect;
+import sjtu.se.Util.TaskService;
+import sjtu.se.Util.TaskService.Task;
+import sjtu.se.Util.Notify;
 import sjtu.se.Meet.R;
 
 public class ChatActivity extends Activity implements View.OnClickListener{
@@ -570,7 +564,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
-			sjtu.se.Activity.ChatPlatform.protocol.Message message;
 			switch(msg.what){
 			case -1:
 				showToast("没有连接其它用户，点击\"Menu\"扫描并选择周国用户");
@@ -583,20 +576,20 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 					showTargetMessage((HashMap<String, Object>) msg.obj);
 				}
 				if(sAliveCount <= 0){
-					Utils.notifyMessage(ChatActivity.this, "您有未读取消息", ChatActivity.this);
+					Notify.notifyMessage(ChatActivity.this, "您有未读取消息", ChatActivity.this);
 				}
 				break;
 			case Task.TASK_GET_REMOTE_STATE:
 				setTitle((String)msg.obj);
 				if(sAliveCount <= 0){
 					if(isBTStateChanged(msg.arg1) && msg.arg1 != TaskService.BT_STAT_WAIT)
-						Utils.notifyMessage(ChatActivity.this, (String)msg.obj, ChatActivity.this);
+						Notify.notifyMessage(ChatActivity.this, (String) msg.obj, ChatActivity.this);
 				}
 				break;
 			case Task.TASK_SEND_MSG:
 				showToast(msg.obj.toString());
 				if(sAliveCount <= 0){
-					Utils.notifyMessage(ChatActivity.this, msg.obj.toString(), ChatActivity.this);
+					Notify.notifyMessage(ChatActivity.this, msg.obj.toString(), ChatActivity.this);
 				}
 				break;
 			}
@@ -633,7 +626,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put(ChatListViewAdapter.KEY_ROLE, ChatListViewAdapter.ROLE_OWN);
 		//程治谦
-		map.put(ChatListViewAdapter.KEY_NAME, "123");
+		map.put(ChatListViewAdapter.KEY_NAME, "null");
 		//map.put(ChatListViewAdapter.KEY_NAME, mBluetoothAdapter.getName());
 		map.put(ChatListViewAdapter.KEY_TEXT, msg);
 		SimpleDateFormat df2 = new SimpleDateFormat("E MM月dd日 yy HH:mm ");
@@ -644,11 +637,35 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		SoundEffect.getInstance(ChatActivity.this).play(SoundEffect.SOUND_SEND);
 	}
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*if(requestCode == REQUES_BT_ENABLE_CODE && resultCode == RESULT_OK){
+            startServiceAsServer();
+        }else if(requestCode == REQUES_SELECT_BT_CODE && resultCode == RESULT_OK){
+            mRemoteDevice = data.getParcelableExtra("DEVICE");
+            if(mRemoteDevice == null)
+                return;
+            TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
+        }*/
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void showToast(String msg){
+        Toast tst = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+        tst.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//menu.add(0,1,0,"选择周围用户");
-		//menu.add(0,2,0,"设置在线用户名");
-		//menu.add(0,3,0,"下载最新客户端");
         getMenuInflater().inflate(R.menu.chat_platform, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -680,24 +697,5 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		}*/
 		
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode == REQUES_BT_ENABLE_CODE && resultCode == RESULT_OK){
-			startServiceAsServer();
-		}else if(requestCode == REQUES_SELECT_BT_CODE && resultCode == RESULT_OK){
-			mRemoteDevice = data.getParcelableExtra("DEVICE");
-			if(mRemoteDevice == null)
-				return;
-			TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	private void showToast(String msg){
-		Toast tst = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-		tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
-		tst.show();
 	}
 }

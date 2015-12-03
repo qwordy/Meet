@@ -1,13 +1,18 @@
-package sjtu.se.Activity.ChatPlatform.protocol;
+package sjtu.se.Util;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 
-/**
- *
- * @author Micheal
- *
- */
 public class DataProtocol {
+
+	public static class Message {
+		public byte type;
+		public int total;
+		public int length;
+		public String msg;
+		public String fileName;
+		public String remoteDevName;
+	}
+
 	public final static byte HEAD = 0xA;
 	public final static byte TYPE_MSG = 0xC;
 	public final static byte TYPE_FILE = 0xF;

@@ -1,4 +1,4 @@
-package sjtu.se.Activity.ChatPlatform.utils;
+package sjtu.se.Util;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import sjtu.se.Meet.R;
 
-public class Utils {
+public class Notify {
 	public static final int NOTIFY_ID1 = 1001;
 	
 	public static void notifyMessage(Context context, String msg, Activity activity){

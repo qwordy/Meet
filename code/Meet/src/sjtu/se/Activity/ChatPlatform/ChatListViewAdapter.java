@@ -1,4 +1,4 @@
-package sjtu.se.Activity.ChatPlatform.UI;
+package sjtu.se.Activity.ChatPlatform;
 
 import java.util.ArrayList;
 import java.util.HashMap;

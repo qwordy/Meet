@@ -30,8 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--service android:name="sjtu.se.service.Server" >
-        </service-->
 
         <activity
             android:name="sjtu.se.Activity.Setting.SystemSettings"
@@ -69,10 +67,6 @@
             android:name="sjtu.se.Activity.Want.ShowWants"
             android:label="@string/title_activity_show_wants" >
         </activity>
-        <!--activity
-            android:name="sjtu.se.Activity.ChatPlatform"
-            android:label="@string/title_activity_chat_platform" >
-        </activity-->
         <activity
             android:name="sjtu.se.Activity.ContactCard.ContactCardSettings"
             android:label="@string/title_activity_contact_card_settings" >
@@ -87,7 +81,6 @@
                 <data android:mimeType="application/sjtu.se.bluetoothtry" />
             </intent-filter>
         </activity>
-
         <activity
                 android:name="sjtu.se.Activity.ChatPlatform.ChatActivity"
                 android:label="@string/app_name"
@@ -95,14 +88,8 @@
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustPan" >
         </activity>
-
-        <service android:name="sjtu.se.Activity.ChatPlatform.task.TaskService" >
+        <service android:name="sjtu.se.Util.TaskService" >
         </service>
-
-        <activity
-                android:name="sjtu.se.Activity.ChatPlatform.SelectDevice"
-                android:screenOrientation="portrait" >
-        </activity>
 
     </application>
 

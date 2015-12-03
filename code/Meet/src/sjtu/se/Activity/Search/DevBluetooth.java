@@ -11,6 +11,7 @@ public class DevBluetooth{
     public Information Info;
     public Date FoundTime;
     public BluetoothDevice mRemoteDevice;
+
     public DevBluetooth(String addr, String info, Information i,BluetoothDevice device){
         Address = addr;
         Information = info;

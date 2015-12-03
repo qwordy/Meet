@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" 
+    android:gravity="left"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical" 
+        android:gravity="left"
+        android:padding="6dp"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/conversationWho"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="2dp"
+            android:paddingTop="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="Paler"
+            android:textColor="#A0A0A0"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/conversationContent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="Hello Paler!!!"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/conversationTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="2dp"
+            android:paddingTop="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="18:30:11"
+            android:textColor="#A0A0A0"
+            android:textSize="12sp" />
+    </LinearLayout>
+    
+    <View  
+		android:layout_width="0dp"  
+		android:layout_weight="1"
+		android:layout_height="fill_parent" 
+		android:background="#FFFFFF" />
+
+</LinearLayout>

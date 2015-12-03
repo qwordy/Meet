@@ -1,4 +1,4 @@
-package sjtu.se.Activity.ChatPlatform.UI;
+package sjtu.se.Activity.ChatPlatform;
 
 import sjtu.se.Meet.R;
 import android.content.Context;
