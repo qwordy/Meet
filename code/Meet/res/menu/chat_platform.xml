@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.bluetoothtry.ChatPlatform" >
+
+    <item android:id="@+id/action_settings" android:orderInCategory="100" android:title="@string/action_settings"></item>
+    <item android:id="@+id/action_personal" android:orderInCategory="101" android:title="@string/action_personal"></item>
+    <item android:id="@+id/send_contact" android:orderInCategory="103" android:title="@string/send_contact"></item>
+    <item android:id="@+id/action_information" android:orderInCategory="104" android:title="@string/action_information"></item>
+    <item android:id="@+id/action_logout" android:orderInCategory="200" android:title="@string/action_logout"></item>
+
+</menu>
