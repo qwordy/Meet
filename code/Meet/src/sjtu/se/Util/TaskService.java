@@ -282,7 +282,10 @@ public class TaskService extends Service {
 					break;
 				}
 				if (socket != null) {
-					manageConnectedSocket(socket);
+					//---------------------
+					mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
+					//manageConnectedSocket(socket);
+					//---------------------
 					try {
 						mmServerSocket.close();
 					} catch (IOException e) {

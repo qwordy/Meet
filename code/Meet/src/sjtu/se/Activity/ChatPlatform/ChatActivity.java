@@ -122,12 +122,16 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 			// 默认设备作为服务端
 			startServiceAsServer();
 		}*/
-		startServiceAsServer();
 
-		mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
-		if(mRemoteDevice == null)
-			return;
-		TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
+		if(this.getIntent().getBooleanExtra("isclient", true)) {
+			mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
+			if (mRemoteDevice == null)
+				return;
+			TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
+		}
+		else {
+			startServiceAsServer();
+		}
 		//---------------------------------------------------------------------
 	}
 
@@ -418,6 +422,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	}
 	
 	private void startServiceAsServer(){
+		TaskService.stop(this);
 		TaskService.start(this, mHandler);
 		TaskService.newTask(new Task(mHandler, Task.TASK_START_ACCEPT, null));
 		SoundEffect.getInstance(this).play(SoundEffect.SOUND_PLAY);

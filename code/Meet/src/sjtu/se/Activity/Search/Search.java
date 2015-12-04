@@ -2,6 +2,7 @@ package sjtu.se.Activity.Search;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Set;
 
 //程治谦
@@ -12,8 +13,7 @@ import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
-import sjtu.se.Util.Format;
-import sjtu.se.Util.Match;
+import sjtu.se.Util.*;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
 import android.annotation.SuppressLint;
@@ -73,7 +73,6 @@ public class Search extends Activity {
     private Information full_user;
 
     private Context ctx;
-    private Handler handler;
     private IntentFilter intentFilter;
 
 	public BluetoothAdapter mBluetoothAdapter;
@@ -86,6 +85,68 @@ public class Search extends Activity {
 	private ListView HistoryDeviceList;
 	private ListView RecommendDeviceList;
 	private ArrayList<DevBluetooth> OldRecommendList;
+
+	private Handler handler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			switch(msg.what){
+				case 0:{
+					DeviceListAdapter.reset();
+					RecommendDevListAdapter.reset();
+
+					recommendNotify(Search.getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
+					OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
+
+					Rename();
+					doDiscovery();
+
+					Message message = this.obtainMessage(CMD);
+					this.sendMessageDelayed(message, 5000);
+					break;
+				}
+				case 1:{
+					recreate();
+					break;
+				}
+				case 2:{
+					mBluetoothAdapter.cancelDiscovery();
+					break;
+				}
+			}
+		}
+	};
+
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			switch(msg.what){
+				case 0:
+					AlertDialog.Builder builder = new Builder(ctx);
+					builder.setMessage("确定建立连接么？");
+					builder.setTitle("提示");
+					builder.setPositiveButton("确定", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							Intent intent = new Intent(Search.this, ChatActivity.class);
+							intent.putExtra("isclient", false);
+							ctx.startActivity(intent);
+							dialog.dismiss();
+						}
+					});
+					builder.setNegativeButton("取消", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							dialog.dismiss();
+						}
+					});
+					builder.create().show();
+					break;
+			}
+		}
+	};
 
 	@SuppressLint("NewApi")
 	@Override
@@ -137,38 +198,11 @@ public class Search extends Activity {
 		OpenBluetooth();
 		Rename();
 
-		handler = new Handler(){
-			@Override
-			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
-				switch(msg.what){
-					case 0:{
-						DeviceListAdapter.reset();
-						RecommendDevListAdapter.reset();
-
-						recommendNotify(Search.getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
-						OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
-
-						Rename();
-						doDiscovery();
-
-						Message message = this.obtainMessage(CMD);
-						this.sendMessageDelayed(message, 5000);
-						break;
-					}
-					case 1:{
-						recreate();
-						break;
-					}
-					case 2:{
-						mBluetoothAdapter.cancelDiscovery();
-						break;
-					}
-				}
-			}
-		};
 		Message message = handler.obtainMessage(0);
 		handler.sendMessageDelayed(message, 0);
+
+		TaskService.start(this, mHandler);
+		TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 	}
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -670,6 +704,7 @@ public class Search extends Activity {
 						dialog.dismiss();*/
                         Intent intent = new Intent(Search.this, ChatActivity.class);
                         intent.putExtra("DEVICE", ((DevBluetooth)DeviceListAdapter.getItem(position)).mRemoteDevice);
+                        intent.putExtra("isclient", true);
                         ctx.startActivity(intent);
                         dialog.dismiss();
 					}
