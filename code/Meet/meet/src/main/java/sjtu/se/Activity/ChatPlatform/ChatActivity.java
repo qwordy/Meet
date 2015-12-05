@@ -75,7 +75,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
 		// 获得蓝牙管理器
 		/*mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

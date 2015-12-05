@@ -172,7 +172,7 @@ public class ShowContactCard extends Activity implements CreateNdefMessageCallba
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_contact_card);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
 		ctx = this;
 

@@ -344,7 +344,7 @@ public class ShowWants extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_wants);
 
-        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+        /*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         ctx = this;
 

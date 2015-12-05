@@ -1,5 +1,7 @@
 package sjtu.se.Activity.Information;
 
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.*;
 import sjtu.se.Meet.R;
 
@@ -19,7 +21,7 @@ import android.widget.TextView;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
 
-public class BaseInfoSettings extends Activity {
+public class BaseInfoSettings extends AppCompatActivity {
 
 	private Context ctx = this;
 	private SharedPreferences baseInfo;
@@ -288,7 +290,8 @@ public class BaseInfoSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.base_info);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(myToolbar);
 
 		ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
 
