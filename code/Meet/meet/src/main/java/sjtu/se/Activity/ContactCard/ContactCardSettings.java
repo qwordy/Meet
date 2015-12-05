@@ -171,7 +171,7 @@ public class ContactCardSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contact_card_settings);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 		ctx = this;
 
 		ActivityControlCenter.CONTACTS_MAY_CHANGED = true;

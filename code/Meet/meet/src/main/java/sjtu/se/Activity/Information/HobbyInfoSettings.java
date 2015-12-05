@@ -290,7 +290,7 @@ public class HobbyInfoSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hobby_info);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
 		ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
 

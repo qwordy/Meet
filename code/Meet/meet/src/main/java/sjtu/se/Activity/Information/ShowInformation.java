@@ -170,7 +170,7 @@ public class ShowInformation extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_information);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
 		Parcelable parcelable = this.getIntent().getParcelableExtra("information");
 		info = (Information) parcelable;

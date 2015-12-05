@@ -216,7 +216,7 @@ public class ContactInfoSettings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_info);
 
-        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+        /*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
 

@@ -179,7 +179,7 @@ public class EducationInfoSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.education_info);
 
-		this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
 		ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
 

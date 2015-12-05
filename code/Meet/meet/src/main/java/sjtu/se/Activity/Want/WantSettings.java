@@ -1,6 +1,7 @@
 package sjtu.se.Activity.Want;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Want;
@@ -173,7 +174,8 @@ public class WantSettings extends AppCompatActivity{
         setContentView(R.layout.want_settings);
         ctx = this;
 
-        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         ActivityControlCenter.WANTS_MAY_CHANGED = true;
 
