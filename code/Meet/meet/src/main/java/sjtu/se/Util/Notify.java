@@ -33,6 +33,7 @@ public class Notify {
         notification.flags |= Notification.FLAG_AUTO_CANCEL; // 点击清除按钮或点击通知后会自动消失
         notification.defaults |= Notification.DEFAULT_LIGHTS;
         notification.vibrate = new long[]{300, 500};
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //notification.setLatestEventInfo(context, "Meet遇见", msg, contentIntent);
        /* // 定制我们要在状态栏显示的通知样式
 		builder = new Notification(context);

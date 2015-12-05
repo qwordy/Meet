@@ -30,17 +30,17 @@
             </intent-filter>
         </activity>
 
-        <!--<activity
+        <activity
             android:name="sjtu.se.Activity.Setting.SystemSettings"
             android:label="@string/title_activity_system_settings"
             android:parentActivityName="android.preference.PreferenceActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="android.preference.PreferenceActivity" />
-        </activity>-->
+        </activity>
         <activity
             android:name="sjtu.se.Activity.Information.BaseInfoSettings"
-            android:label="@string/title_activity_personal_information" >
+            android:label="@string/title_activity_personal_information">
         </activity>
         <activity
             android:name="sjtu.se.Activity.Information.ContactInfoSettings"

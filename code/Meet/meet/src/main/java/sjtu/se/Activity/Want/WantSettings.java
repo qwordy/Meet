@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Want;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Want;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class WantSettings extends Activity {
+public class WantSettings extends AppCompatActivity{
 
     private Context ctx = this;
 
