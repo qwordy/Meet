@@ -159,7 +159,7 @@ public class Search extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-		/*ctx = this;
+		ctx = this;
 		overt_user = new Information();
 		full_user  = new Information();
 
@@ -206,7 +206,7 @@ public class Search extends AppCompatActivity {
 		handler.sendMessageDelayed(message, 0);
 
 		TaskService.start(this, mHandler);
-		TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));*/
+		TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 	}
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -337,6 +337,7 @@ public class Search extends AppCompatActivity {
 		Intent notificationIntent = new Intent(this, Search.class);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		mNotificationManager.notify(1, notification);
