@@ -7,6 +7,8 @@ import java.util.Set;
 
 //程治谦
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.BaseInfoSettings;
@@ -54,7 +56,7 @@ import android.view.KeyEvent;
 
 import sjtu.se.Meet.R;
 
-public class Search extends Activity {
+public class Search extends AppCompatActivity {
 
 	private static final int REQUEST_FOR_ENABLE = 1;
 
@@ -154,8 +156,10 @@ public class Search extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
-		ctx = this;
+		/*ctx = this;
 		overt_user = new Information();
 		full_user  = new Information();
 
@@ -202,7 +206,7 @@ public class Search extends Activity {
 		handler.sendMessageDelayed(message, 0);
 
 		TaskService.start(this, mHandler);
-		TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+		TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));*/
 	}
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -333,7 +337,7 @@ public class Search extends Activity {
 		Intent notificationIntent = new Intent(this, Search.class);
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		//notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		mNotificationManager.notify(1, notification);
 		Shake();
@@ -681,7 +685,7 @@ public class Search extends Activity {
 		DeviceList.setOnItemLongClickListener(new OnItemLongClickListener(){
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+					final int position, long id) {
 				// TODO Auto-generated method stub
 				AlertDialog.Builder builder = new Builder(ctx);
 				String nick = ((DevBluetooth)DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
