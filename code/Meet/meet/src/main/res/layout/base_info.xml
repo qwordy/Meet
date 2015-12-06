@@ -99,8 +99,8 @@
 	                android:id="@+id/base_info_name_overt"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:textOff="隐藏"
-	                android:textOn="公开"
+	                android:textOff="已隐藏"
+	                android:textOn="已公开"
 	                android:textColorLink="#B5E61D" />
 	
 	        </LinearLayout>
@@ -152,8 +152,8 @@
 	                android:id="@+id/base_info_gender_overt"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:textOff="隐藏"
-	                android:textOn="公开"
+	                android:textOff="已隐藏"
+	                android:textOn="已公开"
 	                android:textColorLink="#B5E61D"  />
 	
 	        </LinearLayout>
@@ -205,8 +205,8 @@
 	                android:id="@+id/base_info_birthday_overt"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:textOff="隐藏"
-	                android:textOn="公开" 
+	                android:textOff="已隐藏"
+	                android:textOn="已公开"
 	                android:textColorLink="#B5E61D" />
 	
 	        </LinearLayout>
@@ -260,8 +260,8 @@
 	                android:layout_height="wrap_content"
 	                android:checked="false"
 	                android:textColorLink="#B5E61D"
-	                android:textOff="隐藏"
-	                android:textOn="公开" />
+	                android:textOff="已隐藏"
+	                android:textOn="已公开" />
 	
 	        </LinearLayout>
         </LinearLayout>
@@ -312,8 +312,8 @@
 	                android:id="@+id/base_info_location_overt"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:textOff="隐藏"
-	                android:textOn="公开"
+	                android:textOff="已隐藏"
+	                android:textOn="已公开"
 	                android:textColorLink="#B5E61D"  />
 	
 	        </LinearLayout>
@@ -370,8 +370,8 @@
 	                android:id="@+id/base_info_keywords_overt"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:textOff="隐藏"
-	                android:textOn="公开" 
+	                android:textOff="已隐藏"
+	                android:textOn="已公开"
 	                android:textColorLink="#B5E61D" />
 	
 	        </LinearLayout>

@@ -49,8 +49,8 @@
 	                android:id="@+id/contact_info_phone_overt"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:textOff="隐藏"
-	                android:textOn="公开" />
+	                android:textOff="已隐藏"
+	                android:textOn="已公开" />
 	
 	        </LinearLayout>
 	        </LinearLayout>
@@ -100,8 +100,8 @@
                 android:id="@+id/contact_info_qq_overt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOff="隐藏"
-                android:textOn="公开" />
+                android:textOff="已隐藏"
+                android:textOn="已公开" />
 
         </LinearLayout>
         </LinearLayout>
@@ -158,8 +158,8 @@
                 android:id="@+id/contact_info_email_overt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOff="隐藏"
-                android:textOn="公开" />
+                android:textOff="已隐藏"
+                android:textOn="已公开" />
 
         </LinearLayout>
         </LinearLayout>
@@ -216,8 +216,8 @@
                 android:id="@+id/contact_info_weibo_overt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOff="隐藏"
-                android:textOn="公开" />
+                android:textOff="已隐藏"
+                android:textOn="已公开" />
 
         </LinearLayout>
         </LinearLayout>
@@ -273,8 +273,8 @@
                 android:id="@+id/contact_info_socialnet_overt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOff="隐藏"
-                android:textOn="公开" />
+                android:textOff="已隐藏"
+                android:textOn="已公开" />
 
         </LinearLayout>
         </LinearLayout>

@@ -55,12 +55,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.view.KeyEvent;
 
 import sjtu.se.Meet.R;
-
 public class Search extends AppCompatActivity {
 
 	private static final int REQUEST_FOR_ENABLE = 1;
-
-    private int CMD = 0;
 
     private Want want1;
     private Want want2;
@@ -103,7 +100,7 @@ public class Search extends AppCompatActivity {
 					Rename();
 					doDiscovery();
 
-					Message message = this.obtainMessage(CMD);
+					Message message = this.obtainMessage(ActivityControlCenter.CMD);
 					this.sendMessageDelayed(message, 5000);
 					break;
 				}
@@ -131,6 +128,8 @@ public class Search extends AppCompatActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
+							ActivityControlCenter.CMD = 2;
+
 							Intent intent = new Intent(Search.this, ChatActivity.class);
 							intent.putExtra("isclient", false);
 							ctx.startActivity(intent);
@@ -200,20 +199,15 @@ public class Search extends AppCompatActivity {
 		this.registerReceiver(receiver, intentFilter);
 
 		OpenBluetooth();
-		Rename();
 
 		Message message = handler.obtainMessage(0);
 		handler.sendMessageDelayed(message, 0);
-
-		TaskService.start(this, mHandler);
-		TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 	}
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-
 			if (action.equals(BluetoothDevice.ACTION_FOUND)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				String addr = device.getAddress();
@@ -245,7 +239,7 @@ public class Search extends AppCompatActivity {
 			}
 			//程治谦
 			/*if (action.equals(ActivityControlCenter.ACTION_LAUNCHED)){
-				CMD = 2;
+				ActivityControlCenter.CMD = 2;
 				Bundle bundle = new Bundle();
 				bundle.putParcelable("information", overt_user);
 				Intent intent2 = new Intent(Search.this, ChatPlatform.class);
@@ -271,6 +265,11 @@ public class Search extends AppCompatActivity {
         else {
             ActivityControlCenter.savedName = mBluetoothAdapter.getName();
             ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
+
+            Rename();
+
+            TaskService.start(this, mHandler);
+            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
         }
 
 	}
@@ -282,7 +281,12 @@ public class Search extends AppCompatActivity {
                     case RESULT_OK:{
                         ActivityControlCenter.savedName = mBluetoothAdapter.getName();
                         ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
+
                         Rename();
+
+                        TaskService.start(this, mHandler);
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+
                         Toast.makeText(this, "蓝牙已经开启", Toast.LENGTH_SHORT).show();
                         break;
                     }
@@ -390,6 +394,7 @@ public class Search extends AppCompatActivity {
 			updateWants();
 			ActivityControlCenter.WANTS_MAY_CHANGED = false;
 		}
+		ActivityControlCenter.CMD = 0;
 	}
 
 	@Override
@@ -695,7 +700,7 @@ public class Search extends AppCompatActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						/*CMD = 2;
+						/*ActivityControlCenter.CMD = 2;
 						
 						Bundle bundle = new Bundle();
 						bundle.putParcelable("information", overt_user);
@@ -705,6 +710,8 @@ public class Search extends AppCompatActivity {
 						intent.putExtras(bundle);
 						ctx.startActivity(intent);
 						dialog.dismiss();*/
+						ActivityControlCenter.CMD = 2;
+
                         Intent intent = new Intent(Search.this, ChatActivity.class);
                         intent.putExtra("DEVICE", ((DevBluetooth)DeviceListAdapter.getItem(position)).mRemoteDevice);
                         intent.putExtra("isclient", true);
@@ -770,7 +777,7 @@ public class Search extends AppCompatActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						
-						CMD = 2;
+						ActivityControlCenter.CMD = 2;
 						
 						Bundle bundle = new Bundle();
 						bundle.putParcelable("information", overt_user);
