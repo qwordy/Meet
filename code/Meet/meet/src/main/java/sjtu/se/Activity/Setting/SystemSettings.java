@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Setting;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -42,12 +43,14 @@ public class SystemSettings extends AppCompatActivity {
 
 		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 		setSupportActionBar(myToolbar);
+		ActionBar ab = getSupportActionBar();
+		ab.setDisplayHomeAsUpEnabled(true);
 
 		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new Pref_Fragment()).commit();
 
-		intentFilter = new IntentFilter();
-		intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
-		this.registerReceiver(receiver, intentFilter);
+		//intentFilter = new IntentFilter();
+		//intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
+		//this.registerReceiver(receiver, intentFilter);
 
 	}
 
