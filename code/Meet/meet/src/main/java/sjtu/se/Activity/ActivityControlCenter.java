@@ -6,6 +6,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.graphics.drawable.ColorDrawable;
 
 public class ActivityControlCenter {
+	public static int CMD = 0;
+	public static boolean IS_ANALYSE = true;
+
 	public static String savedName;
 	public static BluetoothAdapter savedBTAdapter;
 	public static String ACTIVITY_EXIT_ACTION = "activity_exit_action";
