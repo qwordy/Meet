@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <CheckBoxPreference android:summary="@string/off" android:key="day_or_night" android:summaryOn="@string/on" android:title="夜间模式" android:defaultValue="false" android:summaryOff="@string/off" android:enabled="true" android:disableDependentsState="false"/>
-    
-
+    <CheckBoxPreference android:summary="@string/off"
+                        android:key="day_or_night"
+                        android:summaryOn="@string/on"
+                        android:title="匹配提醒"
+                        android:defaultValue="false"
+                        android:summaryOff="@string/off"
+                        android:enabled="true"
+                        android:disableDependentsState="false"/>
 </PreferenceScreen>

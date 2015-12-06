@@ -1,6 +1,9 @@
 package sjtu.se.Activity.Setting;
 
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import sjtu.se.Fragment.Pref_Fragment;
 import sjtu.se.Meet.R;
 
 import android.content.BroadcastReceiver;
@@ -10,17 +13,12 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
 import sjtu.se.Activity.ActivityControlCenter;
 
-public class SystemSettings extends PreferenceActivity {
+public class SystemSettings extends AppCompatActivity {
 
 	//public static boolean dayOrNightChange = false;
-	public static boolean night = false;
+	//public static boolean night = false;
 
 	private IntentFilter intentFilter;
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -33,7 +31,6 @@ public class SystemSettings extends PreferenceActivity {
 		}
 	};
 
-	@SuppressWarnings("deprecation")
 	@Override
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,36 +38,17 @@ public class SystemSettings extends PreferenceActivity {
 		//SystemSettings.dayOrNight(this);
 
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_system_settings);
-		addPreferencesFromResource(R.xml.system);
+		setContentView(R.layout.activity_pref);
+
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(myToolbar);
+
+		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new Pref_Fragment()).commit();
 
 		intentFilter = new IntentFilter();
 		intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
 		this.registerReceiver(receiver, intentFilter);
 
-		//ActivityControlCenter.personal_base_info = getSharedPreferences("test", MODE_WORLD_READABLE & MODE_WORLD_WRITEABLE);
-		//System.out.println(ActivityControlCenter.personal_base_info.getString("test", null));
-
-		CheckBoxPreference nightModel = (CheckBoxPreference) findPreference("day_or_night");
-		nightModel.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
-
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				//SystemSettings.dayOrNightChange = true;
-				//SystemSettings.day = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("day_or_night", false);
-				recreate();
-				return true;
-			}
-		});
-	}
-
-	public static void dayOrNight(Context context){
-		boolean b = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("day_or_night", false);
-		night = b;
-		if (b)
-			context.setTheme(android.R.style.Theme_Holo);
-		else
-			context.setTheme(android.R.style.Theme_Holo_Light);
 	}
 
 	@Override
@@ -83,9 +61,8 @@ public class SystemSettings extends PreferenceActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.system_settings, menu);
+		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
 	}
 
@@ -95,9 +72,13 @@ public class SystemSettings extends PreferenceActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == android.R.id.home){
-			this.finish();
+
+		//noinspection SimplifiableIfStatement
+		if (id == R.id.action_settings) {
+			//this.startActivity(new Intent(SystemSettings.this, SystemSettings.class));
+			return false;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
