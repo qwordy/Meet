@@ -29,7 +29,7 @@ public class SoundEffect implements OnLoadCompleteListener {
 		mSoundMap = new HashMap<Integer, Integer>();
 		// SoundPool(int maxStreams, int streamType, int srcQuality)
 		mSoundPool= new SoundPool(2, AudioManager.STREAM_SYSTEM, 0);
-		// load(Context context, int resId, int priority)
+		//load(Context context, int resId, int priority)
 		mSoundMap.put(SOUND_SEND, mSoundPool.load(context, R.raw.send, 1));
 		mSoundMap.put(SOUND_RECV, mSoundPool.load(context, R.raw.recv, 1));
 		mSoundMap.put(SOUND_ERR, mSoundPool.load(context, R.raw.error, 1));
