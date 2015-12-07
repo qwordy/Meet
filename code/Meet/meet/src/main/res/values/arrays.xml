@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="appType">
+		<item>All apps</item>
+		<item>User apps</item>
+	</string-array>
+</resources>

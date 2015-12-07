@@ -15,6 +15,7 @@ import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
+import sjtu.se.Ubma.MainActivity;
 import sjtu.se.Util.*;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
@@ -888,6 +889,10 @@ public class Search extends AppCompatActivity {
 			this.startActivity(new Intent(Search.this, WantSettings.class));
 			return true;
 		}
+        if(id == R.id.action_analysis) {
+            this.startActivity(new Intent(Search.this, MainActivity.class));
+            return true;
+        }
 		/*if (id == R.id.action_contact){
 			this.startActivity(new Intent(Search.this, ContactCardSettings.class));
 			return true;
