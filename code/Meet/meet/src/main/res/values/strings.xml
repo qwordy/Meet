@@ -11,9 +11,16 @@
     <string name="action_analysis">手机行为分析</string>
     <string name="action_logout">退出</string>
 
+    <string name="title_activity_system_settings">系统设置</string>
+    <string name="pref_alert_title">匹配提醒</string>
+    <string name="pref_nickname_title">显示名称</string>
+    <string name="pref_nickname_edit_title">输入自定义名称</string>
+    <string name="pref_sound_title">提示音</string>
+    <string name="pref_analysis_title">行为分析</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>
-    <string name="title_activity_system_settings">系统设置</string>
+    <string name="empty">未设置</string>
+
     <string name="overt">公开</string>
     <string name="hide">隐藏</string>
     <string name="devBtn">附近的人</string>

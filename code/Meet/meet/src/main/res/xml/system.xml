@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <CheckBoxPreference android:summary="@string/off"
-                        android:key="day_or_night"
-                        android:summaryOn="@string/on"
-                        android:title="匹配提醒"
-                        android:defaultValue="false"
-                        android:summaryOff="@string/off"
-                        android:enabled="true"
-                        android:disableDependentsState="false"/>
+    <EditTextPreference android:key="pref_nickname"
+                        android:title="@string/pref_nickname_title"
+                        android:defaultValue=""
+                        android:dialogTitle="@string/pref_nickname_edit_title"
+                        android:summary="@string/empty"/>
+    <SwitchPreference android:key="pref_alert_switch"
+                      android:title="@string/pref_alert_title"
+                      android:defaultValue="true"
+                      android:switchTextOff="Off"
+                      android:switchTextOn="On"/>
+    <SwitchPreference android:key="pref_sound_switch"
+                      android:title="@string/pref_sound_title"
+                      android:defaultValue="true"
+                      android:switchTextOff="Off"
+                      android:switchTextOn="On"/>
+    <SwitchPreference android:key="pref_analysis_switch"
+                      android:title="@string/pref_analysis_title"
+                      android:defaultValue="true"
+                      android:switchTextOff="Off"
+                      android:switchTextOn="On"/>
 </PreferenceScreen>
