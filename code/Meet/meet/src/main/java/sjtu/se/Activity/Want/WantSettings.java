@@ -1,9 +1,11 @@
 package sjtu.se.Activity.Want;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import sjtu.se.Activity.ActivityControlCenter;
+import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.UserInformation.Want;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Meet.R;
@@ -176,6 +178,8 @@ public class WantSettings extends AppCompatActivity{
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
 
         ActivityControlCenter.WANTS_MAY_CHANGED = true;
 
@@ -207,25 +211,36 @@ public class WantSettings extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.want_settings, menu);
+        getMenuInflater().inflate(R.menu.search, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if (id == R.id.action_news) {
+            return false;
+        }
         if (id == R.id.action_settings) {
-            this.startActivity(new Intent(WantSettings.this, SystemSettings.class));
+            this.startActivity(new Intent(this, SystemSettings.class));
             return true;
         }
-        if (id == android.R.id.home){
-            this.finish();
+        if (id == R.id.action_personal){
+            this.startActivity(new Intent(this, BaseInfoSettings.class));
+            return true;
         }
+        /*if (id == R.id.action_want){
+            this.startActivity(new Intent(this, WantSettings.class));
+            return true;
+        }*/
+        if (id == R.id.action_analysis){
+            return false;
+        }
+        if (id == R.id.action_logout) {
+            super.finish();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

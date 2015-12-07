@@ -40,11 +40,23 @@
         </activity>
         <activity
             android:name="sjtu.se.Activity.Information.BaseInfoSettings"
-            android:label="@string/title_activity_personal_information">
+            android:label="@string/title_activity_personal_information"
+            android:parentActivityName="sjtu.se.Activity.Search.Search">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="sjtu.se.Activity.Search.Search" />
+        </activity>
+        <activity
+                android:name="sjtu.se.Activity.Want.WantSettings"
+                android:label="@string/title_activity_want_settings"
+                android:parentActivityName="sjtu.se.Activity.Search.Search">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="sjtu.se.Activity.Search.Search" />
         </activity>
         <activity
             android:name="sjtu.se.Activity.Information.ContactInfoSettings"
-            android:label="@string/title_activity_contact_information" >
+            android:label="@string/title_activity_contact_information">
         </activity>
         <activity
             android:name="sjtu.se.Activity.Information.EducationInfoSettings"
@@ -57,10 +69,6 @@
         <activity
             android:name="sjtu.se.Activity.Information.ShowInformation"
             android:label="@string/title_activity_show_information" >
-        </activity>
-        <activity
-            android:name="sjtu.se.Activity.Want.WantSettings"
-            android:label="@string/title_activity_want_settings" >
         </activity>
         <activity
             android:name="sjtu.se.Activity.Want.ShowWants"
