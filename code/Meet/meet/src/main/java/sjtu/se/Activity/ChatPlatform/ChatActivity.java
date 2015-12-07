@@ -14,6 +14,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -75,7 +77,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
 
-		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
 
 		// 获得蓝牙管理器
 		/*mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -615,7 +616,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	 * @param data
 	 */
 	private void showTargetMessage(HashMap<String, Object> data){
-		SimpleDateFormat df1 = new SimpleDateFormat("E MM月dd日 yy HH:mm ");
+		SimpleDateFormat df1 = new SimpleDateFormat("E yyyy年MM月dd日 HH:mm ");
 		data.put(ChatListViewAdapter.KEY_DATE, df1.format(System.currentTimeMillis()).toString());
 		data.put(ChatListViewAdapter.KEY_SHOW_MSG, true);
 		mChatContent2.add(data);
@@ -634,7 +635,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		map.put(ChatListViewAdapter.KEY_NAME, "null");
 		//map.put(ChatListViewAdapter.KEY_NAME, mBluetoothAdapter.getName());
 		map.put(ChatListViewAdapter.KEY_TEXT, msg);
-		SimpleDateFormat df2 = new SimpleDateFormat("E MM月dd日 yy HH:mm ");
+		SimpleDateFormat df2 = new SimpleDateFormat("E yyyy年MM月dd日 HH:mm ");
 		map.put(ChatListViewAdapter.KEY_DATE, df2.format(System.currentTimeMillis()).toString());
 		map.put(ChatListViewAdapter.KEY_SHOW_MSG, true);
 		mChatContent2.add(map);

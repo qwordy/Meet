@@ -28,6 +28,7 @@ import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
 public class TaskService extends Service {
 
 	public static class Task {
+		public static final int TASK_START_ACCEPT_TRY = 0;
 		public static final int TASK_START_ACCEPT = 1;
 		public static final int TASK_START_CONN_THREAD = 2;
 		public static final int TASK_SEND_MSG = 3;
@@ -194,6 +195,11 @@ public class TaskService extends Service {
 
 	private void doTask(Task task) {
 		switch (task.getTaskID()) {
+		case Task.TASK_START_ACCEPT_TRY:
+			mAcceptThread = new AcceptThread(false);
+			mAcceptThread.start();
+			isServerMode = true;
+			break;
 		case Task.TASK_START_ACCEPT:
 			mAcceptThread = new AcceptThread();
 			mAcceptThread.start();
@@ -252,6 +258,8 @@ public class TaskService extends Service {
 		private final BluetoothServerSocket mmServerSocket;
 		private boolean isCancel = false;
 
+		private boolean status;
+
 		public AcceptThread() {
 			Log.d(TAG, "AcceptThread");
 			BluetoothServerSocket tmp = null;
@@ -261,6 +269,19 @@ public class TaskService extends Service {
 			} catch (IOException e) {
 			}
 			mmServerSocket = tmp;
+			status = true;
+		}
+
+		public AcceptThread(Boolean s) {
+			Log.d(TAG, "AcceptThread");
+			BluetoothServerSocket tmp = null;
+			try {
+				tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
+						"MT_Chat_Room", UUID.fromString(UUID_STR));
+			} catch (IOException e) {
+			}
+			mmServerSocket = tmp;
+			status = s;
 		}
 
 		public void run() {
@@ -283,8 +304,9 @@ public class TaskService extends Service {
 				}
 				if (socket != null) {
 					//---------------------
-					//mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
-					manageConnectedSocket(socket);
+					mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
+					if(status)
+						manageConnectedSocket(socket);
 					//---------------------
 					try {
 						mmServerSocket.close();
@@ -353,6 +375,7 @@ public class TaskService extends Service {
 		public void run() {
 			// Cancel discovery because it will slow down the connection
 			mBluetoothAdapter.cancelDiscovery();
+
 			try {
 				// Connect the device through the socket. This will block
 				// until it succeeds or throws an exception
@@ -364,9 +387,11 @@ public class TaskService extends Service {
 					mmSocket.close();
 				} catch (IOException closeException) {
 				}
-				mAcceptThread = new AcceptThread();
+				/*mAcceptThread = new AcceptThread();
 				mAcceptThread.start();
-				isServerMode = true;
+				isServerMode = true;*/
+				mConnectThread = new ConnectThread(mmDevice);
+				mConnectThread.start();
 				return;
 			} // Do work to manage the connection (in a separate thread)
 			manageConnectedSocket(mmSocket);

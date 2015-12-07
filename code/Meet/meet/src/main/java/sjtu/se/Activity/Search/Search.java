@@ -273,7 +273,7 @@ public class Search extends AppCompatActivity {
             Rename();
 
             TaskService.start(this, mHandler);
-            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT_TRY, null));
         }
 
 	}
@@ -289,7 +289,7 @@ public class Search extends AppCompatActivity {
                         Rename();
 
                         TaskService.start(this, mHandler);
-                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT_TRY, null));
 
                         Toast.makeText(this, "蓝牙已经开启", Toast.LENGTH_SHORT).show();
                         break;
@@ -406,6 +406,10 @@ public class Search extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(ActivityControlCenter.CMD, 0);
         editor.commit();
+
+        /*TaskService.stop(this);
+        TaskService.start(this, mHandler);
+        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT_TRY, null));*/
 	}
 
 	@Override
