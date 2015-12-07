@@ -95,6 +95,7 @@
         </activity>
         <service android:name="sjtu.se.Util.TaskService" >
         </service>
+
         <activity android:name="sjtu.se.Ubma.ActiveTimeActivity"/>
         <activity android:name="sjtu.se.Ubma.AllAppsActivity"/>
         <activity android:name="sjtu.se.Ubma.MainActivity"/>

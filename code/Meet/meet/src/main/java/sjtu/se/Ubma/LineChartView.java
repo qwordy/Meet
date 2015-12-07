@@ -99,9 +99,9 @@ public class LineChartView extends View {
 				paint);
 
 		// Prepare data
-		/*double[] data = new double[]{20, 0, 0, 0, 0, 55, 37, 26, 19, 50, 36, 0,
-				3, 60, 60, 48, 36, 45, 20, 25, 30, 10, 30, 43};*/
-		double[] data = prepareData();
+		double[] data = new double[]{20, 0, 0, 0, 0, 55, 37, 26, 19, 50, 36, 0,
+				3, 60, 60, 48, 36, 45, 20, 25, 30, 10, 30, 43};
+		//double[] data = prepareData();
 
 		// Draw line chart
 		paint.setColor(Color.DKGRAY);
