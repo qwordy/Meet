@@ -12,10 +12,11 @@
     <string name="action_logout">退出</string>
 
     <string name="title_activity_system_settings">系统设置</string>
-    <string name="pref_alert_title">匹配提醒</string>
+    <string name="pref_alert_title">匹配开关</string>
     <string name="pref_nickname_title">显示名称</string>
     <string name="pref_nickname_edit_title">输入自定义名称</string>
-    <string name="pref_sound_title">提示音</string>
+    <string name="pref_sound_title">音效提示</string>
+    <string name="pref_shake_title">震动提示</string>
     <string name="pref_analysis_title">行为分析</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>

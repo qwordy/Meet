@@ -3,7 +3,6 @@ package sjtu.se.Activity.Setting;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import sjtu.se.Fragment.Pref_Fragment;
 import sjtu.se.Meet.R;
 
 import android.content.BroadcastReceiver;
@@ -36,13 +35,13 @@ public class SystemSettings extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new Pref_Fragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SettingFragment()).commit();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search, menu);
+
         return true;
     }
 

@@ -10,6 +10,11 @@
                       android:defaultValue="true"
                       android:switchTextOff="Off"
                       android:switchTextOn="On"/>
+    <SwitchPreference android:key="pref_shake_switch"
+                      android:title="@string/pref_shake_title"
+                      android:defaultValue="true"
+                      android:switchTextOff="Off"
+                      android:switchTextOn="On"/>
     <SwitchPreference android:key="pref_sound_switch"
                       android:title="@string/pref_sound_title"
                       android:defaultValue="true"

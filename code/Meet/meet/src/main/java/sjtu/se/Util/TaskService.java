@@ -283,7 +283,7 @@ public class TaskService extends Service {
 				}
 				if (socket != null) {
 					//---------------------
-					mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
+					//mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
 					manageConnectedSocket(socket);
 					//---------------------
 					try {

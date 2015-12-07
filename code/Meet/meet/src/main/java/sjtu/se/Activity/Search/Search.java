@@ -100,7 +100,8 @@ public class Search extends AppCompatActivity {
 					Rename();
 					doDiscovery();
 
-					Message message = this.obtainMessage(ActivityControlCenter.CMD);
+					SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+					Message message = this.obtainMessage(sp.getInt(ActivityControlCenter.CMD,0));
 					this.sendMessageDelayed(message, 5000);
 					break;
 				}
@@ -128,7 +129,10 @@ public class Search extends AppCompatActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							ActivityControlCenter.CMD = 2;
+                            SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putInt(ActivityControlCenter.CMD, 2);
+                            editor.commit();
 
 							Intent intent = new Intent(Search.this, ChatActivity.class);
 							intent.putExtra("isclient", false);
@@ -343,14 +347,17 @@ public class Search extends AppCompatActivity {
 		notify.flags |= Notification.FLAG_AUTO_CANCEL;
 		manager.notify(1, notify);
 
-		Shake();
+        SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+        if(sp.getBoolean(ActivityControlCenter.IS_SHAKE,true))
+		    Shake();
+        if(sp.getBoolean(ActivityControlCenter.IS_SOUND,true))
+            SoundEffect.getInstance(this).play(SoundEffect.SOUND_RECV);
 	}
 
 	protected void Shake(){
 		Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		long [] pattern = {100,400,100,400,100,400};
 		vibrator.vibrate(pattern, -1);
-		//vibrator.cancel();
 	}
 
 	public static ArrayList<DevBluetooth> getAddition(ArrayList<DevBluetooth> formal, ArrayList<DevBluetooth> later){
@@ -394,7 +401,11 @@ public class Search extends AppCompatActivity {
 			updateWants();
 			ActivityControlCenter.WANTS_MAY_CHANGED = false;
 		}
-		ActivityControlCenter.CMD = 0;
+
+        SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(ActivityControlCenter.CMD, 0);
+        editor.commit();
 	}
 
 	@Override
@@ -402,6 +413,7 @@ public class Search extends AppCompatActivity {
 		super.onDestroy();
 		// Make sure we're not doing discovery anymore
 		if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.setName(ActivityControlCenter.savedName);
 			mBluetoothAdapter.cancelDiscovery();
 		}
 		// Unregister broadcast listeners
@@ -710,7 +722,11 @@ public class Search extends AppCompatActivity {
 						intent.putExtras(bundle);
 						ctx.startActivity(intent);
 						dialog.dismiss();*/
-						ActivityControlCenter.CMD = 2;
+
+                        SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putInt(ActivityControlCenter.CMD, 2);
+                        editor.commit();
 
                         Intent intent = new Intent(Search.this, ChatActivity.class);
                         intent.putExtra("DEVICE", ((DevBluetooth)DeviceListAdapter.getItem(position)).mRemoteDevice);
