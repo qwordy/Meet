@@ -145,6 +145,7 @@ public class Search extends AppCompatActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
+
 							dialog.dismiss();
 						}
 					});
@@ -274,7 +275,7 @@ public class Search extends AppCompatActivity {
             Rename();
 
             TaskService.start(this, mHandler);
-            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT_TRY, null));
+            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
         }
 
 	}
@@ -290,7 +291,7 @@ public class Search extends AppCompatActivity {
                         Rename();
 
                         TaskService.start(this, mHandler);
-                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT_TRY, null));
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 
                         Toast.makeText(this, "蓝牙已经开启", Toast.LENGTH_SHORT).show();
                         break;
@@ -349,10 +350,10 @@ public class Search extends AppCompatActivity {
 		manager.notify(1, notify);
 
         SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-        if(sp.getBoolean(ActivityControlCenter.IS_SHAKE,true))
-		    Shake();
         if(sp.getBoolean(ActivityControlCenter.IS_SOUND,true))
             SoundEffect.getInstance(this).play(SoundEffect.SOUND_RECV);
+        if(sp.getBoolean(ActivityControlCenter.IS_SHAKE,true))
+		    Shake();
 	}
 
 	protected void Shake(){
@@ -408,9 +409,7 @@ public class Search extends AppCompatActivity {
         editor.putInt(ActivityControlCenter.CMD, 0);
         editor.commit();
 
-        /*TaskService.stop(this);
-        TaskService.start(this, mHandler);
-        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT_TRY, null));*/
+        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 	}
 
 	@Override
@@ -744,6 +743,7 @@ public class Search extends AppCompatActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 						dialog.dismiss();
 					}
 				});

@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Util.SoundEffect;
 import sjtu.se.Util.TaskService;
 import sjtu.se.Util.TaskService.Task;
@@ -43,14 +47,11 @@ import sjtu.se.Meet.R;
 public class ChatActivity extends Activity implements View.OnClickListener{
 	private final String TAG = "ChatActivity";
 	public static int sAliveCount = 0;
-	public static final String EXTRA_MESSAGER = "sjtu.se.Activity.BUNDLE";
 	
 	// 蓝牙状态变量
 	private static int sBTState = -1;
-	
-	private final int REQUES_BT_ENABLE_CODE = 123;
-	private final int REQUES_SELECT_BT_CODE = 222;
-	
+
+    private Context ctx;
 	private ListView mList;
 	private EditText mInput;
 	private Button mSendBtn;
@@ -68,7 +69,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	private DrawerHScrollView mScrollView;
 	private ChatListViewAdapter mAdapter2;
 	private ArrayList<HashMap<String, Object>> mChatContent2 = new ArrayList<HashMap<String, Object>>();
-	private BluetoothAdapter mBluetoothAdapter;
 	
 	private ArrayList<HashMap<String, Object>> mEmoList = new ArrayList<HashMap<String, Object>>();
 	
@@ -76,15 +76,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-
-
-		// 获得蓝牙管理器
-		/*mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (mBluetoothAdapter == null) {
-			Log.e(TAG, "Your device is not support Bluetooth!");
-			Toast.makeText(this, "该设备没有蓝牙设备", Toast.LENGTH_LONG).show();
-			return;
-		}*/
 		
 		mRootLayout = (LinearLayout) findViewById(R.id.root);
 		mChatLayout = (LinearLayout) findViewById(R.id.topPanel);
@@ -115,14 +106,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		mEmoButton.setOnClickListener(this);
 		
 		//---------------------------------------------------------------------
-		// 打开蓝牙设备
-		/*if (!mBluetoothAdapter.isEnabled()) {
-			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableBtIntent, REQUES_BT_ENABLE_CODE); 
-		}else{
-			// 默认设备作为服务端
-			startServiceAsServer();
-		}*/
+        ctx = this;
 
 		if(this.getIntent().getBooleanExtra("isclient", true)) {
 			mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
@@ -130,9 +114,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 				return;
 			TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
 		}
-		else {
-			startServiceAsServer();
-		}
+
+        TaskService.mActivityHandler = mHandler;
 		//---------------------------------------------------------------------
 	}
 
@@ -422,12 +405,11 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 					new String[]{"img"}, new int[]{R.id.imageView});
 	}
 	
-	private void startServiceAsServer(){
-		TaskService.stop(this);
+	/*private void startServiceAsServer(){
 		TaskService.start(this, mHandler);
 		TaskService.newTask(new Task(mHandler, Task.TASK_START_ACCEPT, null));
 		SoundEffect.getInstance(this).play(SoundEffect.SOUND_PLAY);
-	}
+	}*/
 	
 	@Override
 	protected void onResume() {
@@ -448,7 +430,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		//if(mBluetoothAdapter.isEnabled())
 		//	mBluetoothAdapter.disable();
 		// 停止服务
-		TaskService.stop(this);
+		//TaskService.stop(this);
 	}
 	
 	
@@ -567,12 +549,12 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		return scrollHei + pageNumHei;
 	}
 	
-	private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
 			switch(msg.what){
-			case -1:
-				showToast("没有连接其它用户，点击\"Menu\"扫描并选择周国用户");
+                case -1:
+                    showToast("没有连接其它用户，点击\"Menu\"扫描并选择周国用户");
 				SoundEffect.getInstance(ChatActivity.this).play(SoundEffect.SOUND_ERR);
 				break;
 			case Task.TASK_RECV_MSG:
@@ -581,11 +563,11 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 				if(msg.obj instanceof HashMap<?, ?>){
 					showTargetMessage((HashMap<String, Object>) msg.obj);
 				}
-				if(sAliveCount <= 0){
+				/*if(sAliveCount <= 0){
 					Notify.notifyMessage(ChatActivity.this, "您有未读取消息", ChatActivity.this);
-				}
+				}*/
 				break;
-			case Task.TASK_GET_REMOTE_STATE:
+			/*case Task.TASK_GET_REMOTE_STATE:
 				setTitle((String)msg.obj);
 				if(sAliveCount <= 0){
 					if(isBTStateChanged(msg.arg1) && msg.arg1 != TaskService.BT_STAT_WAIT)
@@ -597,7 +579,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 				if(sAliveCount <= 0){
 					Notify.notifyMessage(ChatActivity.this, msg.obj.toString(), ChatActivity.this);
 				}
-				break;
+				break;*/
 			}
 		}
 	};
@@ -665,6 +647,26 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("退出将断开连接，确定吗？");
+            builder.setTitle("提示");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((ChatActivity)ctx).finish();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
             return true;
         }
         return super.onKeyDown(keyCode, event);

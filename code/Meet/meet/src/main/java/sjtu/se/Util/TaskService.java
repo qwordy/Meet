@@ -27,515 +27,500 @@ import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
  */
 public class TaskService extends Service {
 
-	public static class Task {
-		public static final int TASK_START_ACCEPT_TRY = 0;
-		public static final int TASK_START_ACCEPT = 1;
-		public static final int TASK_START_CONN_THREAD = 2;
-		public static final int TASK_SEND_MSG = 3;
-		public static final int TASK_GET_REMOTE_STATE = 4;
-		public static final int TASK_RECV_MSG = 5;
-		public static final int TASK_RECV_FILE = 6;
-		/** mParam[0]：path */
-		public static final int TASK_SEND_FILE = 7;
-		public static final int TASK_PROGRESS = 8;
+    public static class Task {
+        public static final int TASK_START_ACCEPT = 1;
+        public static final int TASK_START_CONN_THREAD = 2;
+        public static final int TASK_SEND_MSG = 3;
+        public static final int TASK_GET_REMOTE_STATE = 4;
+        public static final int TASK_RECV_MSG = 5;
+        public static final int TASK_RECV_FILE = 6;
+        /** mParam[0]：path */
+        public static final int TASK_SEND_FILE = 7;
+        public static final int TASK_PROGRESS = 8;
 
 
-		// 任务ID
-		private int mTaskID;
-		// 任务参数列表
-		public Object[] mParams;
+        // 任务ID
+        private int mTaskID;
+        // 任务参数列表
+        public Object[] mParams;
 
-		private Handler mH;
-
-
-		public Task(Handler handler, int taskID, Object[] params){
-			this.mH = handler;
-			this.mTaskID = taskID;
-			this.mParams = params;
-		}
-
-		public Handler getHandler(){
-			return this.mH;
-		}
-
-		public int getTaskID(){
-			return mTaskID;
-		}
-	}
-
-	public static final int BT_STAT_WAIT = 0;
-	public static final int BT_STAT_CONN = 1;
-	public static final int BT_STAT_ONLINE = 2;
-	public static final int BT_STAT_UNKNOWN = 3;
-
-	private final String TAG = "TaskService";
-	private TaskThread mThread;
-
-	private BluetoothAdapter mBluetoothAdapter;
-	private AcceptThread mAcceptThread;
-	private ConnectThread mConnectThread;
-
-	private boolean isServerMode = true;
-
-	private static Handler mActivityHandler;
-
-	// 任务队列
-	private static ArrayList<Task> mTaskList = new ArrayList<Task>();
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (mBluetoothAdapter == null) {
-			Log.e(TAG, "Your device is not support Bluetooth!");
-			return;
-		}
-		mThread = new TaskThread();
-		mThread.start();
-	}
-
-	private Handler mServiceHandler = new Handler() {
-		@Override
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case Task.TASK_GET_REMOTE_STATE:
-				android.os.Message activityMsg = mActivityHandler
-						.obtainMessage();
-				activityMsg.what = msg.what;
-				if (mAcceptThread != null && mAcceptThread.isAlive()) {
-					activityMsg.obj = "等待连接...";
-					activityMsg.arg1 = BT_STAT_WAIT;
-				} else if (mCommThread != null && mCommThread.isAlive()) {
-					activityMsg.obj = mCommThread.getRemoteName() + "[在线]";
-					activityMsg.arg1 = BT_STAT_ONLINE;
-				} else if (mConnectThread != null && mConnectThread.isAlive()) {
-					SoundEffect.getInstance(TaskService.this).play(3);
-					activityMsg.obj = "正在连接："
-							+ mConnectThread.getDevice().getName();
-					activityMsg.arg1 = BT_STAT_CONN;
-				} else {
-					activityMsg.obj = "未知状态";
-					activityMsg.arg1 = BT_STAT_UNKNOWN;
-					SoundEffect.getInstance(TaskService.this).play(2);
-					// 重新等待连接
-					mAcceptThread = new AcceptThread();
-					mAcceptThread.start();
-					isServerMode = true;
-				}
-
-				mActivityHandler.sendMessage(activityMsg);
-				break;
-
-			default:
-				break;
-			}
-			super.handleMessage(msg);
-		}
-	};
-	
-	public static void start(Context c, Handler handler){
-		mActivityHandler = handler;
-		Intent intent = new Intent(c, TaskService.class);
-		c.startService(intent);
-	}
-	
-	public static void stop(Context c){
-		Intent intent = new Intent(c, TaskService.class);
-		c.stopService(intent);
-	}
-	
+        private Handler mH;
 
 
-	public static void newTask(Task target) {
-		synchronized (mTaskList) {
-			mTaskList.add(target);
-		}
-	}
+        public Task(Handler handler, int taskID, Object[] params){
+            this.mH = handler;
+            this.mTaskID = taskID;
+            this.mParams = params;
+        }
 
-	private class TaskThread extends Thread {
-		private boolean isRun = true;
-		private int mCount = 0;
+        public Handler getHandler(){
+            return this.mH;
+        }
 
-		public void cancel() {
-			isRun = false;
-		}
+        public int getTaskID(){
+            return mTaskID;
+        }
+    }
 
-		@Override
-		public void run() {
-			Task task;
-			while (isRun) {
+    public static final int BT_STAT_WAIT = 0;
+    public static final int BT_STAT_CONN = 1;
+    public static final int BT_STAT_ONLINE = 2;
+    public static final int BT_STAT_UNKNOWN = 3;
 
-				// 有任务
-				if (mTaskList.size() > 0) {
-					synchronized (mTaskList) {
-						// 获得任务
-						task = mTaskList.get(0);
-						doTask(task);
-					}
-				} else {
-					try {
-						Thread.sleep(200);
-						mCount++;
-					} catch (InterruptedException e) {
-					}
-					// 每过10秒钟进行一次状态检查
-					if (mCount >= 50) {
-						mCount = 0;
-						// 检查远程设备状态
-						android.os.Message handlerMsg = mServiceHandler
-								.obtainMessage();
-						handlerMsg.what = Task.TASK_GET_REMOTE_STATE;
-						mServiceHandler.sendMessage(handlerMsg);
-					}
-				}
-			}
-		}
+    private final String TAG = "TaskService";
+    private TaskThread mThread;
 
-	}
+    private BluetoothAdapter mBluetoothAdapter;
+    private AcceptThread mAcceptThread;
+    private ConnectThread mConnectThread;
 
-	private void doTask(Task task) {
-		switch (task.getTaskID()) {
-		case Task.TASK_START_ACCEPT_TRY:
-			mAcceptThread = new AcceptThread(false);
-			mAcceptThread.start();
-			isServerMode = true;
-			break;
-		case Task.TASK_START_ACCEPT:
-			mAcceptThread = new AcceptThread();
-			mAcceptThread.start();
-			isServerMode = true;
-			break;
-		case Task.TASK_START_CONN_THREAD:
-			if (task.mParams == null || task.mParams.length == 0) {
-				break;
-			}
-			BluetoothDevice remote = (BluetoothDevice) task.mParams[0];
-			mConnectThread = new ConnectThread(remote);
-			mConnectThread.start();
-			isServerMode = false;
-			break;
-		case Task.TASK_SEND_MSG:
-			boolean sucess = false;
-			if (mCommThread == null || !mCommThread.isAlive()
-					|| task.mParams == null || task.mParams.length == 0) {
-				Log.e(TAG, "mCommThread or task.mParams null");
-			}else{
-				byte[] msg = null;
-				try {
-					msg = DataProtocol.packMsg((String) task.mParams[0]);
-					sucess = mCommThread.write(msg);
-				} catch (UnsupportedEncodingException e) {
-					sucess = false;
-				}
-			}
-			if (!sucess) {
-				android.os.Message returnMsg = mActivityHandler.obtainMessage();
-				returnMsg.what = Task.TASK_SEND_MSG;
-				returnMsg.obj = "消息发送失败";
-				mActivityHandler.sendMessage(returnMsg);
-			}
-			break;
-		}
+    private boolean isServerMode = true;
 
-		// 移除任务
-		mTaskList.remove(task);
-	}
+    public static Handler mActivityHandler;
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		mThread.cancel();
-	}
+    // 任务队列
+    private static ArrayList<Task> mTaskList = new ArrayList<Task>();
 
-	private final String UUID_STR = "00001101-0000-1000-8000-00805F9B34FB";
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Log.e(TAG, "Your device is not support Bluetooth!");
+            return;
+        }
+        mThread = new TaskThread();
+        mThread.start();
+    }
 
-	/**
-	 * 等待客户端连接线程
-	 * 
-	 * @author Administrator
-	 */
-	private class AcceptThread extends Thread {
-		private final BluetoothServerSocket mmServerSocket;
-		private boolean isCancel = false;
+    private Handler mServiceHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case Task.TASK_GET_REMOTE_STATE:
+                    android.os.Message activityMsg = mActivityHandler
+                            .obtainMessage();
+                    activityMsg.what = msg.what;
+                    if (mAcceptThread != null && mAcceptThread.isAlive()) {
+                        activityMsg.obj = "等待连接...";
+                        activityMsg.arg1 = BT_STAT_WAIT;
+                    } else if (mCommThread != null && mCommThread.isAlive()) {
+                        activityMsg.obj = mCommThread.getRemoteName() + "[在线]";
+                        activityMsg.arg1 = BT_STAT_ONLINE;
+                    } else if (mConnectThread != null && mConnectThread.isAlive()) {
+                        SoundEffect.getInstance(TaskService.this).play(3);
+                        activityMsg.obj = "正在连接："
+                                + mConnectThread.getDevice().getName();
+                        activityMsg.arg1 = BT_STAT_CONN;
+                    } else {
+                        activityMsg.obj = "未知状态";
+                        activityMsg.arg1 = BT_STAT_UNKNOWN;
+                        SoundEffect.getInstance(TaskService.this).play(2);
+                        // 重新等待连接
+                        mAcceptThread = new AcceptThread();
+                        mAcceptThread.start();
+                        isServerMode = true;
+                    }
 
-		private boolean status;
+                    mActivityHandler.sendMessage(activityMsg);
+                    break;
 
-		public AcceptThread() {
-			Log.d(TAG, "AcceptThread");
-			BluetoothServerSocket tmp = null;
-			try {
-				tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
-						"MT_Chat_Room", UUID.fromString(UUID_STR));
-			} catch (IOException e) {
-			}
-			mmServerSocket = tmp;
-			status = true;
-		}
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
-		public AcceptThread(Boolean s) {
-			Log.d(TAG, "AcceptThread");
-			BluetoothServerSocket tmp = null;
-			try {
-				tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
-						"MT_Chat_Room", UUID.fromString(UUID_STR));
-			} catch (IOException e) {
-			}
-			mmServerSocket = tmp;
-			status = s;
-		}
+    public static void start(Context c, Handler handler){
+        mActivityHandler = handler;
+        Intent intent = new Intent(c, TaskService.class);
+        c.startService(intent);
+    }
 
-		public void run() {
-			BluetoothSocket socket = null;
-			while (true) {
-				try {
-					// 阻塞等待
-					socket = mmServerSocket.accept();
-				} catch (IOException e) {
-					if (!isCancel) {
-						try {
-							mmServerSocket.close();
-						} catch (IOException e1) {
-						}
-						mAcceptThread = new AcceptThread();
-						mAcceptThread.start();
-						isServerMode = true;
-					}
-					break;
-				}
-				if (socket != null) {
-					//---------------------
-					mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
-					if(status)
-						manageConnectedSocket(socket);
-					//---------------------
-					try {
-						mmServerSocket.close();
-					} catch (IOException e) {
-					}
-					mAcceptThread = null;
-					break;
-				}
-			}
-		}
+    public static void stop(Context c){
+        Intent intent = new Intent(c, TaskService.class);
+        c.stopService(intent);
+    }
 
-		public void cancel() {
-			try {
-				Log.d(TAG, "AcceptThread canceled");
-				isCancel = true;
-				isServerMode = false;
-				mmServerSocket.close();
-				mAcceptThread = null;
-				if (mCommThread != null && mCommThread.isAlive()) {
-					mCommThread.cancel();
-				}
-			} catch (IOException e) {
-			}
-		}
-	}
 
-	/**
-	 * 作为客户端连接指定的蓝牙设备线程
-	 * 
-	 * @author Administrator
-	 */
-	private class ConnectThread extends Thread {
-		private final BluetoothSocket mmSocket;
-		private final BluetoothDevice mmDevice;
 
-		public ConnectThread(BluetoothDevice device) {
+    public static void newTask(Task target) {
+        synchronized (mTaskList) {
+            mTaskList.add(target);
+        }
+    }
 
-			Log.d(TAG, "ConnectThread");
+    private class TaskThread extends Thread {
+        private boolean isRun = true;
+        private int mCount = 0;
 
-			if (mAcceptThread != null && mAcceptThread.isAlive()) {
-				mAcceptThread.cancel();
-			}
+        public void cancel() {
+            isRun = false;
+        }
 
-			if (mCommThread != null && mCommThread.isAlive()) {
-				mCommThread.cancel();
-			}
+        @Override
+        public void run() {
+            Task task;
+            while (isRun) {
 
-			// Use a temporary object that is later assigned to mmSocket,
-			// because mmSocket is final
-			BluetoothSocket tmp = null;
-			mmDevice = device;
-			try {
-				tmp = device.createRfcommSocketToServiceRecord(UUID
-						.fromString(UUID_STR));
-			} catch (IOException e) {
-				Log.d(TAG, "createRfcommSocketToServiceRecord error!");
-			}
+                // 有任务
+                if (mTaskList.size() > 0) {
+                    synchronized (mTaskList) {
+                        // 获得任务
+                        task = mTaskList.get(0);
+                        doTask(task);
+                    }
+                } else {
+                    try {
+                        Thread.sleep(200);
+                        mCount++;
+                    } catch (InterruptedException e) {
+                    }
+                    // 每过10秒钟进行一次状态检查
+                    if (mCount >= 50) {
+                        mCount = 0;
+                        // 检查远程设备状态
+                        android.os.Message handlerMsg = mServiceHandler
+                                .obtainMessage();
+                        handlerMsg.what = Task.TASK_GET_REMOTE_STATE;
+                        mServiceHandler.sendMessage(handlerMsg);
+                    }
+                }
+            }
+        }
 
-			mmSocket = tmp;
-		}
+    }
 
-		public BluetoothDevice getDevice() {
-			return mmDevice;
-		}
+    private void doTask(Task task) {
+        switch (task.getTaskID()) {
+            case Task.TASK_START_ACCEPT:
+                mAcceptThread = new AcceptThread();
+                mAcceptThread.start();
+                isServerMode = true;
+                break;
+            case Task.TASK_START_CONN_THREAD:
+                if (task.mParams == null || task.mParams.length == 0) {
+                    break;
+                }
+                BluetoothDevice remote = (BluetoothDevice) task.mParams[0];
+                mConnectThread = new ConnectThread(remote);
+                mConnectThread.start();
+                isServerMode = false;
+                break;
+            case Task.TASK_SEND_MSG:
+                boolean sucess = false;
+                if (mCommThread == null || !mCommThread.isAlive()
+                        || task.mParams == null || task.mParams.length == 0) {
+                    Log.e(TAG, "mCommThread or task.mParams null");
+                }else{
+                    byte[] msg = null;
+                    try {
+                        msg = DataProtocol.packMsg((String) task.mParams[0]);
+                        sucess = mCommThread.write(msg);
+                    } catch (UnsupportedEncodingException e) {
+                        sucess = false;
+                    }
+                }
+                if (!sucess) {
+                    android.os.Message returnMsg = mActivityHandler.obtainMessage();
+                    returnMsg.what = Task.TASK_SEND_MSG;
+                    returnMsg.obj = "消息发送失败";
+                    mActivityHandler.sendMessage(returnMsg);
+                }
+                break;
+        }
 
-		public void run() {
-			// Cancel discovery because it will slow down the connection
-			mBluetoothAdapter.cancelDiscovery();
+        // 移除任务
+        mTaskList.remove(task);
+    }
 
-			try {
-				// Connect the device through the socket. This will block
-				// until it succeeds or throws an exception
-				mmSocket.connect();
-			} catch (IOException connectException) {
-				// Unable to connect; close the socket and get out
-				Log.e(TAG, "Connect server failed");
-				try {
-					mmSocket.close();
-				} catch (IOException closeException) {
-				}
-				/*mAcceptThread = new AcceptThread();
-				mAcceptThread.start();
-				isServerMode = true;*/
-				mConnectThread = new ConnectThread(mmDevice);
-				mConnectThread.start();
-				return;
-			} // Do work to manage the connection (in a separate thread)
-			manageConnectedSocket(mmSocket);
-		}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mThread.cancel();
+    }
 
-		public void cancel() {
-			try {
-				mmSocket.close();
-			} catch (IOException e) {
-			}
-			mConnectThread = null;
-		}
-	}
+    private final String UUID_STR = "00001101-0000-1000-8000-00805F9B34FB";
 
-	private ConnectedThread mCommThread;
+    /**
+     * 等待客户端连接线程
+     *
+     * @author Administrator
+     */
+    private class AcceptThread extends Thread {
+        private final BluetoothServerSocket mmServerSocket;
+        private boolean isCancel = false;
 
-	private void manageConnectedSocket(BluetoothSocket socket) {
-		// 启动子线程来维持连接
-		mCommThread = new ConnectedThread(socket);
-		mCommThread.start();
-	}
+        public AcceptThread() {
+            Log.d(TAG, "AcceptThread");
 
-	private class ConnectedThread extends Thread {
-		private final BluetoothSocket mmSocket;
-		private final InputStream mmInStream;
-		private final OutputStream mmOutStream;
-		private BufferedOutputStream mmBos;
-		private byte[] buffer;
+            //-------------------
 
-		public ConnectedThread(BluetoothSocket socket) {
-			Log.d(TAG, "ConnectedThread");
-			mmSocket = socket;
-			InputStream tmpIn = null;
-			OutputStream tmpOut = null;
-			try {
-				tmpIn = socket.getInputStream();
-				tmpOut = socket.getOutputStream();
-			} catch (IOException e) {
-			}
-			mmInStream = tmpIn;
-			mmOutStream = tmpOut;
-			mmBos = new BufferedOutputStream(mmOutStream);
-		}
+            if (mCommThread != null && mCommThread.isAlive()) {
+                mCommThread.cancel();
+            }
 
-		public OutputStream getOutputStream() {
-			return mmOutStream;
-		}
+            //-------------------
 
-		public boolean write(byte[] msg) {
-			if (msg == null)
-				return false;
-			try {
-				mmBos.write(msg);
-				mmBos.flush();
-				System.out.println("Write:" + msg);
-			} catch (IOException e) {
-				return false;
-			}
-			return true;
-		}
+            BluetoothServerSocket tmp = null;
+            try {
+                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
+                        "MT_Chat_Room", UUID.fromString(UUID_STR));
+            } catch (IOException e) {
+            }
+            mmServerSocket = tmp;
+        }
 
-		public String getRemoteName() {
-			return mmSocket.getRemoteDevice().getName();
-		}
+        public void run() {
+            BluetoothSocket socket = null;
+            while (true) {
+                try {
+                    // 阻塞等待
+                    socket = mmServerSocket.accept();
+                } catch (Exception e) {
+                    if (!isCancel) {
+                        try {
+                            mmServerSocket.close();
+                        } catch (Exception e1) {
+                        }
+                        mAcceptThread = new AcceptThread();
+                        mAcceptThread.start();
+                        isServerMode = true;
+                    }
+                    break;
+                }
+                if (socket != null) {
+                    //---------------------
+                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
+                    manageConnectedSocket(socket);
+                    //---------------------
+                    try {
+                        mmServerSocket.close();
+                    } catch (IOException e) {
+                    }
+                    mAcceptThread = null;
+                    break;
+                }
+            }
+        }
 
-		public void cancel() {
-			try {
-				mmSocket.close();
-			} catch (IOException e) {
-			}
-			mCommThread = null;
-		}
+        public void cancel() {
+            try {
+                Log.d(TAG, "AcceptThread canceled");
+                isCancel = true;
+                isServerMode = false;
+                mmServerSocket.close();
+                mAcceptThread = null;
+                if (mCommThread != null && mCommThread.isAlive()) {
+                    mCommThread.cancel();
+                }
+            } catch (IOException e) {
+            }
+        }
+    }
 
-		public void run() {
-			try {
-				write(DataProtocol.packMsg(mBluetoothAdapter.getName()
-						+ "已经上线\n"));
-			} catch (UnsupportedEncodingException e2) {
-			}
-			int size;
-			DataProtocol.Message msg;
-			android.os.Message handlerMsg;
-			buffer = new byte[1024];
+    /**
+     * 作为客户端连接指定的蓝牙设备线程
+     *
+     * @author Administrator
+     */
+    private class ConnectThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final BluetoothDevice mmDevice;
 
-			BufferedInputStream bis = new BufferedInputStream(mmInStream);
-			// BufferedReader br = new BufferedReader(new
-			// InputStreamReader(mmInStream));
-			HashMap<String, Object> data;
-			while (true) {
-				try {
-					size = bis.read(buffer);
-					msg = DataProtocol.unpackData(buffer);
-					if (msg == null)
-						continue;
+        public ConnectThread(BluetoothDevice device) {
 
-					if (mActivityHandler == null) {
-						return;
-					}
+            Log.d(TAG, "ConnectThread");
 
-					msg.remoteDevName = mmSocket.getRemoteDevice().getName();
-					if (msg.type == DataProtocol.TYPE_FILE) {
-						// 文件接收处理忽略
+            if (mAcceptThread != null && mAcceptThread.isAlive()) {
+                mAcceptThread.cancel();
+            }
 
-					} else if (msg.type == DataProtocol.TYPE_MSG) {
-						data = new HashMap<String, Object>();
-						System.out.println("Read data.");
-						data.put(ChatListViewAdapter.KEY_ROLE,
-								ChatListViewAdapter.ROLE_TARGET);
-						data.put(ChatListViewAdapter.KEY_NAME,
-								msg.remoteDevName);
-						data.put(ChatListViewAdapter.KEY_TEXT, msg.msg);
-						// 通过Activity更新到UI上
-						handlerMsg = mActivityHandler.obtainMessage();
-						handlerMsg.what = Task.TASK_RECV_MSG;
-						handlerMsg.obj = data;
-						mActivityHandler.sendMessage(handlerMsg);
-					}
-				} catch (IOException e) {
-					try {
-						mmSocket.close();
-					} catch (IOException e1) {
-					}
-					mCommThread = null;
-					if (isServerMode) {
-						// 检查远程设备状态
-						handlerMsg = mServiceHandler.obtainMessage();
-						handlerMsg.what = Task.TASK_GET_REMOTE_STATE;
-						mServiceHandler.sendMessage(handlerMsg);
-						SoundEffect.getInstance(TaskService.this).play(2);
-						mAcceptThread = new AcceptThread();
-						mAcceptThread.start();
-					}
-					break;
-				}
-			}
-		}
-	}
+            if (mCommThread != null && mCommThread.isAlive()) {
+                mCommThread.cancel();
+            }
 
-	// ================================================================
+            // Use a temporary object that is later assigned to mmSocket,
+            // because mmSocket is final
+            BluetoothSocket tmp = null;
+            mmDevice = device;
+            try {
+                tmp = device.createRfcommSocketToServiceRecord(UUID
+                        .fromString(UUID_STR));
+            } catch (IOException e) {
+                Log.d(TAG, "createRfcommSocketToServiceRecord error!");
+            }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+            mmSocket = tmp;
+        }
+
+        public BluetoothDevice getDevice() {
+            return mmDevice;
+        }
+
+        public void run() {
+            // Cancel discovery because it will slow down the connection
+            mBluetoothAdapter.cancelDiscovery();
+            try {
+                // Connect the device through the socket. This will block
+                // until it succeeds or throws an exception
+                mmSocket.connect();
+            } catch (IOException connectException) {
+                // Unable to connect; close the socket and get out
+                Log.e(TAG, "Connect server failed");
+                try {
+                    mmSocket.close();
+                } catch (IOException closeException) {
+                }
+                mAcceptThread = new AcceptThread();
+                mAcceptThread.start();
+                isServerMode = true;
+                return;
+            } // Do work to manage the connection (in a separate thread)
+            manageConnectedSocket(mmSocket);
+        }
+
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+            }
+            mConnectThread = null;
+        }
+    }
+
+    private ConnectedThread mCommThread;
+
+    private void manageConnectedSocket(BluetoothSocket socket) {
+        // 启动子线程来维持连接
+        mCommThread = new ConnectedThread(socket);
+        mCommThread.start();
+    }
+
+    private class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+        private BufferedOutputStream mmBos;
+        private byte[] buffer;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            Log.d(TAG, "ConnectedThread");
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) {
+            }
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+            mmBos = new BufferedOutputStream(mmOutStream);
+        }
+
+        public OutputStream getOutputStream() {
+            return mmOutStream;
+        }
+
+        public boolean write(byte[] msg) {
+            if (msg == null)
+                return false;
+            try {
+                mmBos.write(msg);
+                mmBos.flush();
+                System.out.println("Write:" + msg);
+            } catch (IOException e) {
+                return false;
+            }
+            return true;
+        }
+
+        public String getRemoteName() {
+            return mmSocket.getRemoteDevice().getName();
+        }
+
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+            }
+            mCommThread = null;
+        }
+
+        public void run() {
+            /*try {
+                //write(DataProtocol.packMsg(mBluetoothAdapter.getName()
+                write(DataProtocol.packMsg("用户"
+                        + "已经上线\n"));
+            } catch (UnsupportedEncodingException e2) {
+            }*/
+            int size;
+            DataProtocol.Message msg;
+            android.os.Message handlerMsg;
+            buffer = new byte[1024];
+
+            BufferedInputStream bis = new BufferedInputStream(mmInStream);
+            // BufferedReader br = new BufferedReader(new
+            // InputStreamReader(mmInStream));
+            HashMap<String, Object> data;
+            while (true) {
+                try {
+                    size = bis.read(buffer);
+                    msg = DataProtocol.unpackData(buffer);
+                    if (msg == null)
+                        continue;
+
+                    if (mActivityHandler == null) {
+                        return;
+                    }
+
+                    msg.remoteDevName = mmSocket.getRemoteDevice().getName();
+                    if (msg.type == DataProtocol.TYPE_FILE) {
+                        // 文件接收处理忽略
+
+                    } else if (msg.type == DataProtocol.TYPE_MSG) {
+                        data = new HashMap<String, Object>();
+                        System.out.println("Read data.");
+                        data.put(ChatListViewAdapter.KEY_ROLE,
+                                ChatListViewAdapter.ROLE_TARGET);
+                        data.put(ChatListViewAdapter.KEY_NAME,
+                                msg.remoteDevName);
+                        data.put(ChatListViewAdapter.KEY_TEXT, msg.msg);
+                        // 通过Activity更新到UI上
+                        handlerMsg = mActivityHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_RECV_MSG;
+                        handlerMsg.obj = data;
+                        mActivityHandler.sendMessage(handlerMsg);
+                    }
+                } catch (IOException e) {
+                    try {
+                        mmSocket.close();
+                    } catch (IOException e1) {
+                    }
+                    mCommThread = null;
+                    /*if (isServerMode) {
+                        // 检查远程设备状态
+                        handlerMsg = mServiceHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_GET_REMOTE_STATE;
+                        mServiceHandler.sendMessage(handlerMsg);
+                        SoundEffect.getInstance(TaskService.this).play(2);
+                        mAcceptThread = new AcceptThread();
+                        mAcceptThread.start();
+                    }*/
+                    break;
+                }
+            }
+        }
+    }
+
+    // ================================================================
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
