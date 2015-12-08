@@ -627,14 +627,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*if(requestCode == REQUES_BT_ENABLE_CODE && resultCode == RESULT_OK){
-            startServiceAsServer();
-        }else if(requestCode == REQUES_SELECT_BT_CODE && resultCode == RESULT_OK){
-            mRemoteDevice = data.getParcelableExtra("DEVICE");
-            if(mRemoteDevice == null)
-                return;
-            TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
-        }*/
         super.onActivityResult(requestCode, resultCode, data);
     }
 

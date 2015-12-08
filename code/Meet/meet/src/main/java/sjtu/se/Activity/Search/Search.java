@@ -83,7 +83,6 @@ public class Search extends AppCompatActivity {
 	private Handler handler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
 			switch(msg.what){
 				case 0:{
 					DeviceListAdapter.reset();
@@ -117,13 +116,14 @@ public class Search extends AppCompatActivity {
 		public void handleMessage(Message msg) {
 			switch(msg.what){
 				case 0:
+                    Notify.notifyMessage(Search.this,"有人想和你连接",Search.this);
+
 					AlertDialog.Builder builder = new Builder(ctx);
 					builder.setMessage("确定建立连接么？");
 					builder.setTitle("提示");
 					builder.setPositiveButton("确定", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
                             SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putInt(ActivityControlCenter.CMD, 2);
@@ -138,7 +138,6 @@ public class Search extends AppCompatActivity {
 					builder.setNegativeButton("取消", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
 
 							dialog.dismiss();
 						}
@@ -672,7 +671,7 @@ public class Search extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // TODO Auto-generated method stub
+
                 String addr = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
                 SharedPreferences sp = getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
                 String res = sp.getString(addr, "Not found");
@@ -700,7 +699,7 @@ public class Search extends AppCompatActivity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				// TODO Auto-generated method stub
+
 				AlertDialog.Builder builder = new Builder(ctx);
 				String nick = ((DevBluetooth)DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
 				final String address = ((DevBluetooth)DeviceListAdapter.getItem(position)).Address;
@@ -709,7 +708,7 @@ public class Search extends AppCompatActivity {
 				builder.setPositiveButton("确定", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+
 						/*ActivityControlCenter.CMD = 2;
 						
 						Bundle bundle = new Bundle();
@@ -736,7 +735,7 @@ public class Search extends AppCompatActivity {
 				builder.setNegativeButton("取消", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+
                         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 						dialog.dismiss();
 					}
@@ -753,7 +752,7 @@ public class Search extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // TODO Auto-generated method stub
+
                 String addr = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
                 SharedPreferences sp = getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
                 String res = sp.getString(addr, "Not found");
@@ -781,7 +780,7 @@ public class Search extends AppCompatActivity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
+
 				AlertDialog.Builder builder = new Builder(ctx);
 				String nick = ((DevBluetooth)RecommendDevListAdapter.getItem(position)).Info.baseinfo.Nick;
 				final String address = ((DevBluetooth)RecommendDevListAdapter.getItem(position)).Address;
@@ -790,7 +789,6 @@ public class Search extends AppCompatActivity {
 				builder.setPositiveButton("确定", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
 						
 						ActivityControlCenter.CMD = 2;
 						
@@ -807,7 +805,7 @@ public class Search extends AppCompatActivity {
 				builder.setNegativeButton("取消", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+
 						dialog.dismiss();
 					}
 				});
@@ -823,7 +821,7 @@ public class Search extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // TODO Auto-generated method stub
+
                 String addr = ((DevBluetooth) HistoryDevListAdapter.getItem(position)).Address;
                 SharedPreferences sp = getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
                 String res = sp.getString(addr, "Not found");
