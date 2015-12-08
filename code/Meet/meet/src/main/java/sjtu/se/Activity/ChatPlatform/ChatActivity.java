@@ -564,20 +564,20 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 					showTargetMessage((HashMap<String, Object>) msg.obj);
 				}
 				/*if(sAliveCount <= 0){
-					Notify.notifyMessage(ChatActivity.this, "您有未读取消息", ChatActivity.this);
+					Notify.notifyMessage(ChatActivity.this, "您有未读取消息","遇见MEET","您有未读取消息", ChatActivity.this);
 				}*/
 				break;
 			/*case Task.TASK_GET_REMOTE_STATE:
 				setTitle((String)msg.obj);
 				if(sAliveCount <= 0){
 					if(isBTStateChanged(msg.arg1) && msg.arg1 != TaskService.BT_STAT_WAIT)
-						Notify.notifyMessage(ChatActivity.this, (String) msg.obj, ChatActivity.this);
+						Notify.notifyMessage(ChatActivity.this, "对方状态更改","遇见MEET",(String) msg.obj, ChatActivity.this);
 				}
 				break;
 			case Task.TASK_SEND_MSG:
 				showToast(msg.obj.toString());
 				if(sAliveCount <= 0){
-					Notify.notifyMessage(ChatActivity.this, msg.obj.toString(), ChatActivity.this);
+					Notify.notifyMessage(ChatActivity.this, "消息","遇见MEET",msg.obj.toString(), ChatActivity.this);
 				}
 				break;*/
 			}

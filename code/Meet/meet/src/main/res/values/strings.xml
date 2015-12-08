@@ -25,7 +25,7 @@
     <string name="overt">公开</string>
     <string name="hide">隐藏</string>
     <string name="devBtn">附近的人</string>
-    <string name="hisBtn">曾经关注</string>
+    <string name="hisBtn">历史记录</string>
     <string name="RecBtn">为您推荐</string>
     <string name="title_activity_personal_information">个人资料</string>
     <string name="title_activity_contact_information">联系方式</string>
