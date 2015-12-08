@@ -284,9 +284,12 @@ public class TaskService extends Service {
                             mmServerSocket.close();
                         } catch (Exception e1) {
                         }
-                        mAcceptThread = new AcceptThread();
-                        mAcceptThread.start();
-                        isServerMode = true;
+                        try {
+                            mAcceptThread = new AcceptThread();
+                            mAcceptThread.start();
+                            isServerMode = true;
+                        }catch (Exception e2) {
+                        }
                     }
                     break;
                 }

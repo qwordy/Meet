@@ -402,7 +402,7 @@ public class Search extends AppCompatActivity {
         editor.putInt(ActivityControlCenter.CMD, 0);
         editor.commit();
 
-        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+        //TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 	}
 
 	@Override
@@ -661,7 +661,7 @@ public class Search extends AppCompatActivity {
 		DeviceList.setVisibility(View.GONE);
 		RecommendDeviceList.setVisibility(View.GONE);
 		HistoryDeviceList.setVisibility(View.VISIBLE);
-		getPairedDevice();
+		//getPairedDevice();
 	}
 
 	//程治谦
@@ -708,17 +708,6 @@ public class Search extends AppCompatActivity {
 				builder.setPositiveButton("确定", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-
-						/*ActivityControlCenter.CMD = 2;
-						
-						Bundle bundle = new Bundle();
-						bundle.putParcelable("information", overt_user);
-						Intent intent = new Intent(Search.this, ChatActivity.class);
-						intent.putExtra("address", address);
-						intent.putExtra("isclient", true);
-						intent.putExtras(bundle);
-						ctx.startActivity(intent);
-						dialog.dismiss();*/
 
                         SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
                         SharedPreferences.Editor editor = sp.edit();
@@ -775,44 +764,45 @@ public class Search extends AppCompatActivity {
 				ctx.startActivity(intent);	
 			}
 		});
-		
-		/*RecommendDeviceList.setOnItemLongClickListener(new OnItemLongClickListener(){
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
 
-				AlertDialog.Builder builder = new Builder(ctx);
-				String nick = ((DevBluetooth)RecommendDevListAdapter.getItem(position)).Info.baseinfo.Nick;
-				final String address = ((DevBluetooth)RecommendDevListAdapter.getItem(position)).Address;
-				builder.setMessage("确定与"+ address +"建立连接么？");
-				builder.setTitle("提示");
-				builder.setPositiveButton("确定", new OnClickListener(){
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						
-						ActivityControlCenter.CMD = 2;
-						
-						Bundle bundle = new Bundle();
-						bundle.putParcelable("information", overt_user);
-						Intent intent = new Intent(Search.this, ChatPlatform.class);
-						intent.putExtra("address", address);
-						intent.putExtra("isclient", true);
-						intent.putExtras(bundle);
-						ctx.startActivity(intent);
-						dialog.dismiss();
-					}
-				});
-				builder.setNegativeButton("取消", new OnClickListener(){
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
+        DeviceList.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           final int position, long id) {
 
-						dialog.dismiss();
-					}
-				});
-				builder.create().show();
-				return true;
-			}
-		});*/
+                AlertDialog.Builder builder = new Builder(ctx);
+                String nick = ((DevBluetooth) DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
+                final String address = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
+                builder.setMessage("确定与 " + nick + " 建立连接么？");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确定", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        SharedPreferences sp = getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putInt(ActivityControlCenter.CMD, 2);
+                        editor.commit();
+
+                        Intent intent = new Intent(Search.this, ChatActivity.class);
+                        intent.putExtra("DEVICE", ((DevBluetooth) DeviceListAdapter.getItem(position)).mRemoteDevice);
+                        intent.putExtra("isclient", true);
+                        ctx.startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("取消", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                return true;
+            }
+        });
     }
 
     private void setHistoryDeviceListClick() {
