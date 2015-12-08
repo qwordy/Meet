@@ -23,6 +23,7 @@ public class LineChartView extends View {
 	private Paint paint;
 	private final int textColor = Color.DKGRAY;
 	private final int chartColor = Color.GRAY;
+	private final int backgroundColor = 0xfffafafa;
 
 	public LineChartView(Context context) {
 		super(context);
@@ -48,7 +49,7 @@ public class LineChartView extends View {
 
 		//Log.d("Meet", "draw");
 		super.onDraw(canvas);
-		canvas.drawColor(Color.WHITE);
+		canvas.drawColor(backgroundColor);
 		height = getHeight();
 		width = getWidth();
 		//canvas.drawRect(0, 0, 200, 300, paint);

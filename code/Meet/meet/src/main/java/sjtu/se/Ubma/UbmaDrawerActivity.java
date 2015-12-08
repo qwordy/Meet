@@ -55,23 +55,38 @@ public class UbmaDrawerActivity extends AppCompatActivity
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
+		Fragment fragment;
+		switch (position) {
+			case 0:
+				fragment = new ActiveTimeFragment();
+				break;
+			case 1:
+				fragment = new AppListFragment();
+				break;
+			default:
+				fragment = PlaceholderFragment.newInstance(position);
+		}
 		fragmentManager.beginTransaction()
-				.replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+				.replace(R.id.ubma_container, fragment)
 				.commit();
 	}
 
 	public void onSectionAttached(int number) {
 		switch (number) {
-			case 1:
+			case 0:
 				mTitle = getString(R.string.title_section1);
 				break;
-			case 2:
+			case 1:
 				mTitle = getString(R.string.title_section2);
 				break;
-			case 3:
+			case 2:
 				mTitle = getString(R.string.title_section3);
 				break;
 		}
+	}
+
+	public void setTitle(String title) {
+		mTitle = title;
 	}
 
 	public void restoreActionBar() {
@@ -84,7 +99,9 @@ public class UbmaDrawerActivity extends AppCompatActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!mNavigationDrawerFragment.isDrawerOpen()) {
+		restoreActionBar();
+		return false;
+		/*if (!mNavigationDrawerFragment.isDrawerOpen()) {
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
@@ -92,7 +109,7 @@ public class UbmaDrawerActivity extends AppCompatActivity
 			restoreActionBar();
 			return true;
 		}
-		return super.onCreateOptionsMenu(menu);
+		return super.onCreateOptionsMenu(menu);*/
 	}
 
 	@Override
