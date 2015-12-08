@@ -116,8 +116,6 @@ public class Search extends AppCompatActivity {
 		public void handleMessage(Message msg) {
 			switch(msg.what){
 				case 0:
-                    Notify.notifyMessage(Search.this,"有人想和你连接",Search.this);
-
 					AlertDialog.Builder builder = new Builder(ctx);
 					builder.setMessage("确定建立连接么？");
 					builder.setTitle("提示");
