@@ -1,8 +1,6 @@
 package sjtu.se.Activity.Search;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Set;
 
 //程治谦
@@ -15,12 +13,11 @@ import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
-import sjtu.se.Ubma.MainActivity;
+import sjtu.se.Ubma.UbmaActivity;
 import sjtu.se.Util.*;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Notification;
@@ -40,17 +37,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.view.KeyEvent;
@@ -890,7 +883,7 @@ public class Search extends AppCompatActivity {
 			return true;
 		}
         if(id == R.id.action_analysis) {
-            this.startActivity(new Intent(Search.this, MainActivity.class));
+            this.startActivity(new Intent(Search.this, UbmaActivity.class));
             return true;
         }
 		/*if (id == R.id.action_contact){
