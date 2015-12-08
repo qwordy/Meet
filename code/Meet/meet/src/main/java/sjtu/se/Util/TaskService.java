@@ -267,7 +267,7 @@ public class TaskService extends Service {
             try {
                 tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
                         "MT_Chat_Room", UUID.fromString(UUID_STR));
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
             mmServerSocket = tmp;
         }
@@ -297,7 +297,7 @@ public class TaskService extends Service {
                     //---------------------
                     try {
                         mmServerSocket.close();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                     }
                     mAcceptThread = null;
                     break;
@@ -315,7 +315,7 @@ public class TaskService extends Service {
                 if (mCommThread != null && mCommThread.isAlive()) {
                     mCommThread.cancel();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
         }
     }
@@ -348,7 +348,7 @@ public class TaskService extends Service {
             try {
                 tmp = device.createRfcommSocketToServiceRecord(UUID
                         .fromString(UUID_STR));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.d(TAG, "createRfcommSocketToServiceRecord error!");
             }
 
@@ -366,12 +366,12 @@ public class TaskService extends Service {
                 // Connect the device through the socket. This will block
                 // until it succeeds or throws an exception
                 mmSocket.connect();
-            } catch (IOException connectException) {
+            } catch (Exception connectException) {
                 // Unable to connect; close the socket and get out
                 Log.e(TAG, "Connect server failed");
                 try {
                     mmSocket.close();
-                } catch (IOException closeException) {
+                } catch (Exception closeException) {
                 }
                 mAcceptThread = new AcceptThread();
                 mAcceptThread.start();
@@ -384,7 +384,7 @@ public class TaskService extends Service {
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
             mConnectThread = null;
         }
@@ -413,7 +413,7 @@ public class TaskService extends Service {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
@@ -431,7 +431,7 @@ public class TaskService extends Service {
                 mmBos.write(msg);
                 mmBos.flush();
                 System.out.println("Write:" + msg);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 return false;
             }
             return true;
@@ -444,7 +444,7 @@ public class TaskService extends Service {
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
             mCommThread = null;
         }
@@ -494,10 +494,10 @@ public class TaskService extends Service {
                         handlerMsg.obj = data;
                         mActivityHandler.sendMessage(handlerMsg);
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     try {
                         mmSocket.close();
-                    } catch (IOException e1) {
+                    } catch (Exception e1) {
                     }
                     mCommThread = null;
                     /*if (isServerMode) {
