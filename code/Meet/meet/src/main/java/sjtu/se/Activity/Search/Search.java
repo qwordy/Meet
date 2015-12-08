@@ -14,6 +14,7 @@ import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
 import sjtu.se.Ubma.UbmaActivity;
+import sjtu.se.Ubma.UbmaDrawerActivity;
 import sjtu.se.Util.*;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
@@ -883,7 +884,7 @@ public class Search extends AppCompatActivity {
 			return true;
 		}
         if(id == R.id.action_analysis) {
-            this.startActivity(new Intent(Search.this, UbmaActivity.class));
+            this.startActivity(new Intent(Search.this, UbmaDrawerActivity.class));
             return true;
         }
 		/*if (id == R.id.action_contact){

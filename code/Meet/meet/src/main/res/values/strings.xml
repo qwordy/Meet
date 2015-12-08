@@ -54,9 +54,10 @@
     <string name="active_time_distribution">用户日平均使用手机时间分布</string>
 	<string name="title_activity_ubma_drawer">UbmaDrawerActivity</string>
 
-	<string name="title_section1">Section 1</string>
-	<string name="title_section2">Section 2</string>
-	<string name="title_section3">Section 3</string>
+    <string name="ubma_title">用户行为分析</string>
+	<string name="title_section1">使用时间</string>
+	<string name="title_section2">应用列表</string>
+	<string name="title_section3">偏好应用</string>
 
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
