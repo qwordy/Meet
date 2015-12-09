@@ -117,8 +117,8 @@ public class AppListFragment extends Fragment {
 	private void getAppList() {
 		PackageManager pm = mActivity.getPackageManager();
 		List<PackageInfo> piList = pm.getInstalledPackages(0);
-		List<AppInfo> aiList = new ArrayList();
-		List<AppInfo> userAiList = new ArrayList();
+		List<AppInfo> aiList = new ArrayList<>();
+		List<AppInfo> userAiList = new ArrayList<>();
 		for (PackageInfo pi : piList) {
 			AppInfo appInfo = new AppInfo(
 					pi.packageName,
