@@ -12,11 +12,12 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.AndroidJUnitRunner;
 import android.test.ActivityInstrumentationTestCase2;
+
 import static org.hamcrest.Matchers.*;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,20 +59,59 @@ public class UbmaTest
 	}
 
 	@Test
-	public void test0() {
+	public void testUbma() {
 		ActionBar toolbar = mActivity.getSupportActionBar();
+
+		// Check title 1
 		assertEquals(toolbar.getTitle(), getString(R.string.title_section1));
 		//onView(withId(android.R.id.home)).perform(click());
-		onView(withContentDescription(getString(R.string.navigation_drawer_open))).
-				perform(click());
+
+		// Open drawer
+		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
+				.perform(click());
+
+		// Check title ubma
 		assertEquals(toolbar.getTitle(), getString(R.string.ubma_title));
-		onView(withContentDescription(getString(R.string.navigation_drawer_close))).
-				perform(click());
+
+		// Close drawer
+		onView(withContentDescription(getString(R.string.navigation_drawer_close)))
+				.perform(click());
+
+		// Check title 1
 		assertEquals(toolbar.getTitle(), getString(R.string.title_section1));
-		onView(withContentDescription(getString(R.string.navigation_drawer_open))).
-				perform(click());
-		//onData(withText(getString(R.string.title_section2))).perform(click());
-		onData(is(getString(R.string.title_section2))).perform(click());
+
+		// Open drawer
+		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
+				.perform(click());
+
+		// Click title 1
+		onData(allOf(is(instanceOf(String.class)),
+				is(getString(R.string.title_section1))))
+				.perform(click());
+
+		// Check title 1
+		assertEquals(toolbar.getTitle(), getString(R.string.title_section1));
+
+		// Open drawer
+		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
+				.perform(click());
+
+		// Click title 2
+		onData(allOf(is(instanceOf(String.class)),
+				is(getString(R.string.title_section2))))
+				.perform(click());
+
+		// Swipe
+		onView(withId(R.id.appListView)).perform(swipeUp());
+		onView(withId(R.id.appListView)).perform(swipeUp());
+		onView(withId(R.id.appListView)).perform(swipeDown());
+
+		// Click spinner
+		onView(withId(R.id.spinner)).perform(click());
+
+		// Select user apps
+		onData(allOf(is(instanceOf(String.class)), is("用户应用")))
+				.perform(click());
 
 		//try {Thread.sleep(1000);}catch (Exception e) {}
 	}
