@@ -2,6 +2,7 @@ package sjtu.se;
 
 /**
  * Created by qwordy on 12/9/15.
+ * Ubma
  */
 
 import android.app.Activity;
@@ -39,6 +40,14 @@ public class UbmaTest
 	public void typeOperandsAndPerformAddOperation() {
 		// Call the CalculatorActivity add() method and pass in some operand values, then
 		// check that the expected value is returned.
+		assertEquals(1, 1);
+		assertNotNull(null);
+		assertEquals(4, 4);
+	}
+
+	@Test
+	public void test0() {
+		assertTrue(2 > 1);
 	}
 
 	@After

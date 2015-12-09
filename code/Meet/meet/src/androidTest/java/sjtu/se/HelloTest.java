@@ -12,7 +12,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import sjtu.se.Ubma.UbmaActivity;
 import sjtu.se.Ubma.UbmaDrawerActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -32,6 +31,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @LargeTest
 public class HelloTest {
 	@Rule
-	public ActivityTestRule<UbmaActivity> mActivityRule = new ActivityTestRule<>(
-			UbmaActivity.class);
+	public ActivityTestRule<UbmaDrawerActivity> mActivityRule = new ActivityTestRule<>(
+			UbmaDrawerActivity.class);
 }
