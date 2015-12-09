@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="appType">
-		<item>All apps</item>
-		<item>User apps</item>
+		<item>所有应用</item>
+		<item>用户应用</item>
 	</string-array>
 </resources>

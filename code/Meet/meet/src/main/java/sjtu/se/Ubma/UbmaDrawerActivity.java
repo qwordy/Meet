@@ -5,19 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import sjtu.se.Meet.R;
 
 public class UbmaDrawerActivity extends AppCompatActivity
@@ -32,6 +27,8 @@ public class UbmaDrawerActivity extends AppCompatActivity
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
+
+	private Fragment mFragment0, mFragment1, mFragment2, mFragment3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +52,25 @@ public class UbmaDrawerActivity extends AppCompatActivity
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		Fragment fragment;
-		switch (position) {
-			case 0:
-				fragment = new ActiveTimeFragment();
-				break;
-			case 1:
-				fragment = new AppListFragment();
-				break;
-			default:
-				fragment = PlaceholderFragment.newInstance(position);
-		}
+		Fragment fragment = null;
+		if (position == 0)
+			fragment = mFragment0 == null ?
+					mFragment0 = new ActiveTimeFragment() :
+					mFragment0;
+		else if (position == 1)
+			fragment = mFragment1 == null ?
+					mFragment1 = new AppListFragment() :
+					mFragment1;
+		else if (position == 2)
+			fragment = mFragment2 == null ?
+					mFragment2 = PlaceholderFragment.newInstance(2) :
+					mFragment2;
+		else if (position == 3)
+			fragment = mFragment3 == null ?
+					mFragment3 = PlaceholderFragment.newInstance(3) :
+					mFragment3;
 		fragmentManager.beginTransaction()
-				.replace(R.id.ubma_container, fragment)
-				.commit();
+				.replace(R.id.ubma_container, fragment).commit();
 	}
 
 	public void onSectionAttached(int number) {
@@ -81,6 +83,12 @@ public class UbmaDrawerActivity extends AppCompatActivity
 				break;
 			case 2:
 				mTitle = getString(R.string.title_section3);
+				break;
+			case 3:
+				mTitle = getString(R.string.title_section4);
+				break;
+			case 4:
+				mTitle = getString(R.string.title_section5);
 				break;
 		}
 	}

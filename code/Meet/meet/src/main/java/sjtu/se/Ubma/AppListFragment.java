@@ -1,7 +1,6 @@
 package sjtu.se.Ubma;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -16,10 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import sjtu.se.Meet.R;
 
 import java.util.ArrayList;
@@ -32,10 +28,9 @@ import java.util.List;
 
 public class AppListFragment extends Fragment {
 	private Activity mActivity;
-	private ListView listView;
-	private AppInfoAdapter adapter, adapter1;
-	Spinner spinner;
-	boolean firstTime = true;
+	private ListView mListView;
+	private AppInfoAdapter mAdapter0, mAdapter1;
+	Spinner mSpinner;
 
 	/*public static AppListFragment newInstance(Context context) {
 		AppListFragment fragment = new AppListFragment();
@@ -44,6 +39,7 @@ public class AppListFragment extends Fragment {
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
+		Log.d("Meet", "AppListFragment create");
 		super.onCreate(savedInstanceState);
 		mActivity = getActivity();
 	}
@@ -51,8 +47,7 @@ public class AppListFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_app_list, container, false);
-		return view;
+		return inflater.inflate(R.layout.fragment_app_list, container, false);
 	}
 
 	@Override
@@ -62,24 +57,20 @@ public class AppListFragment extends Fragment {
 	}
 
 	private void init() {
-		spinner = (Spinner) getView().findViewById(R.id.spinner);
-		spinner.setEnabled(false);
-		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		View view = getView();
+		if (view == null) return;
+		mSpinner = (Spinner) view.findViewById(R.id.spinner);
+		mSpinner.setEnabled(false);
+		mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				Log.d("Meet", String.valueOf(id));
-				if (id == 0) {
-					if (!firstTime) {
-						listView.setAdapter(adapter);
-						((TextView) getView().findViewById(R.id.appListText)).setText(
-								adapter.getCount() + " applications");
-					}
-					firstTime = false;
-				} else {
-					listView.setAdapter(adapter1);
-					((TextView) getView().findViewById(R.id.appListText)).setText(
-							adapter1.getCount() + " applications");
-				}
+				if (!mSpinner.isEnabled())
+					return;
+				if (id == 0)
+					setAppListView(mAdapter0);
+				else
+					setAppListView(mAdapter1);
 			}
 
 			@Override
@@ -88,8 +79,8 @@ public class AppListFragment extends Fragment {
 			}
 		});
 
-		listView = (ListView) getView().findViewById(R.id.appListView);
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		mListView = (ListView) getView().findViewById(R.id.appListView);
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
@@ -100,11 +91,12 @@ public class AppListFragment extends Fragment {
 		new AsyncTask<Object, Object, Object>(){
 			@Override
 			protected void onPostExecute(Object o) {
-				listView.setAdapter(adapter);
-				((TextView) getView().findViewById(R.id.appListText)).setText(
-						adapter.getCount() + " applications");
-				spinner.setEnabled(true);
-				super.onPostExecute(o);
+				if (getView() == null) return;
+				if (mSpinner.getSelectedItemId() == 0)
+					setAppListView(mAdapter0);
+				else
+					setAppListView(mAdapter1);
+				mSpinner.setEnabled(true);
 			}
 
 			@Override
@@ -115,11 +107,18 @@ public class AppListFragment extends Fragment {
 		}.execute();
 	}
 
+	private void setAppListView(AppInfoAdapter adapter) {
+		mListView.setAdapter(adapter);
+		if (getView() == null) return;
+		((TextView) getView().findViewById(R.id.appListText)).setText(
+				"共" + adapter.getCount() + "个应用");
+	}
+
 	private void getAppList() {
 		PackageManager pm = mActivity.getPackageManager();
 		List<PackageInfo> piList = pm.getInstalledPackages(0);
-		List<AppInfo> aiList = new ArrayList();
-		List<AppInfo> userAiList = new ArrayList();
+		List<AppInfo> aiList = new ArrayList<>();
+		List<AppInfo> userAiList = new ArrayList<>();
 		for (PackageInfo pi : piList) {
 			AppInfo appInfo = new AppInfo(
 					pi.packageName,
@@ -132,8 +131,8 @@ public class AppListFragment extends Fragment {
 			if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
 				userAiList.add(appInfo);
 		}
-		adapter = new AppInfoAdapter(mActivity, aiList);
-		adapter1 = new AppInfoAdapter(mActivity, userAiList);
+		mAdapter0 = new AppInfoAdapter(mActivity, aiList);
+		mAdapter1 = new AppInfoAdapter(mActivity, userAiList);
 	}
 
 	@Override

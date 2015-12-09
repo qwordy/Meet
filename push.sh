@@ -1,6 +1,6 @@
 git add *.sh
 git add README
-git add code
+git add -A code
 git commit -m "$*"
 git push origin master
 
