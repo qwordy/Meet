@@ -195,6 +195,15 @@ public class TaskService extends Service {
     private void doTask(Task task) {
         switch (task.getTaskID()) {
             case Task.TASK_START_ACCEPT:
+
+                if (mAcceptThread != null && mAcceptThread.isAlive()) {
+                    mAcceptThread.cancel();
+                }
+
+                if (mCommThread != null && mCommThread.isAlive()) {
+                    mCommThread.cancel();
+                }
+
                 mAcceptThread = new AcceptThread();
                 mAcceptThread.start();
                 isServerMode = true;
@@ -255,13 +264,6 @@ public class TaskService extends Service {
         public AcceptThread() {
             Log.d(TAG, "AcceptThread");
 
-            //-------------------
-
-            if (mCommThread != null && mCommThread.isAlive()) {
-                mCommThread.cancel();
-            }
-
-            //-------------------
 
             BluetoothServerSocket tmp = null;
             try {
@@ -503,6 +505,8 @@ public class TaskService extends Service {
                     } catch (Exception e1) {
                     }
                     mCommThread = null;
+                    //-----------------------------------
+                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(-2));
                     /*if (isServerMode) {
                         // 检查远程设备状态
                         handlerMsg = mServiceHandler.obtainMessage();
@@ -512,6 +516,7 @@ public class TaskService extends Service {
                         mAcceptThread = new AcceptThread();
                         mAcceptThread.start();
                     }*/
+                    //-----------------------------------
                     break;
                 }
             }
