@@ -136,7 +136,7 @@ public class Search extends AppCompatActivity {
 					builder.setNegativeButton("取消", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-
+                            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 							dialog.dismiss();
 						}
 					});
@@ -399,8 +399,10 @@ public class Search extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(ActivityControlCenter.CMD, 0);
         editor.commit();
+        handler.sendMessage(handler.obtainMessage(0));
 
-        //TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+        TaskService.mActivityHandler = mHandler;
 	}
 
 	@Override

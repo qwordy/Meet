@@ -553,6 +553,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		@Override
 		public void handleMessage(Message msg) {
 			switch(msg.what){
+                case -2:
+                    showToast("连接中断");
+                    ((ChatActivity)ctx).finish();
+                    break;
                 case -1:
                     showToast("没有连接其它用户，点击\"Menu\"扫描并选择周国用户");
 				SoundEffect.getInstance(ChatActivity.this).play(SoundEffect.SOUND_ERR);
