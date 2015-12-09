@@ -22,7 +22,7 @@ import java.io.ObjectInputStream;
 public class LineChartView extends View {
 	private Paint paint;
 	private final int textColor = Color.DKGRAY;
-	private final int chartColor = Color.GRAY;
+	private final int chartColor = 0xff33b5e5;
 	private final int backgroundColor = 0xfffafafa;
 
 	public LineChartView(Context context) {
@@ -38,7 +38,6 @@ public class LineChartView extends View {
 
 	private void init() {
 		paint = new Paint();
-		paint.setColor(textColor);
 		paint.setTextAlign(Paint.Align.CENTER);
 		paint.setTextSize(Utility.dp2px(14));
 	}
@@ -55,6 +54,7 @@ public class LineChartView extends View {
 		//canvas.drawRect(0, 0, 200, 300, paint);
 
 		// Draw axis
+		paint.setColor(chartColor);
 		float pad, x0, y0, x1, y1, dashLen;
 		pad = width / 8;
 		x0 = pad;
@@ -86,6 +86,7 @@ public class LineChartView extends View {
 		float bias = -(fontMetrics.bottom + fontMetrics.top) / 2;
 
 		// Draw text
+		paint.setColor(textColor);
 		for (i = 0; i <= 24; i++)
 			canvas.drawText(
 					String.valueOf(i),
