@@ -67,7 +67,7 @@ public class UbmaDrawerActivity extends AppCompatActivity
 					mFragment2;
 		else if (position == 3)
 			fragment = mFragment3 == null ?
-					mFragment3 = PlaceholderFragment.newInstance(3) :
+					mFragment3 = new AboutFragment() :
 					mFragment3;
 		fragmentManager.beginTransaction()
 				.replace(R.id.ubma_container, fragment).commit();
@@ -86,9 +86,6 @@ public class UbmaDrawerActivity extends AppCompatActivity
 				break;
 			case 3:
 				mTitle = getString(R.string.title_section4);
-				break;
-			case 4:
-				mTitle = getString(R.string.title_section5);
 				break;
 		}
 	}

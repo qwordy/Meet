@@ -1,0 +1,29 @@
+TASK sjtu.se id=357
+  ACTIVITY sjtu.se/.Activity.Search.Search 41ddd900 pid=786
+    Local FragmentActivity 417d3e58 State:
+      mCreated=truemResumed=true mStopped=false mReallyStopped=false
+      mLoadersStarted=true
+    FragmentManager misc state:
+      mHost=android.support.v4.app.FragmentActivity$HostCallbacks@417d4d78
+      mContainer=android.support.v4.app.FragmentActivity$HostCallbacks@417d4d78
+      mCurState=5 mStateSaved=false mDestroyed=false
+    View Hierarchy:
+      com.android.internal.policy.impl.PhoneWindow$DecorView{417dc8a0 V.E..... ... 0,0-720,1280}
+        android.widget.LinearLayout{417e1120 V.E..... ... 0,0-720,1280}
+          android.view.ViewStub{417e3ec0 G.E..... ... 0,0-0,0 #1020354}
+          android.widget.FrameLayout{417e4298 V.E..... ... 0,50-720,1280}
+            android.support.v7.widget.FitWindowsLinearLayout{417e7ef0 V.E..... ... 0,0-720,1230 #7f0c003c app:id/action_bar_root}
+              android.support.v7.widget.ViewStubCompat{417e85d8 G.E..... ... 0,0-0,0 #7f0c003d app:id/action_mode_bar_stub}
+              android.support.v7.widget.ContentFrameLayout{417e8df0 V.ED.... ... 0,0-720,1230 #1020002 android:id/content}
+                android.widget.LinearLayout{417ee968 V.E..... ... 0,0-720,1230 #7f0c0058 app:id/container}
+                  android.support.v7.widget.Toolbar{417ef7d0 V.E..... ... 0,0-720,112 #7f0c0056 app:id/my_toolbar}
+                    android.widget.TextView{41816d60 V.ED.... ... 32,29-134,83}
+                    android.support.v7.widget.ActionMenuView{41848b80 V.E..... ... 640,0-720,112}
+                      android.support.v7.widget.ActionMenuPresenter$OverflowMenuButton{4184bdb8 VFED..C. ... 0,8-80,104}
+                  android.widget.ListView{417fb0a8 V.ED.VCL ... 0,112-720,1133 #7f0c0059 app:id/DeviceList}
+                  android.widget.ListView{417ff7b8 G.ED.VC. ... 0,0-0,0 #7f0c005a app:id/RecommendDeviceList}
+                  android.widget.ListView{41803270 G.ED.VC. ... 0,0-0,0 #7f0c005b app:id/HistoryDeviceList}
+                  android.widget.LinearLayout{41806d28 V.E..... ... 0,1133-720,1229}
+                    android.support.v7.widget.AppCompatButton{41807808 VFED..C. ... 0,0-240,96 #7f0c005c app:id/SearchShowDev}
+                    android.support.v7.widget.AppCompatButton{41809c20 VFED..C. ... 240,0-480,96 #7f0c005d app:id/RecommendShowDev}
+                    android.support.v7.widget.AppCompatButton{4180a8b8 VFED..C. ... 480,0-720,96 #7f0c005e app:id/FindShowDev}

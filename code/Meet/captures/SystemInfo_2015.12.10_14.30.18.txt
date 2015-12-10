@@ -1,0 +1,33 @@
+Applications Memory Usage (kB):
+Uptime: 949643186 Realtime: 2208321882
+
+** MEMINFO in pid 786 [sjtu.se] **
+                         Shared  Private     Heap     Heap     Heap
+                   Pss    Dirty    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------
+       Native        0        0        0     3372     3038      333
+       Dalvik     2720     7016     2304    10436     9719      717
+       Cursor        0        0        0                           
+       Ashmem        0        0        0                           
+    Other dev        4       56        0                           
+     .so mmap     1253      852      948                           
+    .jar mmap        0        0        0                           
+    .apk mmap      214        0        0                           
+    .ttf mmap      429        0        0                           
+    .dex mmap     1252        0        8                           
+   Other mmap     8185    14648      128                           
+      Unknown     1833      248     1824                           
+        TOTAL    15890    22820     5212    13808    12757     1050
+ 
+ Objects
+               Views:       20         ViewRootImpl:        1
+         AppContexts:        5           Activities:        1
+              Assets:        4        AssetManagers:        4
+       Local Binders:       11        Proxy Binders:       17
+    Death Recipients:        0
+     OpenSSL Sockets:        0
+ 
+ SQL
+         MEMORY_USED:        0
+  PAGECACHE_OVERFLOW:        0          MALLOC_SIZE:        0
+ 

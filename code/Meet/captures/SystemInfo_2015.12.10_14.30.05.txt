@@ -1,0 +1,89 @@
+Applications Graphics Acceleration Info:
+Uptime: 949630605 Realtime: 2208309301
+
+** Graphics info for pid 786 [sjtu.se] **
+
+Recent DisplayList operations
+        DrawDisplayList
+          DrawDisplayList
+            DrawRect
+            DrawDisplayList
+            DrawDisplayList
+            DrawDisplayList
+          DrawPatch
+    RestoreToCount
+  DrawRect
+  DrawDisplayList
+    Save
+    ClipRect
+    DrawDisplayList
+      DrawDisplayList
+        DrawDisplayList
+          DrawDisplayList
+            DrawRect
+            DrawDisplayList
+            DrawDisplayList
+            DrawDisplayList
+          DrawPatch
+    RestoreToCount
+  DrawRect
+  DrawDisplayList
+    Save
+    ClipRect
+    DrawDisplayList
+      DrawDisplayList
+        DrawDisplayList
+          DrawDisplayList
+            DrawRect
+            DrawDisplayList
+            DrawDisplayList
+            DrawDisplayList
+          DrawPatch
+    RestoreToCount
+  DrawRect
+  DrawDisplayList
+    Save
+    ClipRect
+    DrawDisplayList
+      DrawDisplayList
+        DrawDisplayList
+          DrawDisplayList
+            DrawRect
+            DrawDisplayList
+            DrawDisplayList
+            DrawDisplayList
+          DrawPatch
+    RestoreToCount
+
+Caches:
+Current memory usage / total memory usage (bytes):
+  TextureCache            13312 / 25165824
+  LayerCache                  0 / 16777216
+  GradientCache               0 /   524288
+  PathCache                   0 /  4194304
+  CircleShapeCache            0 /  1048576
+  OvalShapeCache              0 /  1048576
+  RoundRectShapeCache         0 /  1048576
+  RectShapeCache              0 /  1048576
+  ArcShapeCache               0 /  1048576
+  TextDropShadowCache         0 /  2097152
+  FontRenderer 0         262144 /   262144
+Other:
+  FboCache                    0 /       16
+  PatchCache                  1 /      512
+Total memory usage:
+  275456 bytes, 0.26 MB
+
+Profile data in ms:
+
+	sjtu.se/sjtu.se.Activity.Search.Search/android.view.ViewRootImpl@4183cc78
+View hierarchy:
+
+  sjtu.se/sjtu.se.Activity.Search.Search/android.view.ViewRootImpl@4183cc78
+  19 views, 1.00 kB of display lists, 25 frames rendered
+
+
+Total ViewRootImpl: 1
+Total Views:        19
+Total DisplayList:  1.00 kB
+
