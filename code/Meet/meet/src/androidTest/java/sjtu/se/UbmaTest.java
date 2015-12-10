@@ -113,6 +113,30 @@ public class UbmaTest
 		onData(allOf(is(instanceOf(String.class)), is("用户应用")))
 				.perform(click());
 
+		// Swipe
+		onView(withId(R.id.appListView)).perform(swipeUp());
+		onView(withId(R.id.appListView)).perform(swipeUp());
+		onView(withId(R.id.appListView)).perform(swipeDown());
+
+		// Open drawer
+		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
+				.perform(click());
+
+		// Click title 4
+		onData(allOf(is(instanceOf(String.class)),
+				is(getString(R.string.title_section4))))
+				.inAdapterView(withId(R.id.navigation_drawer))
+				.perform(click());
+
+		// Open drawer
+		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
+				.perform(click());
+
+		// Click title 2
+		onData(allOf(is(instanceOf(String.class)),
+				is(getString(R.string.title_section2))))
+				.perform(click());
+
 		//try {Thread.sleep(1000);}catch (Exception e) {}
 	}
 
