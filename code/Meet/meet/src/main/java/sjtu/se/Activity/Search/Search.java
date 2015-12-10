@@ -5,6 +5,8 @@ import java.util.Set;
 
 //程治谦
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import sjtu.se.Activity.ActivityControlCenter;
@@ -179,10 +181,11 @@ public class Search extends AppCompatActivity {
 		HistoryDeviceList.setAdapter(HistoryDevListAdapter);
 		RecommendDeviceList.setAdapter(RecommendDevListAdapter);
 
-		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayClicked);
-		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.SearchShowDev)).setBackgroundColor(Color.WHITE);
+        ((Button)findViewById(R.id.SearchShowDev)).setTextColor(ContextCompat.getColor(this, R.color.actionbar_background));
+		((Button)findViewById(R.id.FindShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
-		((Button)findViewById(R.id.RecommendShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.RecommendShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
 
 		intentFilter = new IntentFilter();
@@ -625,11 +628,11 @@ public class Search extends AppCompatActivity {
 
 	@SuppressLint("NewApi")
 	public void ShowDeviceList(View view){
-		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayClicked);
-		((Button)findViewById(R.id.SearchShowDev)).setTextColor(Color.BLACK);
-		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.SearchShowDev)).setBackgroundColor(Color.WHITE);
+		((Button)findViewById(R.id.SearchShowDev)).setTextColor(ContextCompat.getColor(this, R.color.actionbar_background));
+		((Button)findViewById(R.id.FindShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
-		((Button)findViewById(R.id.RecommendShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.RecommendShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
 		HistoryDeviceList.setVisibility(View.GONE);
 		RecommendDeviceList.setVisibility(View.GONE);
@@ -638,11 +641,11 @@ public class Search extends AppCompatActivity {
 
 	@SuppressLint("NewApi")
 	public void ShowRecommendDeviceList(View view){
-		((Button)findViewById(R.id.RecommendShowDev)).setBackground(ActivityControlCenter.dayClicked);
-		((Button)findViewById(R.id.RecommendShowDev)).setTextColor(Color.BLACK);
-		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.RecommendShowDev)).setBackgroundColor(Color.WHITE);
+		((Button)findViewById(R.id.RecommendShowDev)).setTextColor(ContextCompat.getColor(this, R.color.actionbar_background));
+		((Button)findViewById(R.id.SearchShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.SearchShowDev)).setTextColor(Color.WHITE);
-		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.FindShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
 		DeviceList.setVisibility(View.GONE);
 		HistoryDeviceList.setVisibility(View.GONE);
@@ -652,11 +655,11 @@ public class Search extends AppCompatActivity {
 	@SuppressLint("NewApi")
 	public void ShowHistoryDeviceList(View view)
 	{
-		((Button)findViewById(R.id.FindShowDev)).setBackground(ActivityControlCenter.dayClicked);
-		((Button)findViewById(R.id.FindShowDev)).setTextColor(Color.BLACK);
-		((Button)findViewById(R.id.SearchShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.FindShowDev)).setBackgroundColor(Color.WHITE);
+		((Button)findViewById(R.id.FindShowDev)).setTextColor(ContextCompat.getColor(this, R.color.actionbar_background));
+		((Button)findViewById(R.id.SearchShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.SearchShowDev)).setTextColor(Color.WHITE);
-		((Button)findViewById(R.id.RecommendShowDev)).setBackground(ActivityControlCenter.dayNormal);
+		((Button)findViewById(R.id.RecommendShowDev)).setBackgroundColor(ContextCompat.getColor(this, R.color.actionbar_background));
 		((Button)findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
 		DeviceList.setVisibility(View.GONE);
 		RecommendDeviceList.setVisibility(View.GONE);
