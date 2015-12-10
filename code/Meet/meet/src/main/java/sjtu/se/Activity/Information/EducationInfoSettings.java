@@ -1,5 +1,8 @@
 package sjtu.se.Activity.Information;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.*;
 import sjtu.se.Meet.R;
 
@@ -19,7 +22,7 @@ import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
 
-public class EducationInfoSettings extends Activity {
+public class EducationInfoSettings extends AppCompatActivity {
 
 	private Context ctx = this;
 
@@ -179,7 +182,10 @@ public class EducationInfoSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.education_info);
 
-		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(myToolbar);
+		ActionBar ab = getSupportActionBar();
+		ab.setDisplayHomeAsUpEnabled(true);
 
 		ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
 
@@ -219,7 +225,7 @@ public class EducationInfoSettings extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -241,5 +247,5 @@ public class EducationInfoSettings extends Activity {
 			this.finish();
 		}
 		return super.onOptionsItemSelected(item);
-	}
+	}*/
 }

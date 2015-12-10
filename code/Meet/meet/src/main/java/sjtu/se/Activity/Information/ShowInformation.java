@@ -1,5 +1,8 @@
 package sjtu.se.Activity.Information;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
@@ -16,7 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class ShowInformation extends Activity {
+public class ShowInformation extends AppCompatActivity {
 
 	private Information info;
 
@@ -170,7 +173,10 @@ public class ShowInformation extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_information);
 
-		/*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(myToolbar);
+		ActionBar ab = getSupportActionBar();
+		ab.setDisplayHomeAsUpEnabled(true);
 
 		Parcelable parcelable = this.getIntent().getParcelableExtra("information");
 		info = (Information) parcelable;
@@ -190,7 +196,7 @@ public class ShowInformation extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -212,5 +218,5 @@ public class ShowInformation extends Activity {
 			this.finish();
 		}
 		return super.onOptionsItemSelected(item);
-	}
+	}*/
 }

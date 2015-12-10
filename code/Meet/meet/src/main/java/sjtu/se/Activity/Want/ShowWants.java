@@ -1,5 +1,8 @@
 package sjtu.se.Activity.Want;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.*;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Want;
@@ -15,7 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class ShowWants extends Activity {
+public class ShowWants extends AppCompatActivity {
 
     private Context ctx;
     private SharedPreferences wantSettings;
@@ -344,7 +347,10 @@ public class ShowWants extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_wants);
 
-        /*this.getActionBar().setDisplayHomeAsUpEnabled(true);*/
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
 
         ctx = this;
 
@@ -382,7 +388,7 @@ public class ShowWants extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -404,6 +410,6 @@ public class ShowWants extends Activity {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 }
