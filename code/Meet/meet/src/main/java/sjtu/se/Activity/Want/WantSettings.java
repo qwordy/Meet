@@ -226,17 +226,17 @@ public class WantSettings extends AppCompatActivity{
             this.startActivity(new Intent(this, SystemSettings.class));
             return true;
         }
-        if (id == R.id.action_personal){
+        /*if (id == R.id.action_personal){
             this.startActivity(new Intent(this, BaseInfoSettings.class));
             return true;
-        }
+        }*/
         /*if (id == R.id.action_want){
             this.startActivity(new Intent(this, WantSettings.class));
             return true;
         }*/
-        if (id == R.id.action_analysis){
+        /*if (id == R.id.action_analysis){
             return false;
-        }
+        }*/
         if (id == R.id.action_logout) {
             super.finish();
         }
