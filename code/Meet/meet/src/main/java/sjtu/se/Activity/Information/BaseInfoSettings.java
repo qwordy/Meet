@@ -370,13 +370,13 @@ public class BaseInfoSettings extends AppCompatActivity {
             this.startActivity(new Intent(this, BaseInfoSettings.class));
             return true;
         }*/
-		if (id == R.id.action_want){
+		/*if (id == R.id.action_want){
 			this.startActivity(new Intent(this, WantSettings.class));
 			return true;
 		}
 		if (id == R.id.action_analysis){
 			return false;
-		}
+		}*/
 		if (id == R.id.action_logout) {
 			super.finish();
 		}

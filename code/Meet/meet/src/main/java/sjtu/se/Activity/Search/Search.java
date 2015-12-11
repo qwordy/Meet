@@ -5,10 +5,14 @@ import java.util.Set;
 
 //程治谦
 //import sjtu.se.Activity.ContactCard.ContactCardSettings;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.*;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.BaseInfoSettings;
@@ -43,11 +47,7 @@ import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.view.KeyEvent;
 
@@ -55,6 +55,13 @@ import sjtu.se.Meet.R;
 public class Search extends AppCompatActivity {
 
 	private static final int REQUEST_FOR_ENABLE = 1;
+
+	private String[] mMenuTitles;
+	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private ListView mDrawerList;
+    private CharSequence mTitle;
+    private CharSequence mDrawerTitle;
 
     private Want want1;
     private Want want2;
@@ -158,6 +165,33 @@ public class Search extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
 		ctx = this;
+
+        mTitle = mDrawerTitle = getTitle();
+        mMenuTitles = getResources().getStringArray(R.array.menu_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.container);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,myToolbar,
+                R.string.drawer_open, R.string.drawer_close){
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerToggle.syncState();
+
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mMenuTitles));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
 		overt_user = new Information();
 		full_user  = new Information();
 
@@ -203,6 +237,47 @@ public class Search extends AppCompatActivity {
 		Message message = handler.obtainMessage(0);
 		handler.sendMessageDelayed(message, 0);
 	}
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        switch(position){
+            case 0:
+                ctx.startActivity(new Intent(ctx, SystemSettings.class));
+                break;
+            case 1:
+                ctx.startActivity(new Intent(ctx, BaseInfoSettings.class));
+                break;
+            case 2:
+                ctx.startActivity(new Intent(ctx, WantSettings.class));
+                break;
+            case 3:
+                ctx.startActivity(new Intent(ctx, UbmaDrawerActivity.class));
+                break;
+        }
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        //setTitle(mMenuTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
@@ -866,7 +941,7 @@ public class Search extends AppCompatActivity {
 			this.startActivity(new Intent(Search.this, SystemSettings.class));
 			return true;
 		}
-		if (id == R.id.action_personal){
+		/*if (id == R.id.action_personal){
 			this.startActivity(new Intent(Search.this, BaseInfoSettings.class));
 			return true;
 		}
@@ -877,7 +952,7 @@ public class Search extends AppCompatActivity {
         if(id == R.id.action_analysis) {
             this.startActivity(new Intent(Search.this, UbmaDrawerActivity.class));
             return true;
-        }
+        }*/
 		/*if (id == R.id.action_contact){
 			this.startActivity(new Intent(Search.this, ContactCardSettings.class));
 			return true;
