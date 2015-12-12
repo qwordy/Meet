@@ -1,9 +1,12 @@
 package sjtu.se.Activity.Information;
 
+import android.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
+import sjtu.se.Activity.Search.Search;
+import sjtu.se.Activity.Search.SearchFragment;
 import sjtu.se.Activity.Want.WantSettings;
 import sjtu.se.Meet.R;
 
@@ -23,9 +26,11 @@ import android.widget.TextView;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
 
-public class BaseInfoSettings extends AppCompatActivity {
+public class BaseInfoSettings extends Fragment {
 
-	private Context ctx = this;
+	private Context ctx;
+	private View view;
+    private LayoutInflater inflater;
 	private SharedPreferences baseInfo;
 	private TextView item_nick;
 	private TextView item_name;
@@ -34,6 +39,9 @@ public class BaseInfoSettings extends AppCompatActivity {
 	private TextView item_homeland;
 	private TextView item_location;
 	private TextView item_keywords;
+    private TextView item_goto_contact_info;
+    private TextView item_goto_edu_info;
+    private TextView item_goto_hobby_info;
 
 	private Switch item_name_overt;
 	private Switch item_gender_overt;
@@ -42,66 +50,66 @@ public class BaseInfoSettings extends AppCompatActivity {
 	private Switch item_location_overt;
 	private Switch item_keywords_overt;
 
-	public void baseInfoNickEdit(View view){
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.text_edit_name_10, (ViewGroup) findViewById(R.layout.text_edit_name_10));
+	public void baseInfoNickEdit(View v){
+		//LayoutInflater inflater = ctx.getLayoutInflater();
+		View layout = inflater.inflate(R.layout.text_edit_name_10, (ViewGroup) view.findViewById(R.layout.text_edit_name_10));
 		final EditText et = (EditText) layout.findViewById(R.id.edittext_name_10);
 		et.setText(baseInfo.getString(ActivityControlCenter.KEY_NICK, ""));
 
 		new AlertDialog.Builder(ctx).setTitle("设置昵称").setView(layout)
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				String str = et.getText().toString();
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putString(ActivityControlCenter.KEY_NICK, str);
-				editor.commit();
-				item_nick.setText(str);
-			}
-		})
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                String str = et.getText().toString();
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_NICK, str);
+                editor.commit();
+                item_nick.setText(str);
+            }
+        })
 		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		}).show();
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
 	}
 
 	public void baseInfoNameEdit(View view){
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.text_edit_name_10, (ViewGroup) findViewById(R.layout.text_edit_name_10));
+		//LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.text_edit_name_10, (ViewGroup) view.findViewById(R.layout.text_edit_name_10));
 		final EditText et = (EditText) layout.findViewById(R.id.edittext_name_10);
 		et.setText(baseInfo.getString(ActivityControlCenter.KEY_NAME, ""));
 
 		new AlertDialog.Builder(ctx).setTitle("设置昵称").setView(layout)
-		.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				String str = et.getText().toString();
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putString(ActivityControlCenter.KEY_NAME, str);
-				editor.commit();
-				item_name.setText(str);
-			}
-		})
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                String str = et.getText().toString();
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_NAME, str);
+                editor.commit();
+                item_name.setText(str);
+            }
+        })
 		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		}).show();
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
 	}
 
 	public void baseInfoGenderEdit(View view){
-		new AlertDialog.Builder(this).setTitle("选择性别")
+		new AlertDialog.Builder(ctx).setTitle("选择性别")
 		.setSingleChoiceItems(new String[]{"男", "女"}, 0, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				String str = String.valueOf(which);
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putString(ActivityControlCenter.KEY_GENDER, str);
-				editor.commit();
-				item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(str)]);
-				dialog.dismiss();
-			}
-		}).setNegativeButton("取消", null).show();
+            public void onClick(DialogInterface dialog, int which) {
+                String str = String.valueOf(which);
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_GENDER, str);
+                editor.commit();
+                item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(str)]);
+                dialog.dismiss();
+            }
+        }).setNegativeButton("取消", null).show();
 	}
 
 	public void baseInfoBirthdayEdit(View view){
@@ -130,56 +138,57 @@ public class BaseInfoSettings extends AppCompatActivity {
 				item_birthday.setText(mdate);
 			}
 		}).setNegativeButton("返回", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		}).show();
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
 	}
 
 	public void baseInfoHomelandEdit(View view){
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.text_edit_place_16, (ViewGroup) findViewById(R.layout.text_edit_place_16));
+		//LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.text_edit_place_16, (ViewGroup) view.findViewById(R.layout.text_edit_place_16));
 		final EditText et = (EditText) layout.findViewById(R.id.edittext_place_16);
 		et.setText(baseInfo.getString(ActivityControlCenter.KEY_HOMELAND, ""));
 
 		new AlertDialog.Builder(ctx).setTitle("设置籍贯").setView(layout)
-		.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				String str = et.getText().toString();
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putString(ActivityControlCenter.KEY_HOMELAND, str);
-				editor.commit();
-				item_homeland.setText(str);
-			}
-		})
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                String str = et.getText().toString();
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_HOMELAND, str);
+                editor.commit();
+                item_homeland.setText(str);
+            }
+        })
 		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		}).show();
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
 	}
 
-	public void baseInfoLocationEdit(View view){
-		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.text_edit_place_16, (ViewGroup) findViewById(R.layout.text_edit_place_16));
+	public void baseInfoLocationEdit(View view0){
+		//LayoutInflater inflater = ctx.getLayoutInflater();
+		View layout = inflater.inflate(R.layout.text_edit_place_16, (ViewGroup) view.findViewById(R.layout.text_edit_place_16));
 		final EditText et = (EditText) layout.findViewById(R.id.edittext_place_16);
 		et.setText(baseInfo.getString(ActivityControlCenter.KEY_LOCATION, ""));
 
 		new AlertDialog.Builder(ctx).setTitle("设置居住地").setView(layout)
-		.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				String str = et.getText().toString();
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putString(ActivityControlCenter.KEY_LOCATION, str);
-				editor.commit();
-				item_location.setText(str);
-			}
-		})
-		.setNegativeButton("取消",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int which) {}
-		}).show();
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                String str = et.getText().toString();
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_LOCATION, str);
+                editor.commit();
+                item_location.setText(str);
+            }
+        })
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
 	}
 
 	public void baseInfoKeywordsEdit(View view){
@@ -198,150 +207,212 @@ public class BaseInfoSettings extends AppCompatActivity {
 				item_keywords.setText(str);
 			}
 		})
-		.setNegativeButton("取消",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int which) {}
-		}).show();
+		.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
 	}
 
 	public void setBaseInfoNameOvertListener(){
 		item_name_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putBoolean(ActivityControlCenter.KEY_NAME_OVERT, isChecked);
-				editor.commit();
-			}
-		});
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putBoolean(ActivityControlCenter.KEY_NAME_OVERT, isChecked);
+                editor.commit();
+            }
+        });
 	}
 
 	public void setBaseInfoGenderOvertListener(){
-		item_gender_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putBoolean(ActivityControlCenter.KEY_GENDER_OVERT, isChecked);
-				editor.commit();
-			}
-		});
+		item_gender_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putBoolean(ActivityControlCenter.KEY_GENDER_OVERT, isChecked);
+                editor.commit();
+            }
+        });
 	}
 
 	public void setBaseInfoBirthdayOvertListener(){
-		item_birthday_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, isChecked);
-				editor.commit();
-			}
-		});
+		item_birthday_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, isChecked);
+                editor.commit();
+            }
+        });
 	}
 
 	public void setBaseInfoHomelandOvertListener(){
-		item_homeland_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, isChecked);
-				editor.commit();
-			}
-		});
+		item_homeland_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, isChecked);
+                editor.commit();
+            }
+        });
 	}
 
 	public void setBaseInfoLocationOvertListener(){
 		item_location_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, isChecked);
-				editor.commit();
-			}
-		});
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, isChecked);
+                editor.commit();
+            }
+        });
 	}
 
 	public void setBaseInfoKeywordsOvertListener(){
 		item_keywords_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, isChecked);
-				editor.commit();
-			}
-		});
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, isChecked);
+                editor.commit();
+            }
+        });
 	}
 
 	public void goToContactInfo(View view){
-		this.startActivity(new Intent(BaseInfoSettings.this, ContactInfoSettings.class));
+        getActivity().startActivity(new Intent(ctx, ContactInfoSettings.class));
 	}
 
 	public void goToEducationInfo(View view){
-		this.startActivity(new Intent(BaseInfoSettings.this, EducationInfoSettings.class));
+		getActivity().startActivity(new Intent(ctx, EducationInfoSettings.class));
 	}
 
 	public void goToHobbyInfo(View view){
-		this.startActivity(new Intent(BaseInfoSettings.this, HobbyInfoSettings.class));
+        getActivity().startActivity(new Intent(ctx, HobbyInfoSettings.class));
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.base_info);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+        this.inflater=inflater;
+		this.view = inflater.inflate(R.layout.base_info, container, false);
+        this.ctx=getActivity();
+        ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
 
-		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-		setSupportActionBar(myToolbar);
-		ActionBar ab = getSupportActionBar();
-		ab.setDisplayHomeAsUpEnabled(true);
+        baseInfo = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
 
-		ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = true;
+        item_nick = (TextView) view.findViewById(R.id.base_info_nick);
+        item_nick.setText(baseInfo.getString(ActivityControlCenter.KEY_NICK, ""));
+        item_nick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoNickEdit(v);
+            }
+        });
+        item_name = (TextView) view.findViewById(R.id.base_info_name);
+        item_name.setText(baseInfo.getString(ActivityControlCenter.KEY_NAME, ""));
+        item_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoNameEdit(v);
+            }
+        });
+        item_gender = (TextView) view.findViewById(R.id.base_info_gender);
+        item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2"))]);
+        item_gender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoGenderEdit(v);
+            }
+        });
+        item_birthday = (TextView) view.findViewById(R.id.base_info_birthday);
+        item_birthday.setText(baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, ""));
+        item_birthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoBirthdayEdit(v);
+            }
+        });
+        item_homeland = (TextView) view.findViewById(R.id.base_info_homeland);
+        item_homeland.setText(baseInfo.getString(ActivityControlCenter.KEY_HOMELAND, ""));
+        item_homeland.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoHomelandEdit(v);
+            }
+        });
+        item_location = (TextView) view.findViewById(R.id.base_info_location);
+        item_location.setText(baseInfo.getString(ActivityControlCenter.KEY_LOCATION, ""));
+        item_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoLocationEdit(v);
+            }
+        });
+        item_keywords = (TextView) view.findViewById(R.id.base_info_keywords);
+        item_keywords.setText(baseInfo.getString(ActivityControlCenter.KEY_KEYWORDS, ""));
+        item_keywords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baseInfoKeywordsEdit(v);
+            }
+        });
+        item_name_overt = (Switch) view.findViewById(R.id.base_info_name_overt);
+        item_name_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_NAME_OVERT, false));
+        setBaseInfoNameOvertListener();
 
-		baseInfo = getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
+        item_gender_overt = (Switch) view.findViewById(R.id.base_info_gender_overt);
+        item_gender_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_GENDER_OVERT, false));
+        setBaseInfoGenderOvertListener();
 
-		item_nick = (TextView) findViewById(R.id.base_info_nick);
-		item_nick.setText(baseInfo.getString(ActivityControlCenter.KEY_NICK, ""));
-		item_name = (TextView) findViewById(R.id.base_info_name);
-		item_name.setText(baseInfo.getString(ActivityControlCenter.KEY_NAME, ""));
-		item_gender = (TextView) findViewById(R.id.base_info_gender);
-		item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2"))]);
-		item_birthday = (TextView) findViewById(R.id.base_info_birthday);
-		item_birthday.setText(baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, ""));
-		item_homeland = (TextView) findViewById(R.id.base_info_homeland);
-		item_homeland.setText(baseInfo.getString(ActivityControlCenter.KEY_HOMELAND, ""));
-		item_location = (TextView) findViewById(R.id.base_info_location);
-		item_location.setText(baseInfo.getString(ActivityControlCenter.KEY_LOCATION, ""));
-		item_keywords = (TextView) findViewById(R.id.base_info_keywords);
-		item_keywords.setText(baseInfo.getString(ActivityControlCenter.KEY_KEYWORDS, ""));
+        item_birthday_overt = (Switch) view.findViewById(R.id.base_info_birthday_overt);
+        item_birthday_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, false));
+        setBaseInfoBirthdayOvertListener();
 
-		item_name_overt = (Switch) findViewById(R.id.base_info_name_overt);
-		item_name_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_NAME_OVERT, false));
-		setBaseInfoNameOvertListener();
+        item_homeland_overt = (Switch) view.findViewById(R.id.base_info_homeland_overt);
+        item_homeland_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, false));
+        setBaseInfoHomelandOvertListener();
 
-		item_gender_overt = (Switch) findViewById(R.id.base_info_gender_overt);
-		item_gender_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_GENDER_OVERT, false));
-		setBaseInfoGenderOvertListener();
+        item_location_overt = (Switch) view.findViewById(R.id.base_info_location_overt);
+        item_location_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, false));
+        setBaseInfoLocationOvertListener();
 
-		item_birthday_overt = (Switch) findViewById(R.id.base_info_birthday_overt);
-		item_birthday_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, false));
-		setBaseInfoBirthdayOvertListener();
+        item_keywords_overt = (Switch) view.findViewById(R.id.base_info_keywords_overt);
+        item_keywords_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, false));
+        setBaseInfoKeywordsOvertListener();
 
-		item_homeland_overt = (Switch) findViewById(R.id.base_info_homeland_overt);
-		item_homeland_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, false));
-		setBaseInfoHomelandOvertListener();
+        item_goto_contact_info = (TextView) view.findViewById(R.id.textView9);
+        item_goto_contact_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToContactInfo(v);
+            }
+        });
+        item_goto_edu_info = (TextView) view.findViewById(R.id.textView10);
+        item_goto_edu_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToEducationInfo(v);
+            }
+        });
+        item_goto_hobby_info = (TextView) view.findViewById(R.id.textView11);
+        item_goto_hobby_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHobbyInfo(v);
+            }
+        });
 
-		item_location_overt = (Switch) findViewById(R.id.base_info_location_overt);
-		item_location_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, false));
-		setBaseInfoLocationOvertListener();
-
-		item_keywords_overt = (Switch) findViewById(R.id.base_info_keywords_overt);
-		item_keywords_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, false));
-		setBaseInfoKeywordsOvertListener();
+        return view;
 	}
 
-	@Override
+	/*@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return true;
@@ -366,22 +437,22 @@ public class BaseInfoSettings extends AppCompatActivity {
 			this.startActivity(new Intent(this, SystemSettings.class));
 			return true;
 		}
-        /*if (id == R.id.action_personal){
+        *//*if (id == R.id.action_personal){
             this.startActivity(new Intent(this, BaseInfoSettings.class));
             return true;
-        }*/
-		/*if (id == R.id.action_want){
+        }*//*
+		*//*if (id == R.id.action_want){
 			this.startActivity(new Intent(this, WantSettings.class));
 			return true;
 		}
 		if (id == R.id.action_analysis){
 			return false;
-		}*/
+		}*//*
 		if (id == R.id.action_logout) {
 			super.finish();
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
+	}*/
 
 }
