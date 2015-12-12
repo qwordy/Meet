@@ -2,13 +2,13 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".Search">
-    <item android:id="@+id/action_news"
+    <!--<item android:id="@+id/action_news"
           android:title="@string/action_news"
           app:showAsAction="never" />
     <item android:id="@+id/action_settings"
           android:orderInCategory="100"
           android:title="@string/action_settings"
-          app:showAsAction="never" />
+          app:showAsAction="never" />-->
     <!--<item android:id="@+id/action_personal"
           android:orderInCategory="101"
           android:title="@string/action_personal"

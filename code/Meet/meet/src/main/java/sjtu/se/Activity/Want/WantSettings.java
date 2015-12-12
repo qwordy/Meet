@@ -1,9 +1,10 @@
 package sjtu.se.Activity.Want;
 
+import android.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
+import android.view.*;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.UserInformation.Want;
@@ -14,14 +15,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-import android.view.Menu;
-import android.view.MenuItem;
 
-public class WantSettings extends AppCompatActivity{
+public class WantSettings extends Fragment{
 
-    private Context ctx = this;
+    private Context ctx;
+    private View view;
 
     private SharedPreferences wantSettings;
 
@@ -83,7 +82,7 @@ public class WantSettings extends AppCompatActivity{
             }
         }
 
-        Intent intent = new Intent(WantSettings.this, ShowWants.class);
+        Intent intent = new Intent(ctx, ShowWants.class);
         intent.putExtra("message", msg);
         intent.putExtra("key", key);
         ctx.startActivity(intent);
@@ -171,78 +170,87 @@ public class WantSettings extends AppCompatActivity{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.want_settings);
-        ctx = this;
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.view = inflater.inflate(R.layout.want_settings, container, false);
+        ctx=getActivity();
 
         ActivityControlCenter.WANTS_MAY_CHANGED = true;
 
-        wantSettings = getSharedPreferences(ActivityControlCenter.WANT_SETTINGS, 0);
+        wantSettings = ctx.getSharedPreferences(ActivityControlCenter.WANT_SETTINGS, 0);
 
-        want1 = (TextView)findViewById(R.id.wantSlot1);
-        want2 = (TextView)findViewById(R.id.wantSlot2);
-        want3 = (TextView)findViewById(R.id.wantSlot3);
-        want4 = (TextView)findViewById(R.id.wantSlot4);
-        want5 = (TextView)findViewById(R.id.wantSlot5);
-        want6 = (TextView)findViewById(R.id.wantSlot6);
-        want7 = (TextView)findViewById(R.id.wantSlot7);
-        want8 = (TextView)findViewById(R.id.wantSlot8);
+        want1 = (TextView)view.findViewById(R.id.wantSlot1);
+        want1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want2 = (TextView)view.findViewById(R.id.wantSlot2);
+        want2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want3 = (TextView)view.findViewById(R.id.wantSlot3);
+        want3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want4 = (TextView)view.findViewById(R.id.wantSlot4);
+        want4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want5 = (TextView)view.findViewById(R.id.wantSlot5);
+        want5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want6 = (TextView)view.findViewById(R.id.wantSlot6);
+        want6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want7 = (TextView)view.findViewById(R.id.wantSlot7);
+        want7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+        want8 = (TextView)view.findViewById(R.id.wantSlot8);
+        want8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrModify(v);
+            }
+        });
+
+        return view;
     }
 
-    protected void onResume(){
+    public void onResume(){
         super.onResume();
         //System.out.println("Resuming........................................");
         this.updateText();
     }
 
-    @Override
+/*    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_news) {
-            return false;
-        }
-        if (id == R.id.action_settings) {
-            this.startActivity(new Intent(this, SystemSettings.class));
-            return true;
-        }
-        /*if (id == R.id.action_personal){
-            this.startActivity(new Intent(this, BaseInfoSettings.class));
-            return true;
-        }*/
-        /*if (id == R.id.action_want){
-            this.startActivity(new Intent(this, WantSettings.class));
-            return true;
-        }*/
-        /*if (id == R.id.action_analysis){
-            return false;
-        }*/
-        if (id == R.id.action_logout) {
-            super.finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    }*/
 
 }
