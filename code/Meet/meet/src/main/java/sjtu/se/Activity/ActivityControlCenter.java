@@ -53,12 +53,12 @@ public class ActivityControlCenter {
 	public static String KEY_QQ = "keyqq";
 	public static String KEY_EMAIL = "keyemail";
 	public static String KEY_WEIBO = "keyweibo";
-	public static String KEY_SOCIALNET = "keysocialnet";
+	public static String KEY_WECHAT = "keywechat";
 	public static String KEY_PHONE_OVERT = "keyphoneovert";
 	public static String KEY_QQ_OVERT = "keyqqovert";
 	public static String KEY_EMAIL_OVERT = "keyemailovert";
 	public static String KEY_WEIBO_OVERT = "keyweiboovert";
-	public static String KEY_SOCIALNET_OVERT = "keysocialnetovert";
+	public static String KEY_WECHAT_OVERT = "keywechatovert";
 
 	// education information and their overt
 	public static String PERSONAL_EDUCATION_INFO = "educationinfo";

@@ -493,10 +493,10 @@ public class SearchFragment extends Fragment {
         else
             overt_user.contactinfo.Weibo = "";
 
-        if (sp.getBoolean(ActivityControlCenter.KEY_SOCIALNET_OVERT, false))
-            overt_user.contactinfo.Social_Network = sp.getString(ActivityControlCenter.KEY_SOCIALNET, "");
+        if (sp.getBoolean(ActivityControlCenter.KEY_WECHAT_OVERT, false))
+            overt_user.contactinfo.Wechat = sp.getString(ActivityControlCenter.KEY_WECHAT, "");
         else
-            overt_user.contactinfo.Social_Network  = "";
+            overt_user.contactinfo.Wechat  = "";
     }
 
     private void updateEducationInfo(){

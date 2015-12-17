@@ -42,7 +42,7 @@ public class Information implements Parcelable {
 		str += this.baseinfo.Name + dot + this.baseinfo.Nick + dot + this.baseinfo.Gender + dot;
 		str += this.baseinfo.BirthDay + dot + this.baseinfo.Homeland + dot + this.baseinfo.Location + dot;
 		str += this.contactinfo.Phone + dot + this.contactinfo.QQ + dot + this.contactinfo.E_Mail + dot;
-		str += this.contactinfo.Weibo + dot + this.contactinfo.Social_Network + dot;
+		str += this.contactinfo.Weibo + dot + this.contactinfo.Wechat + dot;
 		str += this.edu.College + dot + this.edu.High_School + dot + this.edu.Middle_School + dot + this.edu.Primary_School + dot;
 		str += this.hobby.Game + dot + this.hobby.Sport + dot + this.hobby.Comic + dot + this.hobby.Music + dot;
 		str += this.hobby.Books + dot + this.hobby.Movie + dot + this.hobby.Other + dot;
@@ -74,7 +74,7 @@ public class Information implements Parcelable {
 		info.contactinfo.QQ				= strs[7];
 		info.contactinfo.E_Mail			= strs[8];
 		info.contactinfo.Weibo 			= strs[9];
-		info.contactinfo.Social_Network	= strs[10];
+		info.contactinfo.Wechat			= strs[10];
 		
 		info.edu.College				= strs[11];
 		info.edu.High_School			= strs[12];
@@ -115,7 +115,7 @@ public class Information implements Parcelable {
 		dest.writeString(this.contactinfo.QQ);
 		dest.writeString(this.contactinfo.E_Mail);
 		dest.writeString(this.contactinfo.Weibo);
-		dest.writeString(this.contactinfo.Social_Network);
+		dest.writeString(this.contactinfo.Wechat);
 		// education information
 		dest.writeString(this.edu.College);
 		dest.writeString(this.edu.High_School);
@@ -150,7 +150,7 @@ public class Information implements Parcelable {
 			info.contactinfo.QQ = source.readString();
 			info.contactinfo.E_Mail = source.readString();
 			info.contactinfo.Weibo = source.readString();
-			info.contactinfo.Social_Network = source.readString();
+			info.contactinfo.Wechat = source.readString();
 			
 			info.edu.College = source.readString();
 			info.edu.High_School = source.readString();

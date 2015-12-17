@@ -6,16 +6,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import sjtu.se.Meet.R;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -23,8 +19,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import sjtu.se.Activity.ActivityControlCenter;
-import sjtu.se.Activity.Setting.SystemSettings;
-import sjtu.se.Activity.Want.WantSettings;
 
 public class ContactInfoSettings extends AppCompatActivity {
 
@@ -35,13 +29,13 @@ public class ContactInfoSettings extends AppCompatActivity {
     private TextView item_qq;
     private TextView item_email;
     private TextView item_weibo;
-    private TextView item_socialnet;
+    private TextView item_wechat;
 
     private Switch item_phone_overt;
     private Switch item_qq_overt;
     private Switch item_email_overt;
     private Switch item_weibo_overt;
-    private Switch item_socialnet_overt;
+    private Switch item_wechat_overt;
 
     public void contactInfoPhoneEdit(View view){
         final EditText et = new EditText(ctx);
@@ -131,21 +125,21 @@ public class ContactInfoSettings extends AppCompatActivity {
                 }).show();
     }
 
-    public void contactInfoSocialnetEdit(View view){
+    public void contactInfoWechatEdit(View view){
         final EditText et = new EditText(ctx);
-        et.setText(contactInfo.getString(ActivityControlCenter.KEY_SOCIALNET, ""));
+        et.setText(contactInfo.getString(ActivityControlCenter.KEY_WECHAT, ""));
         et.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
 
-        new AlertDialog.Builder(ctx).setTitle("设置个人主页").setView(et)
+        new AlertDialog.Builder(ctx).setTitle("设置微信号").setView(et)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Auto-generated method stub
                         String str = et.getText().toString();
                         SharedPreferences.Editor editor = contactInfo.edit();
-                        editor.putString(ActivityControlCenter.KEY_SOCIALNET, str);
+                        editor.putString(ActivityControlCenter.KEY_WECHAT, str);
                         editor.commit();
-                        item_socialnet.setText(str);
+                        item_wechat.setText(str);
                     }
                 })
                 .setNegativeButton("取消",new DialogInterface.OnClickListener() {
@@ -201,13 +195,13 @@ public class ContactInfoSettings extends AppCompatActivity {
         });
     }
 
-    public void setContactInfoSocialnetOvertListener(){
-        item_socialnet_overt.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+    public void setContactInfoWechatOvertListener(){
+        item_wechat_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // TODO Auto-generated method stub
                 SharedPreferences.Editor editor = contactInfo.edit();
-                editor.putBoolean(ActivityControlCenter.KEY_SOCIALNET_OVERT, isChecked);
+                editor.putBoolean(ActivityControlCenter.KEY_WECHAT_OVERT, isChecked);
                 editor.commit();
             }
         });
@@ -236,8 +230,8 @@ public class ContactInfoSettings extends AppCompatActivity {
         item_email.setText(contactInfo.getString(ActivityControlCenter.KEY_EMAIL, ""));
         item_weibo = (TextView) findViewById(R.id.contact_info_weibo);
         item_weibo.setText(contactInfo.getString(ActivityControlCenter.KEY_WEIBO, ""));
-        item_socialnet = (TextView) findViewById(R.id.contact_info_socialnet);
-        item_socialnet.setText(contactInfo.getString(ActivityControlCenter.KEY_SOCIALNET, ""));
+        item_wechat = (TextView) findViewById(R.id.contact_info_wechat);
+        item_wechat.setText(contactInfo.getString(ActivityControlCenter.KEY_WECHAT, ""));
 
         item_phone_overt = (Switch) findViewById(R.id.contact_info_phone_overt);
         item_phone_overt.setChecked(contactInfo.getBoolean(ActivityControlCenter.KEY_PHONE_OVERT, false));
@@ -255,9 +249,9 @@ public class ContactInfoSettings extends AppCompatActivity {
         item_weibo_overt.setChecked(contactInfo.getBoolean(ActivityControlCenter.KEY_WEIBO_OVERT, false));
         setContactInfoWeiboOvertListener();
 
-        item_socialnet_overt = (Switch) findViewById(R.id.contact_info_socialnet_overt);
-        item_socialnet_overt.setChecked(contactInfo.getBoolean(ActivityControlCenter.KEY_SOCIALNET_OVERT, false));
-        setContactInfoSocialnetOvertListener();
+        item_wechat_overt = (Switch) findViewById(R.id.contact_info_wechat_overt);
+        item_wechat_overt.setChecked(contactInfo.getBoolean(ActivityControlCenter.KEY_WECHAT_OVERT, false));
+        setContactInfoWechatOvertListener();
     }
 
     @Override
