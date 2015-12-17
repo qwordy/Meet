@@ -34,30 +34,26 @@
             android:gravity="bottom">
         <Button
                 android:id="@+id/SearchShowDev"
-                style="@android:style/Holo.ButtonBar"
+                style="@style/Theme.MyTheme.ActionButton.Active"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/devBtn"
-                android:textSize="14sp" />
-
+                android:text="@string/devBtn"/>
         <Button
                 android:id="@+id/RecommendShowDev"
-                style="@android:style/Holo.ButtonBar"
+                style="@style/Theme.MyTheme.ActionButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/RecBtn"
-                android:textSize="14sp" />
+                android:text="@string/RecBtn"/>
 
         <Button
                 android:id="@+id/FindShowDev"
-                style="@android:style/Holo.ButtonBar"
+                style="@style/Theme.MyTheme.ActionButton"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/hisBtn"
-                android:textSize="14sp" />
+                android:text="@string/hisBtn"/>
 
     </LinearLayout>
 </LinearLayout>

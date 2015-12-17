@@ -62,6 +62,10 @@ public class SearchFragment extends Fragment {
     private ListView RecommendDeviceList;
     private ArrayList<DevBluetooth> OldRecommendList;
 
+    private Button SearchShowBtn;
+    private Button RecommendShowBtn;
+    private Button FindShowBtn;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -73,6 +77,16 @@ public class SearchFragment extends Fragment {
         DeviceList = (ListView)view.findViewById(R.id.DeviceList);
         HistoryDeviceList = (ListView)view.findViewById(R.id.HistoryDeviceList);
         RecommendDeviceList = (ListView)view.findViewById(R.id.RecommendDeviceList);
+        HistoryDeviceList.setVisibility(View.GONE);
+        RecommendDeviceList.setVisibility(View.GONE);
+
+        SearchShowBtn = (Button)(view.findViewById(R.id.SearchShowDev));
+        RecommendShowBtn = (Button)(view.findViewById(R.id.RecommendShowDev));
+        FindShowBtn = (Button)(view.findViewById(R.id.FindShowDev));
+
+        SearchShowBtn.setOnClickListener(new ShowDeviceList());
+        RecommendShowBtn.setOnClickListener(new ShowRecommendDeviceList());
+        FindShowBtn.setOnClickListener(new ShowHistoryDeviceList());
 
         setDeviceListClick();
         setRecommendDeviceListClick();
@@ -80,41 +94,13 @@ public class SearchFragment extends Fragment {
 
         DeviceListAdapter = new DevBluetoothAdapter(ctx, new ArrayList<DevBluetooth>());
         HistoryDevListAdapter = new DevBluetoothAdapter(ctx, new ArrayList<DevBluetooth>());
-        HistoryDeviceList.setVisibility(View.GONE);
         RecommendDevListAdapter = new DevBluetoothAdapter(ctx, new ArrayList<DevBluetooth>());
-        RecommendDeviceList.setVisibility(View.GONE);
 
         OldRecommendList = new ArrayList<DevBluetooth>();
 
         DeviceList.setAdapter(DeviceListAdapter);
         HistoryDeviceList.setAdapter(HistoryDevListAdapter);
         RecommendDeviceList.setAdapter(RecommendDevListAdapter);
-
-        ((Button)view.findViewById(R.id.SearchShowDev)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.SearchShowDev)).setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.FindShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
-
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowRecommendDeviceList(v);
-            }
-        });
-        ((Button)view.findViewById(R.id.SearchShowDev)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowDeviceList(v);
-            }
-        });
-        ((Button)view.findViewById(R.id.FindShowDev)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowHistoryDeviceList(v);
-            }
-        });
 
         intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -626,43 +612,46 @@ public class SearchFragment extends Fragment {
             want8 = new Want();
     }
 
-    public void ShowDeviceList(View v){
-        ((Button)view.findViewById(R.id.SearchShowDev)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.SearchShowDev)).setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.FindShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
-        HistoryDeviceList.setVisibility(View.GONE);
-        RecommendDeviceList.setVisibility(View.GONE);
-        DeviceList.setVisibility(View.VISIBLE);
+    private class ShowDeviceList implements View.OnClickListener{
+        public void onClick(View v){
+            SearchShowBtn.setBackgroundColor(ContextCompat.getColor(ctx,R.color.background));
+            SearchShowBtn.setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            RecommendShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            RecommendShowBtn.setTextColor(Color.WHITE);
+            FindShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            FindShowBtn.setTextColor(Color.WHITE);
+            HistoryDeviceList.setVisibility(View.GONE);
+            RecommendDeviceList.setVisibility(View.GONE);
+            DeviceList.setVisibility(View.VISIBLE);
+        }
     }
 
-    public void ShowRecommendDeviceList(View v){
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.SearchShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.SearchShowDev)).setTextColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.FindShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.FindShowDev)).setTextColor(Color.WHITE);
-        DeviceList.setVisibility(View.GONE);
-        HistoryDeviceList.setVisibility(View.GONE);
-        RecommendDeviceList.setVisibility(View.VISIBLE);
+    private class ShowRecommendDeviceList implements View.OnClickListener{
+        public void onClick(View v){
+            RecommendShowBtn.setBackgroundColor(ContextCompat.getColor(ctx,R.color.background));
+            RecommendShowBtn.setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            SearchShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            SearchShowBtn.setTextColor(Color.WHITE);
+            FindShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            FindShowBtn.setTextColor(Color.WHITE);
+            DeviceList.setVisibility(View.GONE);
+            HistoryDeviceList.setVisibility(View.GONE);
+            RecommendDeviceList.setVisibility(View.VISIBLE);
+        }
     }
 
-    @SuppressLint("NewApi")
-    public void ShowHistoryDeviceList(View v)
-    {
-        ((Button)view.findViewById(R.id.FindShowDev)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.FindShowDev)).setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.SearchShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.SearchShowDev)).setTextColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
-        ((Button)view.findViewById(R.id.RecommendShowDev)).setTextColor(Color.WHITE);
-        DeviceList.setVisibility(View.GONE);
-        RecommendDeviceList.setVisibility(View.GONE);
-        HistoryDeviceList.setVisibility(View.VISIBLE);
-        //getPairedDevice();
+    private class ShowHistoryDeviceList implements View.OnClickListener{
+        public void onClick(View v){
+            FindShowBtn.setBackgroundColor(ContextCompat.getColor(ctx,R.color.background));
+            FindShowBtn.setTextColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            SearchShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            SearchShowBtn.setTextColor(Color.WHITE);
+            RecommendShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
+            RecommendShowBtn.setTextColor(Color.WHITE);
+            DeviceList.setVisibility(View.GONE);
+            RecommendDeviceList.setVisibility(View.GONE);
+            HistoryDeviceList.setVisibility(View.VISIBLE);
+        }
     }
 
     //程治谦
