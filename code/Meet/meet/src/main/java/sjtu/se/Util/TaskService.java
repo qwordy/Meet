@@ -247,10 +247,10 @@ public class TaskService extends Service {
                         || task.mParams == null || task.mParams.length == 0) {
                     Log.e(TAG, "mCommThread or task.mParams null");
                 }else{
-                    byte[] msg = null;
+                    byte[] card = null;
                     try {
-                        msg = DataProtocol.packCard((String) task.mParams[0]);
-                        sucess = mCommThread.write(msg);
+                        card = DataProtocol.packCard((String) task.mParams[0]);
+                        sucess = mCommThread.write(card);
                     } catch (UnsupportedEncodingException e) {
                         sucess = false;
                     }
@@ -522,6 +522,9 @@ public class TaskService extends Service {
                         handlerMsg.what = Task.TASK_RECV_MSG;
                         handlerMsg.obj = data;
                         mActivityHandler.sendMessage(handlerMsg);
+
+                    }else if (msg.type == DataProtocol.TYPE_CARD) {
+
                     }
                 } catch (Exception e) {
                     try {
