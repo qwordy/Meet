@@ -38,6 +38,8 @@ public class TaskService extends Service {
         public static final int TASK_SEND_FILE = 7;
         public static final int TASK_PROGRESS = 8;
 
+        public static final int TASK_SEND_CARD = 9;
+
 
         // 任务ID
         private int mTaskID;
@@ -193,6 +195,7 @@ public class TaskService extends Service {
     }
 
     private void doTask(Task task) {
+        boolean sucess = false;
         switch (task.getTaskID()) {
             case Task.TASK_START_ACCEPT:
 
@@ -218,7 +221,7 @@ public class TaskService extends Service {
                 isServerMode = false;
                 break;
             case Task.TASK_SEND_MSG:
-                boolean sucess = false;
+                sucess = false;
                 if (mCommThread == null || !mCommThread.isAlive()
                         || task.mParams == null || task.mParams.length == 0) {
                     Log.e(TAG, "mCommThread or task.mParams null");
@@ -236,6 +239,27 @@ public class TaskService extends Service {
                     returnMsg.what = Task.TASK_SEND_MSG;
                     returnMsg.obj = "消息发送失败";
                     mActivityHandler.sendMessage(returnMsg);
+                }
+                break;
+            case Task.TASK_SEND_CARD:
+                sucess = false;
+                if (mCommThread == null || !mCommThread.isAlive()
+                        || task.mParams == null || task.mParams.length == 0) {
+                    Log.e(TAG, "mCommThread or task.mParams null");
+                }else{
+                    byte[] msg = null;
+                    try {
+                        msg = DataProtocol.packCard((String) task.mParams[0]);
+                        sucess = mCommThread.write(msg);
+                    } catch (UnsupportedEncodingException e) {
+                        sucess = false;
+                    }
+                }
+                if (!sucess) {
+                    /*android.os.Message returnMsg = mActivityHandler.obtainMessage();
+                    returnMsg.what = Task.TASK_SEND_MSG;
+                    returnMsg.obj = "消息发送失败";
+                    mActivityHandler.sendMessage(returnMsg);*/
                 }
                 break;
         }
