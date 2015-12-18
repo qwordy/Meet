@@ -253,10 +253,10 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="个人主页"
+            android:text="微信号"
             android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:padding="10dp"
-            android:textSize="20sp" />
+            android:textSize="20sp" android:singleLine="false"/>
         
         <View  
 			   android:layout_width="fill_parent"  
@@ -269,12 +269,12 @@
             android:gravity="center_vertical" >
 
             <TextView
-                android:id="@+id/contact_info_socialnet"
+                android:id="@+id/contact_info_wechat"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:onClick="contactInfoSocialnetEdit"
+                android:onClick="contactInfoWechatEdit"
                 android:textColor="#808080"
                 android:textSize="18sp" 
             	android:padding="12dp"
@@ -285,7 +285,7 @@
                 android:focusable="true" />
 
             <Switch
-                android:id="@+id/contact_info_socialnet_overt"
+                android:id="@+id/contact_info_wechat_overt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textOff="已隐藏"

@@ -6,13 +6,6 @@
 			  android:layout_height="match_parent"
 			  android:orientation="vertical"
 			  tools:context=".Activity.Information.BaseInfoSettings">
-	<android.support.v7.widget.Toolbar
-			android:id="@+id/my_toolbar"
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="@color/actionbar_background"
-			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
        	 	android:orientation="vertical"
-            android:background="#FFFFFF" >  
+            android:background="#FFFFFF" android:visibility="gone">
 	        <TextView
 	            android:id="@+id/textView1"
 	            android:layout_width="wrap_content"
@@ -54,7 +47,6 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:clickable="true"
-	                android:onClick="baseInfoNickEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
             		android:padding="12dp" />
@@ -97,7 +89,6 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:clickable="true"
-	                android:onClick="baseInfoNameEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
 	            	android:padding="12dp" />
@@ -150,7 +141,6 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:clickable="true"
-	                android:onClick="baseInfoGenderEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
 	            	android:padding="12dp" />
@@ -203,7 +193,6 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:clickable="true"
-	                android:onClick="baseInfoBirthdayEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
 	                android:padding="12dp" />
@@ -256,7 +245,6 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:clickable="true"
-	                android:onClick="baseInfoHomelandEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
 	                android:padding="12dp" />
@@ -310,7 +298,6 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:clickable="true"
-	                android:onClick="baseInfoLocationEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp" 
 	                android:padding="12dp"/>
@@ -363,7 +350,6 @@
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
 	                android:clickable="true"
-	                android:onClick="baseInfoKeywordsEdit"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
 	                android:padding="12dp"
@@ -400,7 +386,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:onClick="goToContactInfo"
                 android:padding="14dp"
                 android:text="联系方式"
                 android:textAppearance="?android:attr/textAppearanceMedium"

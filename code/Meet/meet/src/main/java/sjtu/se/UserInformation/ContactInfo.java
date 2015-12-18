@@ -5,14 +5,14 @@ public class ContactInfo {
 	public String QQ;
 	public String E_Mail;
 	public String Weibo;
-	public String Social_Network;
+	public String Wechat;
 	
 	public ContactInfo(){
 		this.Phone = "";
 		this.QQ = "";
 		this.E_Mail = "";
 		this.Weibo = "";
-		this.Social_Network = "";
+		this.Wechat = "";
 	};
 	
 	public ContactInfo(ContactInfo c){
@@ -20,6 +20,6 @@ public class ContactInfo {
 		this.QQ = c.QQ;
 		this.E_Mail = c.E_Mail;
 		this.Weibo = c.Weibo;
-		this.Social_Network = c.Social_Network;
+		this.Wechat = c.Wechat;
 	};
 }

@@ -89,11 +89,11 @@ public class ShowInformation extends AppCompatActivity {
 		else
 			((TextView) findViewById(R.id.show_weibo)).setText(str);
 
-		str = info.contactinfo.Social_Network;
+		str = info.contactinfo.Wechat;
 		if (str.equals(""))
-			((TextView) findViewById(R.id.show_socialnet)).setText("-");
+			((TextView) findViewById(R.id.show_wechat)).setText("-");
 		else
-			((TextView) findViewById(R.id.show_socialnet)).setText(str);
+			((TextView) findViewById(R.id.show_wechat)).setText(str);
 	}
 
 	private void setEducationInfo(){

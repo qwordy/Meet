@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:background="@color/background"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="sjtu.se.Activity.Search.Search"
-    tools:ignore="MergeRootFrame" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:background="@color/background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="sjtu.se.Activity.Search.Search"
+                tools:ignore="MergeRootFrame" >
 
     <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
@@ -18,64 +16,28 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <ListView
-        android:id="@+id/DeviceList"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1.09" 
-        android:padding="10dp">
-    </ListView>
-    
-    <ListView
-        android:id="@+id/RecommendDeviceList"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1.09"  
-        android:padding="10dp">
-    </ListView>
+    <android.support.v4.widget.DrawerLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/my_toolbar"
+            android:orientation="vertical">
+        <FrameLayout
+                android:id="@+id/pref_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        </FrameLayout>
 
-    <ListView
-        android:id="@+id/HistoryDeviceList"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1.09"  
-        android:padding="10dp">
-    </ListView>
+        <!-- The navigation drawer -->
+        <ListView android:id="@+id/left_drawer"
+                  android:layout_width="160dp"
+                  android:layout_height="match_parent"
+                  android:layout_gravity="start"
+                  android:choiceMode="singleChoice"
+                  android:divider="@android:color/transparent"
+                  android:dividerHeight="5dp"
+                  android:paddingTop="20dp"
+                  android:background="#e6ffffff"/>
+    </android.support.v4.widget.DrawerLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/SearchShowDev"
-            style="@android:style/Holo.ButtonBar"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="ShowDeviceList"
-            android:text="@string/devBtn"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/RecommendShowDev"
-            style="@android:style/Holo.ButtonBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="ShowRecommendDeviceList"
-            android:text="@string/RecBtn"
-            android:textSize="14sp" />
-        
-         <Button
-             android:id="@+id/FindShowDev"
-             style="@android:style/Holo.ButtonBar"
-             android:layout_width="0dip"
-             android:layout_height="wrap_content"
-             android:layout_weight="1"
-             android:onClick="ShowHistoryDeviceList"
-             android:text="@string/hisBtn"
-             android:textSize="14sp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
