@@ -1,6 +1,5 @@
 package sjtu.se.Activity.Search;
 
-import android.annotation.SuppressLint;
 import android.app.*;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,6 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import sjtu.se.Util.SoundEffect;
 import sjtu.se.Util.TaskService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 
 public class SearchFragment extends Fragment {
@@ -53,13 +55,18 @@ public class SearchFragment extends Fragment {
 
     public BluetoothAdapter mBluetoothAdapter;
 
-    public DevBluetoothAdapter DeviceListAdapter;
-    public DevBluetoothAdapter HistoryDevListAdapter;
-    public DevBluetoothAdapter RecommendDevListAdapter;
+    private RecyclerView DeviceList;
+    private RecyclerView.Adapter DeviceListAdapter;
+    private ArrayList<DevBluetooth> device_list;
 
-    private ListView DeviceList;
-    private ListView HistoryDeviceList;
-    private ListView RecommendDeviceList;
+    private RecyclerView RecommendDeviceList;
+    private RecyclerView.Adapter RecommendDevListAdapter;
+    private ArrayList<DevBluetooth> recommend_device_list;
+
+    private RecyclerView HistoryDeviceList;
+    private RecyclerView.Adapter HistoryDevListAdapter;
+    private ArrayList<DevBluetooth> history_device_list;
+
     private ArrayList<DevBluetooth> OldRecommendList;
 
     private Button SearchShowBtn;
@@ -70,13 +77,30 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.view = inflater.inflate(R.layout.fragment_search, container, false);
-        ctx=getActivity();
         overt_user = new Information();
         full_user  = new Information();
 
-        DeviceList = (ListView)view.findViewById(R.id.DeviceList);
-        HistoryDeviceList = (ListView)view.findViewById(R.id.HistoryDeviceList);
-        RecommendDeviceList = (ListView)view.findViewById(R.id.RecommendDeviceList);
+        DeviceList = (RecyclerView)view.findViewById(R.id.DeviceList);
+        DeviceList.setHasFixedSize(true);
+        DeviceList.setLayoutManager(new LinearLayoutManager(ctx));
+        device_list = new ArrayList<DevBluetooth>();
+        DeviceListAdapter = new DevBluetoothAdapter(ctx,device_list);
+        DeviceList.setAdapter(DeviceListAdapter);
+
+        RecommendDeviceList = (RecyclerView)view.findViewById(R.id.RecommendDeviceList);
+        RecommendDeviceList.setHasFixedSize(true);
+        RecommendDeviceList.setLayoutManager(new LinearLayoutManager(ctx));
+        recommend_device_list = new ArrayList<DevBluetooth>();
+        RecommendDevListAdapter = new DevBluetoothAdapter(ctx,recommend_device_list);
+        RecommendDeviceList.setAdapter(RecommendDevListAdapter);
+
+        HistoryDeviceList = (RecyclerView)view.findViewById(R.id.HistoryDeviceList);
+        HistoryDeviceList.setHasFixedSize(true);
+        HistoryDeviceList.setLayoutManager(new LinearLayoutManager(ctx));
+        history_device_list = new ArrayList<DevBluetooth>();
+        HistoryDevListAdapter = new DevBluetoothAdapter(ctx,history_device_list);
+        HistoryDeviceList.setAdapter(HistoryDevListAdapter);
+
         HistoryDeviceList.setVisibility(View.GONE);
         RecommendDeviceList.setVisibility(View.GONE);
 
@@ -92,16 +116,19 @@ public class SearchFragment extends Fragment {
         setRecommendDeviceListClick();
         setHistoryDeviceListClick();
 
-        DeviceListAdapter = new DevBluetoothAdapter(ctx, new ArrayList<DevBluetooth>());
-        HistoryDevListAdapter = new DevBluetoothAdapter(ctx, new ArrayList<DevBluetooth>());
-        RecommendDevListAdapter = new DevBluetoothAdapter(ctx, new ArrayList<DevBluetooth>());
-
         OldRecommendList = new ArrayList<DevBluetooth>();
 
-        DeviceList.setAdapter(DeviceListAdapter);
-        HistoryDeviceList.setAdapter(HistoryDevListAdapter);
-        RecommendDeviceList.setAdapter(RecommendDevListAdapter);
+        OpenBluetooth();
 
+        Message message = handler.obtainMessage(0);
+        handler.sendMessageDelayed(message, 0);
+
+        return view;
+    }
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        ctx=getActivity();
         intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
@@ -111,28 +138,44 @@ public class SearchFragment extends Fragment {
         intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
         intentFilter.addAction(ActivityControlCenter.ACTION_LAUNCHED);
         ctx.registerReceiver(receiver, intentFilter);
-
-        OpenBluetooth();
-
-        Message message = handler.obtainMessage(0);
-        handler.sendMessageDelayed(message, 0);
-        return view;
     }
 
-    /*public void onCreate(Bundle savedInstanceState){
+    public void addItem(ArrayList<DevBluetooth> lst,RecyclerView.Adapter adapter,String Addr, String Info, Information in,BluetoothDevice device){
+        int size = lst.size();
+        for (int i=0; i<size;i++){
+            if (Addr.equals(lst.get(i).Address)){
+                lst.set(i, new DevBluetooth(Addr, Info, in, device));
+                adapter.notifyDataSetChanged();
+                return;
+            }
+        }
+        lst.add(new DevBluetooth(Addr, Info, in, device));
+        adapter.notifyDataSetChanged();
+    }
 
-    }*/
+    public void listReset(ArrayList<DevBluetooth> lst,RecyclerView.Adapter adapter){
+        int size = lst.size();
+        for (int i=0;i<size;i++){
+            DevBluetooth dev = lst.get(i);
+            if ((new Date()).getTime() - dev.FoundTime.getTime() >= 10000){
+                lst.remove(i);
+                size--;
+                i--;
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what){
                 case 0:{
-                    DeviceListAdapter.reset();
-                    RecommendDevListAdapter.reset();
+                    listReset(device_list, DeviceListAdapter);
+                    listReset(recommend_device_list, RecommendDevListAdapter);
 
-                    recommendNotify(getAddition(OldRecommendList, RecommendDevListAdapter.getList()));
-                    OldRecommendList = (ArrayList<DevBluetooth>) RecommendDevListAdapter.getList().clone();
+                    recommendNotify(getAddition(OldRecommendList, recommend_device_list));
+                    OldRecommendList = (ArrayList<DevBluetooth>) recommend_device_list.clone();
 
                     Rename();
                     doDiscovery();
@@ -205,7 +248,7 @@ public class SearchFragment extends Fragment {
                 Information info = Format.DeFormat(btname);
 
                 if (info != null){
-                    DeviceListAdapter.add(device.getAddress(), device.getName(), info, device);
+                    addItem(device_list, DeviceListAdapter, device.getAddress(), device.getName(), info, device);
                     if (Match.isInterest(info, full_user) ||
                             Match.isWanted(info, want1) ||
                             Match.isWanted(info, want2) ||
@@ -215,7 +258,7 @@ public class SearchFragment extends Fragment {
                             Match.isWanted(info, want6) ||
                             Match.isWanted(info, want7) ||
                             Match.isWanted(info, want8)){
-                        RecommendDevListAdapter.add(device.getAddress(), device.getName(), info, device);
+                        addItem(recommend_device_list, RecommendDevListAdapter, device.getAddress(), device.getName(), info, device);
                     }
                 }
             }
@@ -367,7 +410,7 @@ public class SearchFragment extends Fragment {
             String btname = device.getName();
             Information info = Format.DeFormat(btname);
             if (info != null)
-                HistoryDevListAdapter.add(device.getAddress(), device.getName(), info, device);
+                addItem(history_device_list, HistoryDevListAdapter, device.getAddress(), device.getName(), info, device);
         }
     }
 
@@ -656,7 +699,7 @@ public class SearchFragment extends Fragment {
 
     //程治谦
     private void setDeviceListClick(){
-        DeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*DeviceList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -722,11 +765,11 @@ public class SearchFragment extends Fragment {
                 builder.create().show();
                 return true;
             }
-        });
+        });*/
     }
 
     private void setRecommendDeviceListClick() {
-        RecommendDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*RecommendDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -792,11 +835,11 @@ public class SearchFragment extends Fragment {
                 builder.create().show();
                 return true;
             }
-        });
+        });*/
     }
 
     private void setHistoryDeviceListClick() {
-        HistoryDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*HistoryDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -824,6 +867,6 @@ public class SearchFragment extends Fragment {
                 ctx.startActivity(intent);
             }
 
-        });
+        });*/
     }
 }

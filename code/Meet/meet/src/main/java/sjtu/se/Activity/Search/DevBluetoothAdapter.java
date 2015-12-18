@@ -1,93 +1,135 @@
 package sjtu.se.Activity.Search;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+import sjtu.se.Activity.ActivityControlCenter;
+import sjtu.se.Activity.ChatPlatform.ChatActivity;
+import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.Information;
+import sjtu.se.Util.TaskService;
 
 import java.util.ArrayList;
-import java.util.Date;
 
-public class DevBluetoothAdapter extends BaseAdapter {
-
-    static class ViewHolder{
-        public TextView address;
-        public TextView information;
-    };
-
-    private LayoutInflater mInflater = null;
+public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapter.ViewHolder> {
     private ArrayList<DevBluetooth> lst;
+    private Context ctx;
 
-    public DevBluetoothAdapter(Context context, ArrayList<DevBluetooth> l){
-        this.lst = l;
-        this.mInflater = LayoutInflater.from(context);
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
+    {
+        public TextView nickname;
+        public TextView information;
+        public ArrayList<DevBluetooth> list;
+        public Context ctx;
+        public DevBluetooth dev;
+
+        public ViewHolder(ViewGroup v,ArrayList<DevBluetooth> lst,Context context) {
+            super(v);
+            list = lst;
+            ctx=context;
+            nickname = (TextView)v.getChildAt(0);
+            information = (TextView)v.getChildAt(1);
+            v.setOnClickListener(this);
+            v.setOnLongClickListener(this);
+        }
+
+        public void onClick(View v) {
+            dev=list.get(getAdapterPosition());
+            String addr = dev.Address;
+            SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
+            String res = sp.getString(addr, "Not found");
+            if (!res.equals("Not found")) {
+                Information info = Information.parseInformation(res);
+                if (info != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("information", info);
+                    Intent intent = new Intent(ctx, ShowInformation.class);
+                    intent.putExtras(bundle);
+                    ctx.startActivity(intent);
+                    return;
+                }
+            }
+            Bundle bundle = new Bundle();
+            Information info = new Information(dev.Info);
+            bundle.putParcelable("information", info);
+            Intent intent = new Intent(ctx, ShowInformation.class);
+            intent.putExtras(bundle);
+            ctx.startActivity(intent);
+        }
+
+        public boolean onLongClick(View view) {
+            dev=list.get(getAdapterPosition());
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+            String nick = dev.Info.baseinfo.Nick;
+            final String address = dev.Address;
+            builder.setMessage("确定与 "+ nick +" 建立连接么？");
+            builder.setTitle("提示");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt(ActivityControlCenter.CMD, 2);
+                    editor.commit();
+
+                    Intent intent = new Intent(ctx, ChatActivity.class);
+                    intent.putExtra("DEVICE", dev.mRemoteDevice);
+                    intent.putExtra("isclient", true);
+                    ctx.startActivity(intent);
+                    dialog.dismiss();
+                }
+            });
+            /*builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    dialog.dismiss();
+                }
+            });*/
+            builder.create().show();
+            return true;
+        }
     }
 
-    @Override
-    public int getCount() {
-        return lst.size();
+    public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l){
+        this.lst=l;
+        this.ctx = context;
     }
 
-    @Override
-    public Object getItem(int position) {
-        return lst.get(position);
-    }
-
-    @Override
     public long getItemId(int position) {
         return position;
     }
 
-    public ArrayList<DevBluetooth> getList(){
-        return lst;
+    public DevBluetoothAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
+        ViewGroup v = (ViewGroup)LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list_item, parent, false);
+        ViewHolder vh = new ViewHolder(v,lst,ctx);
+        return vh;
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        if(convertView == null){
-            holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.device_list_item, null);
-            holder.address = (TextView)convertView.findViewById(R.id.Address);
-            holder.information = (TextView)convertView.findViewById(R.id.Information);
-            convertView.setTag(holder);
-        }
-        else{
-            holder = (ViewHolder)convertView.getTag();
-        }
-        holder.address.setText(lst.get(position).Info.baseinfo.Nick);
-        holder.information.setText(lst.get(position).Address);
-        return convertView;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // - get element from your dataset at this position
+        // - replace the contents of the view with that element
+        holder.nickname.setText(lst.get(position).Info.baseinfo.Nick);
+        holder.information.setText(lst.get(position).Information);
     }
 
-    public void add(String Addr, String Info, Information in,BluetoothDevice device){
-        int size = lst.size();
-        for (int i=0; i<size;i++){
-            if (Addr.equals(lst.get(i).Address)){
-                lst.set(i, new DevBluetooth(Addr, Info, in, device));
-                this.notifyDataSetChanged();
-                return;
-            }
-        }
-        lst.add(new DevBluetooth(Addr, Info, in, device));
-        this.notifyDataSetChanged();
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return lst.size();
     }
-
-    public void reset(){
-        int size = lst.size();
-        for (int i=0;i<size;i++){
-            DevBluetooth dev = lst.get(i);
-            if ((new Date()).getTime() - dev.FoundTime.getTime() >= 10000){
-                lst.remove(i);
-                size--;
-                i--;
-            }
-        }
-        this.notifyDataSetChanged();
-    }
-};
+}
