@@ -103,8 +103,8 @@ public class LineChartView extends View {
 				paint);
 
 		// Prepare data
-		double[] data = new double[]{20, 0, 0, 0, 0, 55, 37, 26, 19, 50, 36, 0,
-				3, 60, 60, 48, 36, 45, 20, 25, 30, 10, 30, 43};
+		double[] data = new double[]{5, 0, 0, 0, 0, 0, 0, 2, 5, 10, 8, 13,
+				15, 3, 7, 10, 5, 6, 9, 13, 11, 15, 25, 31};
 		//double[] data = prepareData();
 
 		// Draw line chart
