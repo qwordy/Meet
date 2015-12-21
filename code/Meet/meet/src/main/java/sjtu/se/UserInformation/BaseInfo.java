@@ -15,7 +15,7 @@ public class BaseInfo {
 		this.BirthDay = "";
 		this.Homeland = "";
 		this.Location = "";
-	};
+	}
 	
 	public BaseInfo(BaseInfo b){
 		this.Name = b.Name;
@@ -24,5 +24,5 @@ public class BaseInfo {
 		this.BirthDay = b.BirthDay;
 		this.Homeland = b.Homeland;
 		this.Location = b.Location;
-	};
+	}
 }

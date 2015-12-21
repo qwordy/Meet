@@ -18,7 +18,7 @@ public class DevBluetooth{
         Info = new Information(i);
         FoundTime = new Date();
         mRemoteDevice = device;
-    };
+    }
 
     @Override
     public boolean equals(Object obj) {

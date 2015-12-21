@@ -5,18 +5,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.Information;
-import sjtu.se.Util.TaskService;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
     {
         public TextView nickname;
         public TextView information;
+        public ImageView gender;
         public ArrayList<DevBluetooth> list;
         public Context ctx;
         public DevBluetooth dev;
@@ -36,8 +38,9 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             super(v);
             list = lst;
             ctx=context;
-            nickname = (TextView)v.getChildAt(0);
-            information = (TextView)v.getChildAt(1);
+            gender = (ImageView)v.getChildAt(0);
+            nickname = (TextView)v.getChildAt(1);
+            information = (TextView)v.getChildAt(2);
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
         }
@@ -123,8 +126,16 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.nickname.setText(lst.get(position).Info.baseinfo.Nick);
-        holder.information.setText(lst.get(position).Information);
+        DevBluetooth dev = lst.get(position);
+        if(dev.Info.baseinfo.Gender.equals("0")){
+            holder.gender.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.boy_24dp));
+        }else if(dev.Info.baseinfo.Gender.equals("1")){
+            holder.gender.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.girl_24dp));
+        }/*else{
+            holder.gender.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.gender_24dp));
+        }*/
+        holder.nickname.setText(dev.Info.baseinfo.Nick);
+        holder.information.setText(dev.Info.keywords);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
