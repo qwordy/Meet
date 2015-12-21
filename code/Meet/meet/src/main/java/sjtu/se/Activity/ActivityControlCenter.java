@@ -10,23 +10,9 @@ public class ActivityControlCenter {
 	public static BluetoothAdapter savedBTAdapter;
 	public static String ACTIVITY_EXIT_ACTION = "activity_exit_action";
 
-	public static ColorDrawable dayNormal = new ColorDrawable(0xFF404040);
-	public static ColorDrawable dayClicked = new ColorDrawable(0x00FFFFFF);
-	public static ColorDrawable nightNormal = new ColorDrawable(0xFF222222);
-	public static ColorDrawable nightClicked = new ColorDrawable(0XFF000000);
-
-	public static SimpleDateFormat STD_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
 	public static boolean PERSONAL_INFO_MAY_CHANGED = true;
 	public static boolean WANTS_MAY_CHANGED = true;
-	public static boolean CONTACTS_MAY_CHANGED = true;
 
-	public static String MPROTOCOL_SCHEME_RFCOMM = "bluetoothchat";
-
-	public static String MUUID = "F375BA45-33A6-769E-155A-4006472B03B3";
-
-	public static String ACTION_SERVICE_TO_ACTIVITY = "android.intent.action.servicetoactivity";
-	public static String ACTION_ACTIVITY_TO_SERVICE = "android.intent.action.activitytoservice";
 	public static String ACTION_LAUNCHED = "android.intent.action.launched";
 
 	// base information and their overt
@@ -99,17 +85,6 @@ public class ActivityControlCenter {
 	public static String KEY_WANT_7 = "keywant7";
 	public static String KEY_WANT_8 = "keywant8";
 
-	// contact card settings
-	public static String CONTACT_SETTINGS = "contactsettings";
-	public static String KEY_CONTACT_1 = "keycontact1";
-	public static String KEY_CONTACT_2 = "keycontact2";
-	public static String KEY_CONTACT_3 = "keycontact3";
-	public static String KEY_CONTACT_4 = "keycontact4";
-	public static String KEY_CONTACT_5 = "keycontact5";
-	public static String KEY_CONTACT_6 = "keycontact6";
-	public static String KEY_CONTACT_7 = "keycontact7";
-	public static String KEY_CONTACT_8 = "keycontact8";
-
 	// details
 	public static String DETAIL_INFORMATION = "detailinformation";
 
@@ -123,5 +98,10 @@ public class ActivityControlCenter {
 	public static void SetOriginName(){
 		savedBTAdapter.setName(savedName);
 	}
+
+	public static String MPROTOCOL_SCHEME_RFCOMM = "bluetoothchat";
+	public static String MUUID = "F375BA45-33A6-769E-155A-4006472B03B3";
+	public static String ACTION_SERVICE_TO_ACTIVITY = "android.intent.action.servicetoactivity";
+	public static String ACTION_ACTIVITY_TO_SERVICE = "android.intent.action.activitytoservice";
 
 }
