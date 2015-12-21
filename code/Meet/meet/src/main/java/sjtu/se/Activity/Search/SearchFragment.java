@@ -404,16 +404,6 @@ public class SearchFragment extends Fragment {
         return ret;
     }
 
-    protected void getPairedDevice(){
-        Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
-        for (BluetoothDevice device : devices) {
-            String btname = device.getName();
-            Information info = Format.DeFormat(btname);
-            if (info != null)
-                addItem(history_device_list, HistoryDevListAdapter, device.getAddress(), device.getName(), info, device);
-        }
-    }
-
     @Override
     public void onResume(){
         super.onResume();
