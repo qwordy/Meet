@@ -168,7 +168,9 @@ public class SearchFragment extends Fragment {
     }
 
     public void UpdateDeviceList(){
-
+        /*SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+        Message message = handler.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
+        handler.sendMessage(message);*/
     }
 
     public void addItem(ArrayList<DevBluetooth> lst,RecyclerView.Adapter adapter,String Addr, String Info, Information in,BluetoothDevice device){

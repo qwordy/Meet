@@ -98,10 +98,4 @@ public class ActivityControlCenter {
 	public static void SetOriginName(){
 		savedBTAdapter.setName(savedName);
 	}
-
-	public static String MPROTOCOL_SCHEME_RFCOMM = "bluetoothchat";
-	public static String MUUID = "F375BA45-33A6-769E-155A-4006472B03B3";
-	public static String ACTION_SERVICE_TO_ACTIVITY = "android.intent.action.servicetoactivity";
-	public static String ACTION_ACTIVITY_TO_SERVICE = "android.intent.action.activitytoservice";
-
 }

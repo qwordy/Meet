@@ -39,6 +39,7 @@ public class TaskService extends Service {
         public static final int TASK_PROGRESS = 8;
 
         public static final int TASK_SEND_CARD = 9;
+        public static final int TASK_RECV_CARD = 10;
 
 
         // 任务ID
@@ -524,7 +525,10 @@ public class TaskService extends Service {
                         mActivityHandler.sendMessage(handlerMsg);
 
                     }else if (msg.type == DataProtocol.TYPE_CARD) {
-
+                        handlerMsg = mActivityHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_RECV_CARD;
+                        handlerMsg.obj = msg.msg;
+                        mActivityHandler.sendMessage(handlerMsg);
                     }
                 } catch (Exception e) {
                     try {

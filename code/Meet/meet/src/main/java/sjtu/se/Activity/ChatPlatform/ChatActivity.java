@@ -571,6 +571,11 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 					Notify.notifyMessage(ChatActivity.this, "您有未读取消息","遇见MEET","您有未读取消息", ChatActivity.this);
 				}*/
 				break;
+            case Task.TASK_RECV_CARD:
+                if(msg.obj == null)
+                    return;
+
+                break;
 			/*case Task.TASK_GET_REMOTE_STATE:
 				setTitle((String)msg.obj);
 				if(sAliveCount <= 0){
@@ -676,29 +681,27 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		/*switch(item.getItemId()){
-		case 1:
-			startActivityForResult(new Intent(this, SelectDevice.class), REQUES_SELECT_BT_CODE);
-			break;
-		case 2:
-			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-			final EditText devNameEdit = new EditText(this);
-			dlg.setView(devNameEdit);
-			dlg.setTitle("请输入用户名");
-			dlg.setPositiveButton("设置", new OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					if(devNameEdit.getText().toString().length() != 0)
-						mBluetoothAdapter.setName(devNameEdit.getText().toString());
-				}
-			});
-			dlg.create();
-			dlg.show();
-			break;
-			
-		case 3:
-			startActivity(new Intent(this, DownloadActivity.class));
-			break;
-		}*/
+		switch(item.getItemId()){
+			case R.id.send_contact:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage("向对方发送名片吗？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						dialog.dismiss();
+					}
+				});
+				builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				builder.create().show();
+				break;
+		}
 		
 		return super.onOptionsItemSelected(item);
 	}
