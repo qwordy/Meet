@@ -10,18 +10,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
-import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
@@ -32,7 +30,6 @@ import sjtu.se.Util.TaskService;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
 
 public class SearchFragment extends Fragment {
 
@@ -66,6 +63,9 @@ public class SearchFragment extends Fragment {
     private RecyclerView HistoryDeviceList;
     private RecyclerView.Adapter HistoryDevListAdapter;
     private ArrayList<DevBluetooth> history_device_list;
+
+    private SwipeRefreshLayout device_list_swipe;
+    private SwipeRefreshLayout recomm_list_swipe;
 
     private ArrayList<DevBluetooth> OldRecommendList;
 
@@ -102,7 +102,7 @@ public class SearchFragment extends Fragment {
         HistoryDeviceList.setAdapter(HistoryDevListAdapter);
 
         HistoryDeviceList.setVisibility(View.GONE);
-        RecommendDeviceList.setVisibility(View.GONE);
+        ((View)RecommendDeviceList.getParent()).setVisibility(View.GONE);
 
         SearchShowBtn = (Button)(view.findViewById(R.id.SearchShowDev));
         RecommendShowBtn = (Button)(view.findViewById(R.id.RecommendShowDev));
@@ -115,6 +115,10 @@ public class SearchFragment extends Fragment {
         setDeviceListClick();
         setRecommendDeviceListClick();
         setHistoryDeviceListClick();
+
+        device_list_swipe = (SwipeRefreshLayout)view.findViewById(R.id.DL_fresh);
+        recomm_list_swipe = (SwipeRefreshLayout)view.findViewById(R.id.RDL_fresh);
+        setFreshing();
 
         OldRecommendList = new ArrayList<DevBluetooth>();
 
@@ -138,6 +142,33 @@ public class SearchFragment extends Fragment {
         intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
         intentFilter.addAction(ActivityControlCenter.ACTION_LAUNCHED);
         ctx.registerReceiver(receiver, intentFilter);
+    }
+
+    public void setFreshing(){
+        device_list_swipe.setColorSchemeResources(R.color.primary);
+        device_list_swipe.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener(){
+                    @Override
+                    public void onRefresh() {
+                        UpdateDeviceList();
+                        device_list_swipe.setRefreshing(false);
+                    }
+                }
+        );
+        recomm_list_swipe.setColorSchemeResources(R.color.primary);
+        recomm_list_swipe.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener(){
+                    @Override
+                    public void onRefresh() {
+                        UpdateDeviceList();
+                        recomm_list_swipe.setRefreshing(false);
+                    }
+                }
+        );
+    }
+
+    public void UpdateDeviceList(){
+
     }
 
     public void addItem(ArrayList<DevBluetooth> lst,RecyclerView.Adapter adapter,String Addr, String Info, Information in,BluetoothDevice device){
@@ -654,8 +685,8 @@ public class SearchFragment extends Fragment {
             FindShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
             FindShowBtn.setTextColor(Color.WHITE);
             HistoryDeviceList.setVisibility(View.GONE);
-            RecommendDeviceList.setVisibility(View.GONE);
-            DeviceList.setVisibility(View.VISIBLE);
+            ((View)RecommendDeviceList.getParent()).setVisibility(View.GONE);
+            ((View)DeviceList.getParent()).setVisibility(View.VISIBLE);
         }
     }
 
@@ -667,9 +698,9 @@ public class SearchFragment extends Fragment {
             SearchShowBtn.setTextColor(Color.WHITE);
             FindShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
             FindShowBtn.setTextColor(Color.WHITE);
-            DeviceList.setVisibility(View.GONE);
             HistoryDeviceList.setVisibility(View.GONE);
-            RecommendDeviceList.setVisibility(View.VISIBLE);
+            ((View)RecommendDeviceList.getParent()).setVisibility(View.VISIBLE);
+            ((View)DeviceList.getParent()).setVisibility(View.GONE);
         }
     }
 
@@ -681,8 +712,8 @@ public class SearchFragment extends Fragment {
             SearchShowBtn.setTextColor(Color.WHITE);
             RecommendShowBtn.setBackgroundColor(ContextCompat.getColor(ctx, R.color.actionbar_background));
             RecommendShowBtn.setTextColor(Color.WHITE);
-            DeviceList.setVisibility(View.GONE);
-            RecommendDeviceList.setVisibility(View.GONE);
+            ((View)DeviceList.getParent()).setVisibility(View.GONE);
+            ((View)RecommendDeviceList.getParent()).setVisibility(View.GONE);
             HistoryDeviceList.setVisibility(View.VISIBLE);
         }
     }
