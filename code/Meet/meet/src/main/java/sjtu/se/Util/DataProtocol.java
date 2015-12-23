@@ -17,6 +17,7 @@ public class DataProtocol {
 	public final static byte TYPE_MSG = 0xC;
 	public final static byte TYPE_FILE = 0xF;
 	public final static byte TYPE_CARD = 0xD;
+	public final static byte TYPE_INFO = 0xE;
 
 	public static byte[] packMsg(String msg) throws UnsupportedEncodingException{
 		byte[] msgbytes = msg.getBytes("UTF-8");
@@ -68,6 +69,19 @@ public class DataProtocol {
 		return buf;
 	}
 
+    public static byte[] packInfo(String card) throws UnsupportedEncodingException{
+        byte[] msgbytes = card.getBytes("UTF-8");
+        byte lowLen = (byte)(msgbytes.length & 0xFF);
+        byte hiLen = (byte)(msgbytes.length >> 8 & 0xFF);
+        byte[] buf = new byte[msgbytes.length + 4];
+        buf[0] = HEAD;
+        buf[1] = TYPE_INFO;
+        buf[2] = hiLen;
+        buf[3] = lowLen;
+        System.arraycopy(msgbytes, 0, buf, 4, msgbytes.length);
+        return buf;
+    }
+
 	public static Message unpackData(byte[] data) throws UnsupportedEncodingException{
 		if(data[0] != HEAD)
 			return null;
@@ -88,6 +102,11 @@ public class DataProtocol {
 			msg.length = data[2] << 8 | data[3];
 			msg.msg = new String(data, 4, msg.length, "UTF-8");
 			break;
+        case TYPE_INFO:
+                msg.type = TYPE_INFO;
+                msg.length = data[2] << 8 | data[3];
+                msg.msg = new String(data, 4, msg.length, "UTF-8");
+                break;
 		}
 		return msg;
 	}

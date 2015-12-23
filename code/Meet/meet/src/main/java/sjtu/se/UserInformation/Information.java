@@ -56,7 +56,7 @@ public class Information implements Parcelable {
 			return null;
 		
 		char dot = 1;
-		String strs[] = str.split( "" + (char)1 );
+		String strs[] = str.split( "" + dot );
 		//System.out.println(strs.length);
 		if (strs.length < 24)
 			return null;
@@ -175,6 +175,5 @@ public class Information implements Parcelable {
 			// TODO Auto-generated method stub
 			return new Information[size];
 		}
-		
 	};
 }

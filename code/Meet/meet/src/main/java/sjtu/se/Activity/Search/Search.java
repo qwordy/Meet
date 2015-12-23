@@ -1,61 +1,24 @@
 package sjtu.se.Activity.Search;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-//程治谦
-//import sjtu.se.Activity.ContactCard.ContactCardSettings;
-import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.*;
-import sjtu.se.Activity.ActivityControlCenter;
-import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.BaseInfoSettings;
-import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Activity.Setting.SettingFragment;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
-import sjtu.se.Ubma.UbmaActivity;
 import sjtu.se.Ubma.UbmaDrawerActivity;
-import sjtu.se.Util.*;
-import sjtu.se.UserInformation.Information;
-import sjtu.se.UserInformation.Want;
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemClickListener;
 import android.view.KeyEvent;
 
 import sjtu.se.Meet.R;
 public class Search extends AppCompatActivity {
-
-	private static final int REQUEST_FOR_ENABLE = 1;
 
 	private String[] mMenuTitles;
 	private DrawerLayout mDrawerLayout;
@@ -64,32 +27,6 @@ public class Search extends AppCompatActivity {
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
 
-    private Want want1;
-    private Want want2;
-    private Want want3;
-    private Want want4;
-    private Want want5;
-    private Want want6;
-    private Want want7;
-    private Want want8;
-
-    private Information overt_user;
-    private Information full_user;
-
-    private Context ctx;
-    private IntentFilter intentFilter;
-
-	public BluetoothAdapter mBluetoothAdapter;
-
-	public DevBluetoothAdapter DeviceListAdapter;
-	public DevBluetoothAdapter HistoryDevListAdapter;
-	public DevBluetoothAdapter RecommendDevListAdapter;
-
-	private ListView DeviceList;
-	private ListView HistoryDeviceList;
-	private ListView RecommendDeviceList;
-	private ArrayList<DevBluetooth> OldRecommendList;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -97,8 +34,6 @@ public class Search extends AppCompatActivity {
 		setContentView(R.layout.activity_search);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
-		ctx = this;
 
         mTitle = mDrawerTitle = getTitle();
         mMenuTitles = getResources().getStringArray(R.array.menu_array);

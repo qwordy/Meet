@@ -28,19 +28,24 @@ import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
 public class TaskService extends Service {
 
     public static class Task {
+        public static final int TASK_DISCONNECT = -1;
+        public static final int TASK_CONNECT = 0;
+
         public static final int TASK_START_ACCEPT = 1;
         public static final int TASK_START_CONN_THREAD = 2;
         public static final int TASK_SEND_MSG = 3;
-        public static final int TASK_GET_REMOTE_STATE = 4;
-        public static final int TASK_RECV_MSG = 5;
-        public static final int TASK_RECV_FILE = 6;
-        /** mParam[0]：path */
+        public static final int TASK_RECV_MSG = 4;
+        public static final int TASK_GET_REMOTE_STATE = 5;
+
+        public static final int TASK_RECV_FILE = 6; /** mParam[0]：path */
         public static final int TASK_SEND_FILE = 7;
         public static final int TASK_PROGRESS = 8;
 
         public static final int TASK_SEND_CARD = 9;
         public static final int TASK_RECV_CARD = 10;
 
+        public static final int TASK_SEND_INFO = 11;
+        public static final int TASK_RECV_INFO = 12;
 
         // 任务ID
         private int mTaskID;
@@ -128,6 +133,10 @@ public class TaskService extends Service {
                     mActivityHandler.sendMessage(activityMsg);
                     break;
 
+                case Task.TASK_SEND_INFO:
+                    TaskService.newTask(new Task(mActivityHandler,Task.TASK_SEND_INFO,new Object[]{msg.obj}));
+                    break;
+
                 default:
                     break;
             }
@@ -145,8 +154,6 @@ public class TaskService extends Service {
         Intent intent = new Intent(c, TaskService.class);
         c.stopService(intent);
     }
-
-
 
     public static void newTask(Task target) {
         synchronized (mTaskList) {
@@ -199,19 +206,17 @@ public class TaskService extends Service {
         boolean sucess = false;
         switch (task.getTaskID()) {
             case Task.TASK_START_ACCEPT:
-
                 if (mAcceptThread != null && mAcceptThread.isAlive()) {
                     mAcceptThread.cancel();
                 }
-
                 if (mCommThread != null && mCommThread.isAlive()) {
                     mCommThread.cancel();
                 }
-
                 mAcceptThread = new AcceptThread();
                 mAcceptThread.start();
                 isServerMode = true;
                 break;
+
             case Task.TASK_START_CONN_THREAD:
                 if (task.mParams == null || task.mParams.length == 0) {
                     break;
@@ -221,6 +226,7 @@ public class TaskService extends Service {
                 mConnectThread.start();
                 isServerMode = false;
                 break;
+
             case Task.TASK_SEND_MSG:
                 sucess = false;
                 if (mCommThread == null || !mCommThread.isAlive()
@@ -242,6 +248,7 @@ public class TaskService extends Service {
                     mActivityHandler.sendMessage(returnMsg);
                 }
                 break;
+
             case Task.TASK_SEND_CARD:
                 sucess = false;
                 if (mCommThread == null || !mCommThread.isAlive()
@@ -256,11 +263,31 @@ public class TaskService extends Service {
                         sucess = false;
                     }
                 }
+                android.os.Message returnMsg = mActivityHandler.obtainMessage();
+                returnMsg.what = Task.TASK_SEND_CARD;
+                if (sucess) returnMsg.obj = "名片已发送";
+                else  returnMsg.obj = "名片发送失败";
+                mActivityHandler.sendMessage(returnMsg);
+                break;
+
+            case Task.TASK_SEND_INFO:
+                if (mCommThread == null || !mCommThread.isAlive()
+                        || task.mParams == null || task.mParams.length == 0) {
+                    Log.e(TAG, "mCommThread or task.mParams null");
+                }else{
+                    byte[] info = null;
+                    try {
+                        info = DataProtocol.packCard((String) task.mParams[0]);
+                        sucess = mCommThread.write(info);
+                    } catch (UnsupportedEncodingException e) {
+                        sucess = false;
+                    }
+                }
                 if (!sucess) {
-                    /*android.os.Message returnMsg = mActivityHandler.obtainMessage();
-                    returnMsg.what = Task.TASK_SEND_MSG;
-                    returnMsg.obj = "消息发送失败";
-                    mActivityHandler.sendMessage(returnMsg);*/
+                    android.os.Message msg = mServiceHandler.obtainMessage();
+                    msg.what = Task.TASK_SEND_INFO;
+                    msg.obj = task.mParams[0];
+                    mServiceHandler.sendMessageDelayed(msg,5000);
                 }
                 break;
         }
@@ -322,7 +349,10 @@ public class TaskService extends Service {
                 }
                 if (socket != null) {
                     //---------------------
-                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(0));
+                    android.os.Message handlerMsg = mActivityHandler.obtainMessage(Task.TASK_CONNECT);
+                    handlerMsg.obj = socket.getRemoteDevice();
+                    mActivityHandler.sendMessage(handlerMsg);
+
                     manageConnectedSocket(socket);
                     //---------------------
                     try {
@@ -529,6 +559,13 @@ public class TaskService extends Service {
                         handlerMsg.what = Task.TASK_RECV_CARD;
                         handlerMsg.obj = msg.msg;
                         mActivityHandler.sendMessage(handlerMsg);
+
+                    }else if (msg.type == DataProtocol.TYPE_INFO) {
+                        handlerMsg = mActivityHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_RECV_INFO;
+                        handlerMsg.obj = msg.msg;
+                        mActivityHandler.sendMessage(handlerMsg);
+
                     }
                 } catch (Exception e) {
                     try {
@@ -537,7 +574,7 @@ public class TaskService extends Service {
                     }
                     mCommThread = null;
                     //-----------------------------------
-                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(-2));
+                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
                     /*if (isServerMode) {
                         // 检查远程设备状态
                         handlerMsg = mServiceHandler.obtainMessage();

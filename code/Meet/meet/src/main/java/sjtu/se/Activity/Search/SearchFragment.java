@@ -21,12 +21,10 @@ import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Meet.R;
+import sjtu.se.UserInformation.ContactCard;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
-import sjtu.se.Util.Format;
-import sjtu.se.Util.Match;
-import sjtu.se.Util.SoundEffect;
-import sjtu.se.Util.TaskService;
+import sjtu.se.Util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +32,7 @@ import java.util.Date;
 public class SearchFragment extends Fragment {
 
     private static final int REQUEST_FOR_ENABLE = 1;
+
     private Want want1;
     private Want want2;
     private Want want3;
@@ -77,8 +76,6 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.view = inflater.inflate(R.layout.fragment_search, container, false);
-        overt_user = new Information();
-        full_user  = new Information();
 
         DeviceList = (RecyclerView)view.findViewById(R.id.DeviceList);
         DeviceList.setHasFixedSize(true);
@@ -112,26 +109,18 @@ public class SearchFragment extends Fragment {
         RecommendShowBtn.setOnClickListener(new ShowRecommendDeviceList());
         FindShowBtn.setOnClickListener(new ShowHistoryDeviceList());
 
-        setDeviceListClick();
-        setRecommendDeviceListClick();
-        setHistoryDeviceListClick();
-
         device_list_swipe = (SwipeRefreshLayout)view.findViewById(R.id.DL_fresh);
         recomm_list_swipe = (SwipeRefreshLayout)view.findViewById(R.id.RDL_fresh);
         setFreshing();
 
         OldRecommendList = new ArrayList<DevBluetooth>();
 
-        OpenBluetooth();
-
-        Message message = handler.obtainMessage(0);
-        handler.sendMessageDelayed(message, 0);
-
         return view;
     }
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         ctx=getActivity();
         intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -142,6 +131,14 @@ public class SearchFragment extends Fragment {
         intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
         intentFilter.addAction(ActivityControlCenter.ACTION_LAUNCHED);
         ctx.registerReceiver(receiver, intentFilter);
+
+        overt_user = new Information();
+        full_user  = new Information();
+
+        OpenBluetooth();
+
+        Message message = handler.obtainMessage(0);
+        handler.sendMessageDelayed(message, 0);
     }
 
     public void setFreshing(){
@@ -234,9 +231,15 @@ public class SearchFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what){
-                case 0:
+                case TaskService.Task.TASK_CONNECT:
+                    final BluetoothDevice device = (BluetoothDevice)msg.obj;
+                    Information info = Format.DeFormat(device.getName());
+                    if(info.baseinfo.Nick.equals("")) {
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                        return;
+                    }
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage("确定建立连接么？");
+                    builder.setMessage(info.baseinfo.Nick+"和你打招呼，要建立连接么？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
@@ -247,6 +250,7 @@ public class SearchFragment extends Fragment {
                             editor.commit();
 
                             Intent intent = new Intent(ctx, ChatActivity.class);
+                            intent.putExtra("DEVICE", device);
                             intent.putExtra("isclient", false);
                             ctx.startActivity(intent);
                             dialog.dismiss();
@@ -407,14 +411,11 @@ public class SearchFragment extends Fragment {
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
         if(sp.getBoolean(ActivityControlCenter.IS_SOUND,true))
             SoundEffect.getInstance(ctx).play(SoundEffect.SOUND_RECV);
-        if(sp.getBoolean(ActivityControlCenter.IS_SHAKE,true))
-            Shake();
-    }
-
-    protected void Shake(){
-        Vibrator vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
-        long [] pattern = {100,400,100,400,100,400};
-        vibrator.vibrate(pattern, -1);
+        if(sp.getBoolean(ActivityControlCenter.IS_SHAKE,true)) {
+            Vibrator vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
+            long [] pattern = {100,400,100,400,100,400};
+            vibrator.vibrate(pattern, -1);
+        }
     }
 
     public static ArrayList<DevBluetooth> getAddition(ArrayList<DevBluetooth> formal, ArrayList<DevBluetooth> later){
@@ -470,6 +471,7 @@ public class SearchFragment extends Fragment {
         }
         // Unregister broadcast listeners
         ctx.unregisterReceiver(receiver);
+        TaskService.stop(ctx);
     }
 
     private void updateBaseInfo(){
@@ -514,7 +516,6 @@ public class SearchFragment extends Fragment {
         }
         else
             overt_user.keywords = "";
-
         full_user.keywords = sp.getString(ActivityControlCenter.KEY_KEYWORDS, "");
 
     }
@@ -544,11 +545,13 @@ public class SearchFragment extends Fragment {
             overt_user.contactinfo.Weibo = sp.getString(ActivityControlCenter.KEY_WEIBO, "");
         else
             overt_user.contactinfo.Weibo = "";
+        full_user.contactinfo.Weibo = sp.getString(ActivityControlCenter.KEY_WEIBO, "");
 
         if (sp.getBoolean(ActivityControlCenter.KEY_WECHAT_OVERT, false))
             overt_user.contactinfo.Wechat = sp.getString(ActivityControlCenter.KEY_WECHAT, "");
         else
             overt_user.contactinfo.Wechat  = "";
+        full_user.contactinfo.Wechat = sp.getString(ActivityControlCenter.KEY_WECHAT, "");
     }
 
     private void updateEducationInfo(){
@@ -718,178 +721,5 @@ public class SearchFragment extends Fragment {
             ((View)RecommendDeviceList.getParent()).setVisibility(View.GONE);
             HistoryDeviceList.setVisibility(View.VISIBLE);
         }
-    }
-
-    //程治谦
-    private void setDeviceListClick(){
-        /*DeviceList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                String addr = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
-                SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
-                String res = sp.getString(addr, "Not found");
-                if (!res.equals("Not found")) {
-                    Information info = Information.parseInformation(res);
-                    if (info != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("information", info);
-                        Intent intent = new Intent(ctx, ShowInformation.class);
-                        intent.putExtras(bundle);
-                        ctx.startActivity(intent);
-                        return;
-                    }
-                }
-                Bundle bundle = new Bundle();
-                Information info = new Information(((DevBluetooth) DeviceListAdapter.getItem(position)).Info);
-                bundle.putParcelable("information", info);
-                Intent intent = new Intent(ctx, ShowInformation.class);
-                intent.putExtras(bundle);
-                ctx.startActivity(intent);
-            }
-        });
-
-        DeviceList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           final int position, long id) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                String nick = ((DevBluetooth)DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
-                final String address = ((DevBluetooth)DeviceListAdapter.getItem(position)).Address;
-                builder.setMessage("确定与 "+ nick +" 建立连接么？");
-                builder.setTitle("提示");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putInt(ActivityControlCenter.CMD, 2);
-                        editor.commit();
-
-                        Intent intent = new Intent(ctx, ChatActivity.class);
-                        intent.putExtra("DEVICE", ((DevBluetooth)DeviceListAdapter.getItem(position)).mRemoteDevice);
-                        intent.putExtra("isclient", true);
-                        ctx.startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
-                return true;
-            }
-        });*/
-    }
-
-    private void setRecommendDeviceListClick() {
-        /*RecommendDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                String addr = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
-                SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
-                String res = sp.getString(addr, "Not found");
-                if (!res.equals("Not found")) {
-                    Information info = Information.parseInformation(res);
-                    if (info != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("information", info);
-                        Intent intent = new Intent(ctx, ShowInformation.class);
-                        intent.putExtras(bundle);
-                        ctx.startActivity(intent);
-                        return;
-                    }
-                }
-                Bundle bundle = new Bundle();
-                Information info = new Information(((DevBluetooth) RecommendDevListAdapter.getItem(position)).Info);
-                bundle.putParcelable("information", info);
-                Intent intent=new Intent(ctx, ShowInformation.class);
-                intent.putExtras(bundle);
-                ctx.startActivity(intent);
-            }
-        });
-
-        DeviceList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           final int position, long id) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                String nick = ((DevBluetooth) DeviceListAdapter.getItem(position)).Info.baseinfo.Nick;
-                final String address = ((DevBluetooth) DeviceListAdapter.getItem(position)).Address;
-                builder.setMessage("确定与 " + nick + " 建立连接么？");
-                builder.setTitle("提示");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putInt(ActivityControlCenter.CMD, 2);
-                        editor.commit();
-
-                        Intent intent = new Intent(ctx, ChatActivity.class);
-                        intent.putExtra("DEVICE", ((DevBluetooth) DeviceListAdapter.getItem(position)).mRemoteDevice);
-                        intent.putExtra("isclient", true);
-                        ctx.startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
-                return true;
-            }
-        });*/
-    }
-
-    private void setHistoryDeviceListClick() {
-        /*HistoryDeviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                String addr = ((DevBluetooth) HistoryDevListAdapter.getItem(position)).Address;
-                SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
-                String res = sp.getString(addr, "Not found");
-                if (!res.equals("Not found")) {
-                    Information info = Information.parseInformation(res);
-                    if (info != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("information", info);
-                        Intent intent = new Intent(ctx, ShowInformation.class);
-                        intent.putExtras(bundle);
-                        ctx.startActivity(intent);
-                        return;
-                    }
-                }
-                Bundle bundle = new Bundle();
-                Information info = new Information(((DevBluetooth) HistoryDevListAdapter.getItem(position)).Info);
-                bundle.putParcelable("information", info);
-                Intent intent=new Intent(ctx, ShowInformation.class);
-                intent.putExtras(bundle);
-                ctx.startActivity(intent);
-            }
-
-        });*/
     }
 }

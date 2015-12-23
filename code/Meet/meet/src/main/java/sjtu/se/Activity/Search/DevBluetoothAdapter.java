@@ -73,7 +73,6 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             dev=list.get(getAdapterPosition());
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
             String nick = dev.Info.baseinfo.Nick;
-            final String address = dev.Address;
             builder.setMessage("确定与 "+ nick +" 建立连接么？");
             builder.setTitle("提示");
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {

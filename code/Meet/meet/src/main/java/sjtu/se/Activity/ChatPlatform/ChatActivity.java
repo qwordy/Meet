@@ -38,10 +38,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
-import sjtu.se.Util.SoundEffect;
-import sjtu.se.Util.TaskService;
+import sjtu.se.Activity.Information.ShowInformation;
+import sjtu.se.UserInformation.ContactCard;
+import sjtu.se.UserInformation.Information;
+import sjtu.se.Util.*;
 import sjtu.se.Util.TaskService.Task;
-import sjtu.se.Util.Notify;
 import sjtu.se.Meet.R;
 
 public class ChatActivity extends Activity implements View.OnClickListener{
@@ -50,6 +51,9 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	
 	// 蓝牙状态变量
 	private static int sBTState = -1;
+
+    private Information remote_user;
+    private Information full_user;
 
     private Context ctx;
 	private ListView mList;
@@ -108,12 +112,13 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		//---------------------------------------------------------------------
         ctx = this;
 
-		if(this.getIntent().getBooleanExtra("isclient", true)) {
-			mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
-			if (mRemoteDevice == null)
-				return;
+        mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
+        if (mRemoteDevice == null) return;
+
+        remote_user = Format.DeFormat(mRemoteDevice.getName());
+
+		if(this.getIntent().getBooleanExtra("isclient", true))
 			TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
-		}
 
         TaskService.mActivityHandler = mHandler;
 		//---------------------------------------------------------------------
@@ -405,12 +410,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 					new String[]{"img"}, new int[]{R.id.imageView});
 	}
 	
-	/*private void startServiceAsServer(){
-		TaskService.start(this, mHandler);
-		TaskService.newTask(new Task(mHandler, Task.TASK_START_ACCEPT, null));
-		SoundEffect.getInstance(this).play(SoundEffect.SOUND_PLAY);
-	}*/
-	
 	@Override
 	protected void onResume() {
 		sAliveCount++;
@@ -426,11 +425,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		// 关闭蓝牙
-		//if(mBluetoothAdapter.isEnabled())
-		//	mBluetoothAdapter.disable();
-		// 停止服务
-		//TaskService.stop(this);
 	}
 	
 	
@@ -553,42 +547,71 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 		@Override
 		public void handleMessage(Message msg) {
 			switch(msg.what){
-                case -2:
+                case Task.TASK_DISCONNECT:
                     showToast("连接中断");
                     ((ChatActivity)ctx).finish();
                     break;
-                case -1:
-                    showToast("没有连接其它用户，点击\"Menu\"扫描并选择周国用户");
-				SoundEffect.getInstance(ChatActivity.this).play(SoundEffect.SOUND_ERR);
-				break;
-			case Task.TASK_RECV_MSG:
-				if(msg.obj == null)
-					return;
-				if(msg.obj instanceof HashMap<?, ?>){
-					showTargetMessage((HashMap<String, Object>) msg.obj);
-				}
-				/*if(sAliveCount <= 0){
-					Notify.notifyMessage(ChatActivity.this, "您有未读取消息","遇见MEET","您有未读取消息", ChatActivity.this);
-				}*/
-				break;
-            case Task.TASK_RECV_CARD:
-                if(msg.obj == null)
-                    return;
 
-                break;
-			/*case Task.TASK_GET_REMOTE_STATE:
-				setTitle((String)msg.obj);
-				if(sAliveCount <= 0){
-					if(isBTStateChanged(msg.arg1) && msg.arg1 != TaskService.BT_STAT_WAIT)
-						Notify.notifyMessage(ChatActivity.this, "对方状态更改","遇见MEET",(String) msg.obj, ChatActivity.this);
-				}
-				break;
-			case Task.TASK_SEND_MSG:
-				showToast(msg.obj.toString());
-				if(sAliveCount <= 0){
-					Notify.notifyMessage(ChatActivity.this, "消息","遇见MEET",msg.obj.toString(), ChatActivity.this);
-				}
-				break;*/
+                case Task.TASK_SEND_MSG:
+				    showToast(msg.obj.toString());
+				    /*if(sAliveCount <= 0){
+					    Notify.notifyMessage(ChatActivity.this, "消息","遇见MEET",msg.obj.toString(), ChatActivity.this);
+				    }*/
+				    break;
+
+                case Task.TASK_RECV_MSG:
+                    if(msg.obj == null) return;
+                    if(msg.obj instanceof HashMap<?, ?>){
+                        showTargetMessage((HashMap<String, Object>) msg.obj);
+                    }
+				    /*if(sAliveCount <= 0){
+					    Notify.notifyMessage(ChatActivity.this, "您有未读取消息","遇见MEET","您有未读取消息", ChatActivity.this);
+				    }*/
+                    break;
+
+                case Task.TASK_SEND_CARD:
+                    if(msg.obj == null) return;
+                    showToast(msg.obj.toString());
+                    break;
+
+                case Task.TASK_RECV_CARD:
+                    if(msg.obj == null) return;
+                    final String card = (String)msg.obj;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage("接收对方名片吗？");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ContactInterface.insert(card,ctx);
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
+                    break;
+
+                case Task.TASK_SEND_INFO:
+                    TaskService.newTask(new Task(mHandler,Task.TASK_SEND_INFO,new Object[]{full_user.toString()}));
+                    break;
+
+                case Task.TASK_RECV_INFO:
+                    if(msg.obj == null) return;
+                    remote_user = Information.parseInformation((String)msg.obj);
+                    break;
+
+			    /*case Task.TASK_GET_REMOTE_STATE:
+			    	setTitle((String)msg.obj);
+				    if(sAliveCount <= 0){
+				    	if(isBTStateChanged(msg.arg1) && msg.arg1 != TaskService.BT_STAT_WAIT)
+					    	Notify.notifyMessage(ChatActivity.this, "对方状态更改","遇见MEET",(String) msg.obj, ChatActivity.this);
+				    }
+				    break;*/
 			}
 		}
 	};
@@ -683,26 +706,38 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
 			case R.id.send_contact:
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setMessage("向对方发送名片吗？");
+				AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+				builder.setMessage("发送名片吗？");
 				builder.setTitle("提示");
 				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-
-						dialog.dismiss();
-					}
-				});
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ContactCard card = new ContactCard();
+                        card.setContactCard(ctx);
+                        if (card.name.equals("") || card.phone.equals(""))
+                            showToast("名片不全，发送失败！");
+                        else
+                            TaskService.newTask(new Task(mHandler, Task.TASK_SEND_CARD, new Object[]{card.toString()}));
+                        dialog.dismiss();
+                    }
+                });
 				builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 				builder.create().show();
 				break;
+
+            case R.id.action_information:
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("information", remote_user);
+                Intent intent = new Intent(ctx, ShowInformation.class);
+                intent.putExtras(bundle);
+                ctx.startActivity(intent);
+                break;
 		}
-		
 		return super.onOptionsItemSelected(item);
 	}
 }

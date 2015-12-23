@@ -12,9 +12,8 @@ import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.test.AndroidTestCase;
 
-public class ContactInterface extends AndroidTestCase {
+public class ContactInterface {
 
 
 	public static boolean insert(String str, Context ctx){
@@ -51,18 +50,16 @@ public class ContactInterface extends AndroidTestCase {
             values.put(Data.RAW_CONTACT_ID, rawContactId);
             values.put(Data.MIMETYPE, Email.CONTENT_ITEM_TYPE);
             values.put(Email.DATA, contact.email);
-            values.put(Email.TYPE, Email.TYPE_WORK);
+            values.put(Email.TYPE, Email.TYPE_OTHER);
             ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
         }
-
-         //----------------------------------------------------------------------------------------
 
         if(!contact.qq.equals("")) {
             values.clear();
             values.put(Data.RAW_CONTACT_ID, rawContactId);
             values.put(Data.MIMETYPE, Im.CONTENT_ITEM_TYPE);
-            values.put(Im.DATA, contact.qq);
-            values.put(Im.TYPE,Im.PROTOCOL_QQ);
+            values.put(Im.DATA, "QQ： "+contact.qq);
+            values.put(Im.TYPE,Im.CUSTOM_PROTOCOL);
             ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
         }
 
@@ -70,7 +67,7 @@ public class ContactInterface extends AndroidTestCase {
             values.clear();
             values.put(Data.RAW_CONTACT_ID, rawContactId);
             values.put(Data.MIMETYPE, Website.CONTENT_ITEM_TYPE);
-            values.put(Website.DATA, contact.weibo);
+            values.put(Website.DATA, "微博： "+contact.weibo);
             values.put(Website.TYPE, Website.TYPE_BLOG);
             ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
         }
@@ -79,7 +76,7 @@ public class ContactInterface extends AndroidTestCase {
             values.clear();
             values.put(Data.RAW_CONTACT_ID, rawContactId);
             values.put(Data.MIMETYPE, Im.CONTENT_ITEM_TYPE);
-            values.put(Im.DATA, contact.wechat);
+            values.put(Im.DATA, "微信： "+contact.wechat);
             values.put(Im.TYPE,Im.CUSTOM_PROTOCOL);
             ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
         }

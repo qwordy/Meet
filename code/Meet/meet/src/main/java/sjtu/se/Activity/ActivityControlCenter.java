@@ -1,9 +1,6 @@
 package sjtu.se.Activity;
 
-import java.text.SimpleDateFormat;
-
 import android.bluetooth.BluetoothAdapter;
-import android.graphics.drawable.ColorDrawable;
 
 public class ActivityControlCenter {
 	public static String savedName;
@@ -17,6 +14,7 @@ public class ActivityControlCenter {
 
 	// base information and their overt
 	public static String PERSONAL_BASE_INFO = "baseinfo";
+
 	public static String KEY_NICK = "keynick";
 	public static String KEY_NAME = "keyname";
 	public static String KEY_GENDER = "keygender";
@@ -24,6 +22,7 @@ public class ActivityControlCenter {
 	public static String KEY_HOMELAND = "keyhomeland";
 	public static String KEY_LOCATION = "keylocation";
 	public static String KEY_KEYWORDS = "keykeywords";
+
 	public static String KEY_NAME_OVERT = "keynameovert";
 	public static String KEY_GENDER_OVERT = "keygenderovert";
 	public static String KEY_BIRTHDAY_OVERT = "keybirthdayovert";
@@ -35,11 +34,13 @@ public class ActivityControlCenter {
 
 	// contact information and their overt
 	public static String PERSONAL_CONTACT_INFO = "contactinfo";
+
 	public static String KEY_PHONE = "keyphone";
 	public static String KEY_QQ = "keyqq";
 	public static String KEY_EMAIL = "keyemail";
 	public static String KEY_WEIBO = "keyweibo";
 	public static String KEY_WECHAT = "keywechat";
+
 	public static String KEY_PHONE_OVERT = "keyphoneovert";
 	public static String KEY_QQ_OVERT = "keyqqovert";
 	public static String KEY_EMAIL_OVERT = "keyemailovert";
@@ -48,10 +49,12 @@ public class ActivityControlCenter {
 
 	// education information and their overt
 	public static String PERSONAL_EDUCATION_INFO = "educationinfo";
+
 	public static String KEY_COLLEGE = "keycollege";
 	public static String KEY_HIGH = "keyhigh";
 	public static String KEY_MIDDLE = "keymiddle";
 	public static String KEY_PRIMARY = "keyprimary";
+
 	public static String KEY_COLLEGE_OVERT = "keycollegeovert";
 	public static String KEY_HIGH_OVERT = "keyhighovert";
 	public static String KEY_MIDDLE_OVERT = "keymiddleovert";
@@ -59,6 +62,7 @@ public class ActivityControlCenter {
 
 	// hobby information and their overt
 	public static String PERSONAL_HOBBY_INFO = "hoppyinfo";
+
 	public static String KEY_GAME = "keygame";
 	public static String KEY_SPORT = "keysport";
 	public static String KEY_COMIC = "keycomic";
@@ -66,6 +70,7 @@ public class ActivityControlCenter {
 	public static String KEY_BOOKS = "keybooks";
 	public static String KEY_MOVIE = "keymovie";
 	public static String KEY_OTHER = "keyother";
+
 	public static String KEY_GAME_OVERT = "keygameovert";
 	public static String KEY_SPORT_OVERT = "keysportovert";
 	public static String KEY_COMIC_OVERT = "keycomicovert";
@@ -76,6 +81,7 @@ public class ActivityControlCenter {
 
 	// want settings
 	public static String WANT_SETTINGS = "wantsettings";
+
 	public static String KEY_WANT_1 = "keywant1";
 	public static String KEY_WANT_2 = "keywant2";
 	public static String KEY_WANT_3 = "keywant3";
