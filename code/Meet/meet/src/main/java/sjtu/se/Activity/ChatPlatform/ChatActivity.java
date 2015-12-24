@@ -47,7 +47,7 @@ import sjtu.se.Util.*;
 import sjtu.se.Util.TaskService.Task;
 import sjtu.se.Meet.R;
 
-public class ChatActivity extends Activity implements View.OnClickListener{
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
 	private final String TAG = "ChatActivity";
 	public static int sAliveCount = 0;
 	
@@ -82,6 +82,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
 		
 		mRootLayout = (LinearLayout) findViewById(R.id.root);
 		mChatLayout = (LinearLayout) findViewById(R.id.topPanel);
@@ -645,7 +649,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 	
 	/**
 	 * 显示自己信息
-	 * @param data
 	 */
 	private void showOwnMessage(String msg){
 		HashMap<String, Object> map = new HashMap<String, Object>();
