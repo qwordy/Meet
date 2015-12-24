@@ -137,8 +137,6 @@ public class SearchFragment extends Fragment {
 
         OpenBluetooth();
 
-        Message message = handler.obtainMessage(0);
-        handler.sendMessageDelayed(message, 0);
     }
 
     public void setFreshing(){
@@ -187,7 +185,7 @@ public class SearchFragment extends Fragment {
         int size = lst.size();
         for (int i=0;i<size;i++){
             DevBluetooth dev = lst.get(i);
-            if ((new Date()).getTime() - dev.FoundTime.getTime() >= 10000){
+            if ((new Date()).getTime() - dev.FoundTime.getTime() >= 15000){
                 lst.remove(i);
                 size--;
                 i--;
@@ -211,12 +209,8 @@ public class SearchFragment extends Fragment {
                     doDiscovery();
 
                     SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-                    Message message = this.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
-                    this.sendMessageDelayed(message, 5000);
-                    break;
-                }
-                case 1:{
-                    getActivity().recreate();
+                    Message message = handler.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
+                    handler.sendMessageDelayed(message, 8000);
                     break;
                 }
                 case 2:{
@@ -380,6 +374,9 @@ public class SearchFragment extends Fragment {
             mBluetoothAdapter.cancelDiscovery();
         }
         mBluetoothAdapter.startDiscovery();
+        /*if (!mBluetoothAdapter.isDiscovering()){
+            mBluetoothAdapter.startDiscovery();
+        }*/
     }
 
     protected void recommendNotify(ArrayList<DevBluetooth> change){
@@ -441,20 +438,14 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        if (ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED){
-            Rename();
-            ActivityControlCenter.PERSONAL_INFO_MAY_CHANGED = false;
-        }
-        if (ActivityControlCenter.WANTS_MAY_CHANGED){
-            updateWants();
-            ActivityControlCenter.WANTS_MAY_CHANGED = false;
-        }
 
+        Rename();
+        updateWants();
+
+        handler.removeMessages(0);
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(ActivityControlCenter.CMD, 0);
-        editor.commit();
-        handler.sendMessage(handler.obtainMessage(0));
+        Message message = handler.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
+        handler.sendMessage(message);
 
         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
         TaskService.mActivityHandler = mHandler;
@@ -466,13 +457,14 @@ public class SearchFragment extends Fragment {
         handler.removeMessages(0);
         // Make sure we're not doing discovery anymore
         if (mBluetoothAdapter != null) {
-            mBluetoothAdapter.setName(ActivityControlCenter.savedName);
+            //mBluetoothAdapter.setName(ActivityControlCenter.savedName);
             mBluetoothAdapter.cancelDiscovery();
         }
         // Unregister broadcast listeners
-        ctx.unregisterReceiver(receiver);
+        //ctx.unregisterReceiver(receiver);
         TaskService.stop(ctx);
     }
+
 
     private void updateBaseInfo(){
         SharedPreferences sp = getActivity().getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);

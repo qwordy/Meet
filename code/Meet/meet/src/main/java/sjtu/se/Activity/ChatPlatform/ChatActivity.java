@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -583,7 +585,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ContactInterface.insert(card,ctx);
+                            if(ContactInterface.insert(card,ctx))
+								showToast("名片接收成功！");
+							else
+								showToast("名片接收失败。");
                             dialog.dismiss();
                         }
                     });
@@ -671,7 +676,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            return true;
+            //return true;
         }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

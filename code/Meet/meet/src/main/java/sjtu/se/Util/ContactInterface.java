@@ -66,9 +66,9 @@ public class ContactInterface {
         if(!contact.weibo.equals("")) {
             values.clear();
             values.put(Data.RAW_CONTACT_ID, rawContactId);
-            values.put(Data.MIMETYPE, Website.CONTENT_ITEM_TYPE);
-            values.put(Website.DATA, "微博： "+contact.weibo);
-            values.put(Website.TYPE, Website.TYPE_BLOG);
+            values.put(Data.MIMETYPE, Im.CONTENT_ITEM_TYPE);
+            values.put(Im.DATA, "微博： "+contact.weibo);
+            values.put(Im.TYPE, Im.CUSTOM_PROTOCOL);
             ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
         }
 

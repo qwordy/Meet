@@ -70,16 +70,16 @@ public class SettingFragment extends PreferenceFragment
             editor.commit();
         }
         if(key.equals(KEY_ALERT_SWITCH)) {
-            /*if(sharedPreferences.getBoolean(key,false)) {
+            if(sharedPreferences.getBoolean(key,false)) {
                 SharedPreferences.Editor editor = systemSettings.edit();
-                editor.putInt(ActivityControlCenter.IS_SHAKE, 0);
+                editor.putInt(ActivityControlCenter.CMD, 0);
                 editor.commit();
             }
             else {
                 SharedPreferences.Editor editor = systemSettings.edit();
-                editor.putInt(ActivityControlCenter.IS_SHAKE, 2);
+                editor.putInt(ActivityControlCenter.CMD, 2);
                 editor.commit();
-            }*/
+            }
         }
         if(key.equals(KEY_SHAKE_SWITCH)) {
             if(sharedPreferences.getBoolean(key,false)) {
