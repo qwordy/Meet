@@ -39,7 +39,7 @@
             android:label="@string/title_activity_system_settings"
             android:parentActivityName="sjtu.se.Activity.Search.Search" >
         </activity>
-        <activity
+        <!--<activity
             android:name="sjtu.se.Activity.Information.BaseInfoSettings"
             android:label="@string/title_activity_personal_information"
             android:parentActivityName="sjtu.se.Activity.Search.Search" >
@@ -78,7 +78,7 @@
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="sjtu.se.Activity.Information.BaseInfoSettings" />
-        </activity>
+        </activity>-->
         <activity
             android:name="sjtu.se.Activity.Information.ShowInformation"
             android:label="@string/title_activity_show_information"
@@ -87,7 +87,7 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="sjtu.se.Activity.Search.Search" />
         </activity>
-        <activity
+        <!--<activity
             android:name="sjtu.se.Activity.Want.ShowWants"
             android:label="@string/title_activity_show_wants"
             android:parentActivityName="sjtu.se.Activity.Want.WantSettings" >
@@ -110,13 +110,17 @@
 
                 <data android:mimeType="application/sjtu.se.bluetoothtry" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity
             android:name="sjtu.se.Activity.ChatPlatform.ChatActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName="sjtu.se.Activity.Search.Search" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="sjtu.se.Activity.Search.Search" />
         </activity>
 
         <service android:name="sjtu.se.Util.TaskService" >
