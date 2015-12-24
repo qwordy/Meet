@@ -54,31 +54,19 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sjtu.se.Activity.Search.Search" />
-        </activity>
+        </activity>-->
         <activity
             android:name="sjtu.se.Activity.Information.ContactInfoSettings"
-            android:label="@string/title_activity_contact_information"
-            android:parentActivityName="sjtu.se.Activity.Information.BaseInfoSettings" >
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="sjtu.se.Activity.Information.BaseInfoSettings" />
+            android:label="@string/title_activity_contact_information">
         </activity>
         <activity
             android:name="sjtu.se.Activity.Information.EducationInfoSettings"
-            android:label="@string/title_activity_education_information"
-            android:parentActivityName="sjtu.se.Activity.Information.BaseInfoSettings" >
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="sjtu.se.Activity.Information.BaseInfoSettings" />
+            android:label="@string/title_activity_education_information" >
         </activity>
         <activity
             android:name="sjtu.se.Activity.Information.HobbyInfoSettings"
-            android:label="@string/title_activity_hobby_information"
-            android:parentActivityName="sjtu.se.Activity.Information.BaseInfoSettings" >
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="sjtu.se.Activity.Information.BaseInfoSettings" />
-        </activity>-->
+            android:label="@string/title_activity_hobby_information">
+        </activity>
         <activity
             android:name="sjtu.se.Activity.Information.ShowInformation"
             android:label="@string/title_activity_show_information"
@@ -87,15 +75,11 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="sjtu.se.Activity.Search.Search" />
         </activity>
-        <!--<activity
-            android:name="sjtu.se.Activity.Want.ShowWants"
-            android:label="@string/title_activity_show_wants"
-            android:parentActivityName="sjtu.se.Activity.Want.WantSettings" >
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="sjtu.se.Activity.Information.BaseInfoSettings" />
-        </activity>
         <activity
+            android:name="sjtu.se.Activity.Want.ShowWants"
+            android:label="@string/title_activity_show_wants">
+        </activity>
+        <!--<activity
             android:name="sjtu.se.Activity.ContactCard.ContactCardSettings"
             android:label="@string/title_activity_contact_card_settings" >
         </activity>
