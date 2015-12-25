@@ -106,7 +106,12 @@ public class TaskService extends Service {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case Task.TASK_GET_REMOTE_STATE:
-                    android.os.Message activityMsg = mActivityHandler
+                    if(mAcceptThread == null && mConnectThread == null && mCommThread == null )
+                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                    if (mCommThread != null && mCommThread.isAlive()) {
+                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(111));
+                    }
+                    /*android.os.Message activityMsg = mActivityHandler
                             .obtainMessage();
                     activityMsg.what = msg.what;
                     if (mAcceptThread != null && mAcceptThread.isAlive()) {
@@ -129,8 +134,7 @@ public class TaskService extends Service {
                         mAcceptThread.start();
                         isServerMode = true;
                     }
-
-                    mActivityHandler.sendMessage(activityMsg);
+                    mActivityHandler.sendMessage(activityMsg);*/
                     break;
 
                 case Task.TASK_SEND_INFO:
@@ -187,8 +191,8 @@ public class TaskService extends Service {
                         mCount++;
                     } catch (InterruptedException e) {
                     }
-                    // 每过10秒钟进行一次状态检查
-                    if (mCount >= 50) {
+                    // 每过1秒钟进行一次状态检查
+                    if (mCount >= 5) {
                         mCount = 0;
                         // 检查远程设备状态
                         android.os.Message handlerMsg = mServiceHandler
@@ -316,7 +320,6 @@ public class TaskService extends Service {
         public AcceptThread() {
             Log.d(TAG, "AcceptThread");
 
-
             BluetoothServerSocket tmp = null;
             try {
                 tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(
@@ -433,9 +436,12 @@ public class TaskService extends Service {
                     mmSocket.close();
                 } catch (Exception closeException) {
                 }
-                mAcceptThread = new AcceptThread();
+                //---------------------
+                /*mAcceptThread = new AcceptThread();
                 mAcceptThread.start();
-                isServerMode = true;
+                isServerMode = true;*/
+                cancel();
+                //---------------------
                 return;
             } // Do work to manage the connection (in a separate thread)
             manageConnectedSocket(mmSocket);

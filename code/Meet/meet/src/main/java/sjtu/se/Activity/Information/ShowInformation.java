@@ -180,7 +180,6 @@ public class ShowInformation extends AppCompatActivity {
 
 		Parcelable parcelable = this.getIntent().getParcelableExtra("information");
 		info = (Information) parcelable;
-		System.out.println("info : " + info.keywords);
 
 		setBaseInfo();
 		setContactInfo();

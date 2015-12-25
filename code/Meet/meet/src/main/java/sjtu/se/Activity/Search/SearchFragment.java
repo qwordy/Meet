@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
+import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.ContactCard;
 import sjtu.se.UserInformation.Information;
@@ -81,21 +82,21 @@ public class SearchFragment extends Fragment {
         DeviceList.setHasFixedSize(true);
         DeviceList.setLayoutManager(new LinearLayoutManager(ctx));
         device_list = new ArrayList<DevBluetooth>();
-        DeviceListAdapter = new DevBluetoothAdapter(ctx,device_list);
+        DeviceListAdapter = new DevBluetoothAdapter(ctx,device_list,mHandler);
         DeviceList.setAdapter(DeviceListAdapter);
 
         RecommendDeviceList = (RecyclerView)view.findViewById(R.id.RecommendDeviceList);
         RecommendDeviceList.setHasFixedSize(true);
         RecommendDeviceList.setLayoutManager(new LinearLayoutManager(ctx));
         recommend_device_list = new ArrayList<DevBluetooth>();
-        RecommendDevListAdapter = new DevBluetoothAdapter(ctx,recommend_device_list);
+        RecommendDevListAdapter = new DevBluetoothAdapter(ctx,recommend_device_list,mHandler);
         RecommendDeviceList.setAdapter(RecommendDevListAdapter);
 
         HistoryDeviceList = (RecyclerView)view.findViewById(R.id.HistoryDeviceList);
         HistoryDeviceList.setHasFixedSize(true);
         HistoryDeviceList.setLayoutManager(new LinearLayoutManager(ctx));
         history_device_list = new ArrayList<DevBluetooth>();
-        HistoryDevListAdapter = new DevBluetoothAdapter(ctx,history_device_list);
+        HistoryDevListAdapter = new DevBluetoothAdapter(ctx,history_device_list,mHandler);
         HistoryDeviceList.setAdapter(HistoryDevListAdapter);
 
         HistoryDeviceList.setVisibility(View.GONE);
@@ -163,9 +164,10 @@ public class SearchFragment extends Fragment {
     }
 
     public void UpdateDeviceList(){
-        /*SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-        Message message = handler.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
-        handler.sendMessage(message);*/
+        listReset(device_list, DeviceListAdapter);
+        listReset(recommend_device_list, RecommendDevListAdapter);
+        Rename();
+        doDiscovery();
     }
 
     public void addItem(ArrayList<DevBluetooth> lst,RecyclerView.Adapter adapter,String Addr, String Info, Information in,BluetoothDevice device){
@@ -194,7 +196,7 @@ public class SearchFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private Handler handler = new Handler(){
+    private Handler search = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what){
@@ -208,20 +210,19 @@ public class SearchFragment extends Fragment {
                     Rename();
                     doDiscovery();
 
-                    SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-                    Message message = handler.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
-                    handler.sendMessageDelayed(message, 8000);
+                    search.sendMessageDelayed(search.obtainMessage(0), 8000);
                     break;
                 }
-                case 2:{
-                    mBluetoothAdapter.cancelDiscovery();
+                case 1:{
+                    if(mBluetoothAdapter.isDiscovering())
+                        mBluetoothAdapter.cancelDiscovery();
                     break;
                 }
             }
         }
     };
 
-    private Handler mHandler = new Handler(){
+    public Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what){
@@ -233,15 +234,11 @@ public class SearchFragment extends Fragment {
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage(info.baseinfo.Nick+"和你打招呼，要建立连接么？");
+                    builder.setMessage(info.baseinfo.Nick+" 和你打招呼，要建立连接么？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putInt(ActivityControlCenter.CMD, 2);
-                            editor.commit();
 
                             Intent intent = new Intent(ctx, ChatActivity.class);
                             intent.putExtra("DEVICE", device);
@@ -259,6 +256,16 @@ public class SearchFragment extends Fragment {
                     });
                     builder.create().show();
                     break;
+
+                case TaskService.Task.TASK_DISCONNECT:
+                    break;
+
+                case 111:
+                    /*Intent intent = new Intent(ctx, ChatActivity.class);
+                    intent.putExtra("DEVICE", dev.mRemoteDevice);
+                    intent.putExtra("isclient", true);
+                    ctx.startActivity(intent);*/
+                    break;
             }
         }
     };
@@ -271,9 +278,9 @@ public class SearchFragment extends Fragment {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String addr = device.getAddress();
                 String btname = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
+
                 System.out.println("********New*********");
                 System.out.println("new -> " + btname);
-                //System.out.println("length : " + btname.getBytes().length);
                 System.out.println("********End*********");
 
                 Information info = Format.DeFormat(btname);
@@ -296,18 +303,6 @@ public class SearchFragment extends Fragment {
             if (action.equals(ActivityControlCenter.ACTIVITY_EXIT_ACTION)){
                 getActivity().finish();
             }
-            //程治谦
-			/*if (action.equals(ActivityControlCenter.ACTION_LAUNCHED)){
-				ActivityControlCenter.CMD = 2;
-				Bundle bundle = new Bundle();
-				bundle.putParcelable("information", overt_user);
-				Intent intent2 = new Intent(Search.this, ChatPlatform.class);
-				intent2.putExtra("address", intent.getStringExtra("address"));
-				intent2.putExtra("isclient", false);
-				intent2.putExtras(bundle);
-				//System.out.println("here");
-				ctx.startActivity(intent2);
-			}*/
         }
     };
 
@@ -322,8 +317,8 @@ public class SearchFragment extends Fragment {
             startActivityForResult(Intentenabler,REQUEST_FOR_ENABLE);
         }
         else {
-            ActivityControlCenter.savedName = mBluetoothAdapter.getName();
-            ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
+            //ActivityControlCenter.savedName = mBluetoothAdapter.getName();
+            //ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
 
             Rename();
 
@@ -338,8 +333,8 @@ public class SearchFragment extends Fragment {
             case REQUEST_FOR_ENABLE:{
                 switch (resultCode){
                     case Activity.RESULT_OK:{
-                        ActivityControlCenter.savedName = mBluetoothAdapter.getName();
-                        ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
+                        //ActivityControlCenter.savedName = mBluetoothAdapter.getName();
+                        //ActivityControlCenter.savedBTAdapter = mBluetoothAdapter;
 
                         Rename();
 
@@ -374,9 +369,6 @@ public class SearchFragment extends Fragment {
             mBluetoothAdapter.cancelDiscovery();
         }
         mBluetoothAdapter.startDiscovery();
-        /*if (!mBluetoothAdapter.isDiscovering()){
-            mBluetoothAdapter.startDiscovery();
-        }*/
     }
 
     protected void recommendNotify(ArrayList<DevBluetooth> change){
@@ -442,10 +434,10 @@ public class SearchFragment extends Fragment {
         Rename();
         updateWants();
 
-        handler.removeMessages(0);
+        search.removeMessages(0);
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-        Message message = handler.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
-        handler.sendMessage(message);
+        Message message = search.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
+        search.sendMessage(message);
 
         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
         TaskService.mActivityHandler = mHandler;
@@ -454,7 +446,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        handler.removeMessages(0);
+        search.removeMessages(0);
         // Make sure we're not doing discovery anymore
         if (mBluetoothAdapter != null) {
             //mBluetoothAdapter.setName(ActivityControlCenter.savedName);

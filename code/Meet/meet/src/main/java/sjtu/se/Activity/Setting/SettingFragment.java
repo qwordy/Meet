@@ -77,7 +77,7 @@ public class SettingFragment extends PreferenceFragment
             }
             else {
                 SharedPreferences.Editor editor = systemSettings.edit();
-                editor.putInt(ActivityControlCenter.CMD, 2);
+                editor.putInt(ActivityControlCenter.CMD, 1);
                 editor.commit();
             }
         }

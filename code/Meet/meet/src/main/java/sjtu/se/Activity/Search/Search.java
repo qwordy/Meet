@@ -74,7 +74,6 @@ public class Search extends AppCompatActivity {
     private void selectItem(int position) {
         switch(position){
             case 0:
-                //startActivity(new Intent(this, Search.class));
                 getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
                 break;
             case 1:

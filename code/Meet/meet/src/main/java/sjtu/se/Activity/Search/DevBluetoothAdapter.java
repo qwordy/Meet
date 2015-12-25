@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +19,14 @@ import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.Information;
+import sjtu.se.Util.TaskService;
 
 import java.util.ArrayList;
 
 public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapter.ViewHolder> {
     private ArrayList<DevBluetooth> lst;
     private Context ctx;
+    public static Handler mHandler;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
     {
@@ -78,12 +81,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
-                    SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putInt(ActivityControlCenter.CMD, 2);
-                    editor.commit();
-
+                    //TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
                     Intent intent = new Intent(ctx, ChatActivity.class);
                     intent.putExtra("DEVICE", dev.mRemoteDevice);
                     intent.putExtra("isclient", true);
@@ -91,22 +89,21 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
                     dialog.dismiss();
                 }
             });
-            /*builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
-                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                     dialog.dismiss();
                 }
-            });*/
+            });
             builder.create().show();
             return true;
         }
     }
 
-    public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l){
+    public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l,Handler handler){
         this.lst=l;
         this.ctx = context;
+        this.mHandler = handler;
     }
 
     public long getItemId(int position) {

@@ -191,7 +191,7 @@ public class ChatListViewAdapter extends BaseAdapter {
 		
 		@Override
 		public void onClick(View v) {
-			RelativeLayout rLayout = (RelativeLayout) mView.getParent();
+			/*RelativeLayout rLayout = (RelativeLayout) mView.getParent();
 			ViewHolder holder = (ViewHolder) rLayout.getTag();
 			int pos = holder.getPosition();
 			boolean isShow = (Boolean) mDatalist.get(pos).get(KEY_SHOW_MSG);
@@ -201,7 +201,7 @@ public class ChatListViewAdapter extends BaseAdapter {
 			}else {
 				mView.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 				mDatalist.get(pos).put(KEY_SHOW_MSG, true);
-			}
+			}*/
 		}
 		
 	}

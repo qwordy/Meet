@@ -122,12 +122,56 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         if (mRemoteDevice == null) return;
 
         remote_user = Format.DeFormat(mRemoteDevice.getName());
+		full_user   = getFull_user();
 
 		if(this.getIntent().getBooleanExtra("isclient", true))
 			TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
 
         TaskService.mActivityHandler = mHandler;
 		//---------------------------------------------------------------------
+	}
+
+	private Information getFull_user(){
+
+		SharedPreferences sp;
+		Information info = new Information();
+
+		// base information
+		sp= ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
+		info.baseinfo.Name = sp.getString(ActivityControlCenter.KEY_NAME, "");
+		info.baseinfo.Nick = sp.getString(ActivityControlCenter.KEY_NICK, "");
+		info.baseinfo.Gender = sp.getString(ActivityControlCenter.KEY_GENDER, "");
+		info.baseinfo.BirthDay = sp.getString(ActivityControlCenter.KEY_BIRTHDAY, "");
+		info.baseinfo.Homeland = sp.getString(ActivityControlCenter.KEY_HOMELAND, "");
+		info.baseinfo.Location = sp.getString(ActivityControlCenter.KEY_LOCATION, "");
+		info.keywords = sp.getString(ActivityControlCenter.KEY_KEYWORDS, "");
+
+        //contact information
+        sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_CONTACT_INFO, 0);
+        info.contactinfo.Phone = sp.getString(ActivityControlCenter.KEY_PHONE, "");
+        info.contactinfo.QQ = sp.getString(ActivityControlCenter.KEY_QQ, "");
+        info.contactinfo.E_Mail = sp.getString(ActivityControlCenter.KEY_EMAIL, "");
+        info.contactinfo.Weibo = sp.getString(ActivityControlCenter.KEY_WEIBO, "");
+        info.contactinfo.Wechat = sp.getString(ActivityControlCenter.KEY_WECHAT, "");
+
+        //education information
+        sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_EDUCATION_INFO, 0);
+        info.edu.College = sp.getString(ActivityControlCenter.KEY_COLLEGE, "");
+        info.edu.High_School = sp.getString(ActivityControlCenter.KEY_HIGH, "");
+        info.edu.Middle_School = sp.getString(ActivityControlCenter.KEY_MIDDLE, "");
+        info.edu.Primary_School = sp.getString(ActivityControlCenter.KEY_PRIMARY, "");
+
+        //hobby information
+        sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_HOBBY_INFO, 0);
+        info.hobby.Game = sp.getString(ActivityControlCenter.KEY_GAME, "");
+        info.hobby.Sport = sp.getString(ActivityControlCenter.KEY_SPORT, "");
+        info.hobby.Comic = sp.getString(ActivityControlCenter.KEY_COMIC, "");
+        info.hobby.Music = sp.getString(ActivityControlCenter.KEY_MUSIC, "");
+        info.hobby.Books = sp.getString(ActivityControlCenter.KEY_BOOKS, "");
+        info.hobby.Movie = sp.getString(ActivityControlCenter.KEY_MOVIE, "");
+        info.hobby.Other = sp.getString(ActivityControlCenter.KEY_OTHER, "");
+
+		return info;
 	}
 
 	private View initEmoView(){
@@ -444,8 +488,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 				SoundEffect.getInstance(ChatActivity.this).play(SoundEffect.SOUND_ERR);
 				return;
 			}
-			
-			//------ DEUBG ------ 
 			TaskService.newTask(new Task(mHandler, Task.TASK_SEND_MSG, new Object[]{msg}));
 			showOwnMessage(msg);
 			mInput.setText("");
@@ -584,7 +626,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if(msg.obj == null) return;
                     final String card = (String)msg.obj;
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage("接收对方名片吗？");
+                    builder.setMessage("接收 "+remote_user.baseinfo.Nick+" 的名片吗？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
@@ -613,14 +655,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if(msg.obj == null) return;
                     remote_user = Information.parseInformation((String)msg.obj);
                     break;
-
-			    /*case Task.TASK_GET_REMOTE_STATE:
-			    	setTitle((String)msg.obj);
-				    if(sAliveCount <= 0){
-				    	if(isBTStateChanged(msg.arg1) && msg.arg1 != TaskService.BT_STAT_WAIT)
-					    	Notify.notifyMessage(ChatActivity.this, "对方状态更改","遇见MEET",(String) msg.obj, ChatActivity.this);
-				    }
-				    break;*/
 			}
 		}
 	};
@@ -679,7 +713,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            //return true;
+            return true;
         }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -715,7 +749,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 		switch(item.getItemId()){
 			case R.id.send_contact:
 				AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-				builder.setMessage("发送名片吗？");
+				builder.setMessage("向 "+remote_user.baseinfo.Nick+" 发送名片吗？");
 				builder.setTitle("提示");
 				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
