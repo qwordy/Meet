@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 	private static int sBTState = -1;
 
     private Information remote_user;
-    private Information full_user;
+    private Information overt_user;
 
     private Context ctx;
 	private ListView mList;
@@ -64,7 +64,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 	private ImageView mEmoButton;
 	private GridView mGridView;
 	private boolean isUpdate = false;
-	private BluetoothDevice mRemoteDevice;
 	
 	private LinearLayout mRootLayout, mChatLayout;
 	
@@ -118,61 +117,152 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 		//---------------------------------------------------------------------
         ctx = this;
 
-        mRemoteDevice = this.getIntent().getParcelableExtra("DEVICE");
-        if (mRemoteDevice == null) return;
-
-        remote_user = Format.DeFormat(mRemoteDevice.getName());
-		full_user   = getFull_user();
-
-		if(this.getIntent().getBooleanExtra("isclient", true))
-			TaskService.newTask(new Task(mHandler, Task.TASK_START_CONN_THREAD, new Object[]{mRemoteDevice}));
-
         TaskService.mActivityHandler = mHandler;
+
+        overt_user  = new Information();
+        updateBaseInfo();
+        updateContactInfo();
+        updateEducationInfo();
+        updateHobbyInfo();
+
+        if(this.getIntent().getBooleanExtra("isclient", true)) {
+            remote_user = Information.parseInformation(this.getIntent().getStringExtra("REMOTE_USER"));
+            showToast("对方已上线");
+        }
+
+        TaskService.newTask(new Task(mHandler, Task.TASK_SEND_INFO, new Object[]{overt_user.toString()}));
+
 		//---------------------------------------------------------------------
 	}
 
-	private Information getFull_user(){
+    private void updateBaseInfo(){
+        SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
+        // base information
+        overt_user.baseinfo.Nick = sp.getString(ActivityControlCenter.KEY_NICK, "");
 
-		SharedPreferences sp;
-		Information info = new Information();
+        if (sp.getBoolean(ActivityControlCenter.KEY_NAME_OVERT, false))
+            overt_user.baseinfo.Name = sp.getString(ActivityControlCenter.KEY_NAME, "");
+        else
+            overt_user.baseinfo.Name = "";
 
-		// base information
-		sp= ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
-		info.baseinfo.Name = sp.getString(ActivityControlCenter.KEY_NAME, "");
-		info.baseinfo.Nick = sp.getString(ActivityControlCenter.KEY_NICK, "");
-		info.baseinfo.Gender = sp.getString(ActivityControlCenter.KEY_GENDER, "");
-		info.baseinfo.BirthDay = sp.getString(ActivityControlCenter.KEY_BIRTHDAY, "");
-		info.baseinfo.Homeland = sp.getString(ActivityControlCenter.KEY_HOMELAND, "");
-		info.baseinfo.Location = sp.getString(ActivityControlCenter.KEY_LOCATION, "");
-		info.keywords = sp.getString(ActivityControlCenter.KEY_KEYWORDS, "");
+        if (sp.getBoolean(ActivityControlCenter.KEY_GENDER_OVERT, false))
+            overt_user.baseinfo.Gender = sp.getString(ActivityControlCenter.KEY_GENDER, "");
+        else
+            overt_user.baseinfo.Gender = "";
 
-        //contact information
-        sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_CONTACT_INFO, 0);
-        info.contactinfo.Phone = sp.getString(ActivityControlCenter.KEY_PHONE, "");
-        info.contactinfo.QQ = sp.getString(ActivityControlCenter.KEY_QQ, "");
-        info.contactinfo.E_Mail = sp.getString(ActivityControlCenter.KEY_EMAIL, "");
-        info.contactinfo.Weibo = sp.getString(ActivityControlCenter.KEY_WEIBO, "");
-        info.contactinfo.Wechat = sp.getString(ActivityControlCenter.KEY_WECHAT, "");
+        if (sp.getBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, false))
+            overt_user.baseinfo.BirthDay = sp.getString(ActivityControlCenter.KEY_BIRTHDAY, "");
+        else
+            overt_user.baseinfo.BirthDay = "";
 
-        //education information
-        sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_EDUCATION_INFO, 0);
-        info.edu.College = sp.getString(ActivityControlCenter.KEY_COLLEGE, "");
-        info.edu.High_School = sp.getString(ActivityControlCenter.KEY_HIGH, "");
-        info.edu.Middle_School = sp.getString(ActivityControlCenter.KEY_MIDDLE, "");
-        info.edu.Primary_School = sp.getString(ActivityControlCenter.KEY_PRIMARY, "");
+        if (sp.getBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, false))
+            overt_user.baseinfo.Homeland = sp.getString(ActivityControlCenter.KEY_HOMELAND, "");
+        else
+            overt_user.baseinfo.Homeland = "";
 
-        //hobby information
-        sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_HOBBY_INFO, 0);
-        info.hobby.Game = sp.getString(ActivityControlCenter.KEY_GAME, "");
-        info.hobby.Sport = sp.getString(ActivityControlCenter.KEY_SPORT, "");
-        info.hobby.Comic = sp.getString(ActivityControlCenter.KEY_COMIC, "");
-        info.hobby.Music = sp.getString(ActivityControlCenter.KEY_MUSIC, "");
-        info.hobby.Books = sp.getString(ActivityControlCenter.KEY_BOOKS, "");
-        info.hobby.Movie = sp.getString(ActivityControlCenter.KEY_MOVIE, "");
-        info.hobby.Other = sp.getString(ActivityControlCenter.KEY_OTHER, "");
+        if (sp.getBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, false))
+            overt_user.baseinfo.Location = sp.getString(ActivityControlCenter.KEY_LOCATION, "");
+        else
+            overt_user.baseinfo.Location = "";
 
-		return info;
-	}
+        if (sp.getBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, false)){
+            overt_user.keywords = sp.getString(ActivityControlCenter.KEY_KEYWORDS, "");
+        }
+        else
+            overt_user.keywords = "";
+    }
+
+    private void updateContactInfo(){
+        SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_CONTACT_INFO, 0);
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_PHONE_OVERT, false))
+            overt_user.contactinfo.Phone = sp.getString(ActivityControlCenter.KEY_PHONE, "");
+        else
+            overt_user.contactinfo.Phone = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_QQ_OVERT, false))
+            overt_user.contactinfo.QQ = sp.getString(ActivityControlCenter.KEY_QQ, "");
+        else
+            overt_user.contactinfo.QQ = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_EMAIL_OVERT, false))
+            overt_user.contactinfo.E_Mail = sp.getString(ActivityControlCenter.KEY_EMAIL, "");
+        else
+            overt_user.contactinfo.E_Mail = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_WEIBO_OVERT, false))
+            overt_user.contactinfo.Weibo = sp.getString(ActivityControlCenter.KEY_WEIBO, "");
+        else
+            overt_user.contactinfo.Weibo = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_WECHAT_OVERT, false))
+            overt_user.contactinfo.Wechat = sp.getString(ActivityControlCenter.KEY_WECHAT, "");
+        else
+            overt_user.contactinfo.Wechat  = "";
+    }
+
+    private void updateEducationInfo(){
+        SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_EDUCATION_INFO, 0);
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_COLLEGE_OVERT, false))
+            overt_user.edu.College = sp.getString(ActivityControlCenter.KEY_COLLEGE, "");
+        else
+            overt_user.edu.College = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_HIGH_OVERT, false))
+            overt_user.edu.High_School = sp.getString(ActivityControlCenter.KEY_HIGH, "");
+        else
+            overt_user.edu.High_School = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_MIDDLE_OVERT, false))
+            overt_user.edu.Middle_School = sp.getString(ActivityControlCenter.KEY_MIDDLE, "");
+        else
+            overt_user.edu.Middle_School = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_PRIMARY_OVERT, false))
+            overt_user.edu.Primary_School = sp.getString(ActivityControlCenter.KEY_PRIMARY, "");
+        else
+            overt_user.edu.Primary_School = "";
+    }
+
+    private void updateHobbyInfo(){
+        SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_HOBBY_INFO, 0);
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_GAME_OVERT, false))
+            overt_user.hobby.Game = sp.getString(ActivityControlCenter.KEY_GAME, "");
+        else
+            overt_user.hobby.Game = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_SPORT_OVERT, false))
+            overt_user.hobby.Sport = sp.getString(ActivityControlCenter.KEY_SPORT, "");
+        else
+            overt_user.hobby.Sport = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_COMIC_OVERT, false))
+            overt_user.hobby.Comic = sp.getString(ActivityControlCenter.KEY_COMIC, "");
+        else
+            overt_user.hobby.Comic = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_MUSIC_OVERT, false))
+            overt_user.hobby.Music = sp.getString(ActivityControlCenter.KEY_MUSIC, "");
+        else
+            overt_user.hobby.Music = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_BOOKS_OVERT, false))
+            overt_user.hobby.Books = sp.getString(ActivityControlCenter.KEY_BOOKS, "");
+        else
+            overt_user.hobby.Books = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_MOVIE_OVERT, false))
+            overt_user.hobby.Movie = sp.getString(ActivityControlCenter.KEY_MOVIE, "");
+        else
+            overt_user.hobby.Movie = "";
+
+        if (sp.getBoolean(ActivityControlCenter.KEY_OTHER_OVERT, false))
+            overt_user.hobby.Other = sp.getString(ActivityControlCenter.KEY_OTHER, "");
+        else
+            overt_user.hobby.Other = "";
+    }
 
 	private View initEmoView(){
 		if(mEmoView == null){
@@ -647,13 +737,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     builder.create().show();
                     break;
 
-                case Task.TASK_SEND_INFO:
-                    TaskService.newTask(new Task(mHandler,Task.TASK_SEND_INFO,new Object[]{full_user.toString()}));
-                    break;
-
                 case Task.TASK_RECV_INFO:
                     if(msg.obj == null) return;
                     remote_user = Information.parseInformation((String)msg.obj);
+                    showToast("对方已上线");
                     break;
 			}
 		}
@@ -773,12 +860,36 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 				break;
 
             case R.id.action_information:
+                if(remote_user == null) {
+                    showToast("对方信息为空");
+                    return true;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("information", remote_user);
                 Intent intent = new Intent(ctx, ShowInformation.class);
                 intent.putExtras(bundle);
                 ctx.startActivity(intent);
                 break;
+
+			case android.R.id.home:
+				builder = new AlertDialog.Builder(this);
+				builder.setMessage("退出将断开连接，确定吗？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						((ChatActivity)ctx).finish();
+						dialog.dismiss();
+					}
+				});
+				builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				builder.create().show();
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

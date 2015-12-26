@@ -69,8 +69,8 @@ public class DataProtocol {
 		return buf;
 	}
 
-    public static byte[] packInfo(String card) throws UnsupportedEncodingException{
-        byte[] msgbytes = card.getBytes("UTF-8");
+    public static byte[] packInfo(String info) throws UnsupportedEncodingException{
+        byte[] msgbytes = info.getBytes("UTF-8");
         byte lowLen = (byte)(msgbytes.length & 0xFF);
         byte hiLen = (byte)(msgbytes.length >> 8 & 0xFF);
         byte[] buf = new byte[msgbytes.length + 4];
@@ -86,7 +86,8 @@ public class DataProtocol {
 		if(data[0] != HEAD)
 			return null;
 		Message msg = new Message();
-		switch(data[1]){
+        int lowLen,hiLen;
+        switch(data[1]){
 		case TYPE_FILE:
 			msg.type = TYPE_FILE;
 			msg.total = data[2] << 24 | data[3] << 16 | data[4] << 8 | data[5];
@@ -94,19 +95,25 @@ public class DataProtocol {
 			break;
 		case TYPE_MSG:
 			msg.type = TYPE_MSG;
-			msg.length = data[2] << 8 | data[3];
+            lowLen = data[3] & 0xFF;
+            hiLen = data[2] & 0xFF;
+            msg.length = hiLen << 8 | lowLen;
 			msg.msg = new String(data, 4, msg.length, "UTF-8");
 			break;
 		case TYPE_CARD:
 			msg.type = TYPE_CARD;
-			msg.length = data[2] << 8 | data[3];
+            lowLen = data[3] & 0xFF;
+            hiLen = data[2] & 0xFF;
+            msg.length = hiLen << 8 | lowLen;
 			msg.msg = new String(data, 4, msg.length, "UTF-8");
 			break;
         case TYPE_INFO:
-                msg.type = TYPE_INFO;
-                msg.length = data[2] << 8 | data[3];
-                msg.msg = new String(data, 4, msg.length, "UTF-8");
-                break;
+            msg.type = TYPE_INFO;
+            lowLen = data[3] & 0xFF;
+            hiLen = data[2] & 0xFF;
+            msg.length = hiLen << 8 | lowLen;
+            msg.msg = new String(data, 4, msg.length, "UTF-8");
+            break;
 		}
 		return msg;
 	}

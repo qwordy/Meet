@@ -28,6 +28,7 @@ import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
 public class TaskService extends Service {
 
     public static class Task {
+        public static final int TASK_CONNECT_FAIL = -2;
         public static final int TASK_DISCONNECT = -1;
         public static final int TASK_CONNECT = 0;
 
@@ -53,7 +54,6 @@ public class TaskService extends Service {
         public Object[] mParams;
 
         private Handler mH;
-
 
         public Task(Handler handler, int taskID, Object[] params){
             this.mH = handler;
@@ -108,9 +108,9 @@ public class TaskService extends Service {
                 case Task.TASK_GET_REMOTE_STATE:
                     if(mAcceptThread == null && mConnectThread == null && mCommThread == null )
                         mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
-                    if (mCommThread != null && mCommThread.isAlive()) {
+                    /*if (mCommThread != null && mCommThread.isAlive()) {
                         mActivityHandler.sendMessage(mActivityHandler.obtainMessage(111));
-                    }
+                    }*/
                     /*android.os.Message activityMsg = mActivityHandler
                             .obtainMessage();
                     activityMsg.what = msg.what;
@@ -137,9 +137,9 @@ public class TaskService extends Service {
                     mActivityHandler.sendMessage(activityMsg);*/
                     break;
 
-                case Task.TASK_SEND_INFO:
+                /*case Task.TASK_SEND_INFO:
                     TaskService.newTask(new Task(mActivityHandler,Task.TASK_SEND_INFO,new Object[]{msg.obj}));
-                    break;
+                    break;*/
 
                 default:
                     break;
@@ -155,6 +155,7 @@ public class TaskService extends Service {
     }
 
     public static void stop(Context c){
+
         Intent intent = new Intent(c, TaskService.class);
         c.stopService(intent);
     }
@@ -281,7 +282,7 @@ public class TaskService extends Service {
                 }else{
                     byte[] info = null;
                     try {
-                        info = DataProtocol.packCard((String) task.mParams[0]);
+                        info = DataProtocol.packInfo((String) task.mParams[0]);
                         sucess = mCommThread.write(info);
                     } catch (UnsupportedEncodingException e) {
                         sucess = false;
@@ -441,6 +442,7 @@ public class TaskService extends Service {
                 mAcceptThread.start();
                 isServerMode = true;*/
                 cancel();
+                mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_CONNECT_FAIL));
                 //---------------------
                 return;
             } // Do work to manage the connection (in a separate thread)
@@ -516,20 +518,12 @@ public class TaskService extends Service {
         }
 
         public void run() {
-            /*try {
-                //write(DataProtocol.packMsg(mBluetoothAdapter.getName()
-                write(DataProtocol.packMsg("用户"
-                        + "已经上线\n"));
-            } catch (UnsupportedEncodingException e2) {
-            }*/
             int size;
             DataProtocol.Message msg;
             android.os.Message handlerMsg;
             buffer = new byte[1024];
 
             BufferedInputStream bis = new BufferedInputStream(mmInStream);
-            // BufferedReader br = new BufferedReader(new
-            // InputStreamReader(mmInStream));
             HashMap<String, Object> data;
             while (true) {
                 try {
@@ -581,15 +575,6 @@ public class TaskService extends Service {
                     mCommThread = null;
                     //-----------------------------------
                     mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
-                    /*if (isServerMode) {
-                        // 检查远程设备状态
-                        handlerMsg = mServiceHandler.obtainMessage();
-                        handlerMsg.what = Task.TASK_GET_REMOTE_STATE;
-                        mServiceHandler.sendMessage(handlerMsg);
-                        SoundEffect.getInstance(TaskService.this).play(2);
-                        mAcceptThread = new AcceptThread();
-                        mAcceptThread.start();
-                    }*/
                     //-----------------------------------
                     break;
                 }

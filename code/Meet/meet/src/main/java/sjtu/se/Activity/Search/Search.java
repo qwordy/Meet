@@ -77,18 +77,15 @@ public class Search extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
                 break;
             case 1:
-                //getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SettingFragment()).commit();
-                break;
-            case 2:
                 getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SettingFragment()).commit();
                 break;
-            case 3:
+            case 2:
                 getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new BaseInfoSettings()).commit();
                 break;
-            case 4:
+            case 3:
                 getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new WantSettings()).commit();
                 break;
-            case 5:
+            case 4:
                 startActivity(new Intent(this, UbmaDrawerActivity.class));
                 break;
         }
