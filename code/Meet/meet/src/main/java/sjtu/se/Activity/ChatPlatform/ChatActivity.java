@@ -686,7 +686,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 		public void handleMessage(Message msg) {
 			switch(msg.what){
                 case Task.TASK_DISCONNECT:
-                    showToast("连接中断");
+                    showToast("连接已中断");
                     ((ChatActivity)ctx).finish();
                     break;
 

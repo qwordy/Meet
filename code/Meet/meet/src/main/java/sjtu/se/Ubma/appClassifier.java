@@ -22,7 +22,9 @@ public class appClassifier {
 	public static Category classify(String label) {
 		if (rules == null)
 			initRules();
-		for ()
+		//程治谦：编译需要
+		//for ()
+        return Category.CHAT;
 	}
 
 	public static void initRules() {

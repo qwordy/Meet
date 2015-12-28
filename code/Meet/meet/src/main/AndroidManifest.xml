@@ -30,71 +30,45 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name="sjtu.se.Activity.Setting.SystemSettings"
             android:label="@string/title_activity_system_settings"
             android:parentActivityName="sjtu.se.Activity.Search.Search" >
         </activity>
-        <!--<activity
-            android:name="sjtu.se.Activity.Information.BaseInfoSettings"
-            android:label="@string/title_activity_personal_information"
-            android:parentActivityName="sjtu.se.Activity.Search.Search" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="sjtu.se.Activity.Search.Search" />
-        </activity>
-        <activity
-            android:name="sjtu.se.Activity.Want.WantSettings"
-            android:label="@string/title_activity_want_settings"
-            android:parentActivityName="sjtu.se.Activity.Search.Search" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="sjtu.se.Activity.Search.Search" />
-        </activity>-->
+
         <activity
             android:name="sjtu.se.Activity.Information.ContactInfoSettings"
             android:label="@string/title_activity_contact_information">
         </activity>
+
         <activity
             android:name="sjtu.se.Activity.Information.EducationInfoSettings"
             android:label="@string/title_activity_education_information" >
         </activity>
+
         <activity
             android:name="sjtu.se.Activity.Information.HobbyInfoSettings"
             android:label="@string/title_activity_hobby_information">
         </activity>
+
         <activity
             android:name="sjtu.se.Activity.Information.ShowInformation"
             android:label="@string/title_activity_show_information"
             android:parentActivityName="sjtu.se.Activity.Search.Search" >
-            <meta-data
+            <!--meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="sjtu.se.Activity.Search.Search" />
+                    android:value="sjtu.se.Activity.Search.Search" /-->
         </activity>
+
         <activity
             android:name="sjtu.se.Activity.Want.ShowWants"
             android:label="@string/title_activity_show_wants">
         </activity>
-        <!--<activity
-            android:name="sjtu.se.Activity.ContactCard.ContactCardSettings"
-            android:label="@string/title_activity_contact_card_settings" >
-        </activity>
-        <activity
-            android:name="sjtu.se.Activity.ContactCard.ShowContactCard"
-            android:label="@string/title_activity_show_contact_card"
-            android:launchMode="singleTop" >
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/sjtu.se.bluetoothtry" />
-            </intent-filter>
-        </activity>-->
         <activity
             android:name="sjtu.se.Activity.ChatPlatform.ChatActivity"
             android:label="@string/app_name"
@@ -114,6 +88,7 @@
             android:name="sjtu.se.Ubma.ActiveTimeActivity"
             android:label="使用手机时间" />
         <activity android:name="sjtu.se.Ubma.AllAppsActivity" />
+
         <activity
             android:name="sjtu.se.Ubma.UbmaActivity"
             android:label="用户行为分析" />

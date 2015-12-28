@@ -31,7 +31,8 @@ public class DataProtocol {
 		System.arraycopy(msgbytes, 0, buf, 4, msgbytes.length);
 		return buf;
 	}
-	
+
+	//程治谦：所有file类型有BUG，位移时有符号无符号没处理好，由于没用到所以没修改
 	public static byte[] packFile(File file) throws UnsupportedEncodingException{
 		byte total0 = (byte)(file.length() & 0xFF);
 		byte total1 = (byte)(file.length() >> 8  & 0xFF);

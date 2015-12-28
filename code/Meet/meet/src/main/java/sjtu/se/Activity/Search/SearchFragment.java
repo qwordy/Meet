@@ -236,9 +236,7 @@ public class SearchFragment extends Fragment {
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             search.removeMessages(0);
-
                             Intent intent = new Intent(ctx, ChatActivity.class);
                             intent.putExtra("isclient", false);
                             ctx.startActivity(intent);
@@ -258,7 +256,7 @@ public class SearchFragment extends Fragment {
                 case TaskService.Task.TASK_CONNECT_FAIL:
                     TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                     builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage("连接失败");
+                    builder.setMessage("很抱歉连接超时，请再试一次");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
