@@ -28,8 +28,9 @@ import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
 public class TaskService extends Service {
 
     public static class Task {
-        public static final int TASK_CONNECT_FAIL = -2;
-        public static final int TASK_DISCONNECT = -1;
+        public static final int TASK_CONNECT_FAIL = -3;
+        //public static final int TASK_DISCONNECT2 = -2;
+        public static final int TASK_DISCONNECT1 = -1;
         public static final int TASK_CONNECT = 0;
 
         public static final int TASK_START_ACCEPT = 1;
@@ -79,8 +80,10 @@ public class TaskService extends Service {
     private TaskThread mThread;
 
     private BluetoothAdapter mBluetoothAdapter;
-    private AcceptThread mAcceptThread;
-    private ConnectThread mConnectThread;
+
+    private static AcceptThread mAcceptThread;
+    private static ConnectThread mConnectThread;
+    private static ConnectedThread mCommThread;
 
     public static Handler mActivityHandler;
 
@@ -105,7 +108,8 @@ public class TaskService extends Service {
             switch (msg.what) {
                 case Task.TASK_GET_REMOTE_STATE:
                     if(mAcceptThread == null && mConnectThread == null && mCommThread == null )
-                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT1));
+
                     /*if (mCommThread != null && mCommThread.isAlive()) {
                         mActivityHandler.sendMessage(mActivityHandler.obtainMessage(111));
                     }*/
@@ -148,6 +152,15 @@ public class TaskService extends Service {
     }
 
     public static void stop(Context c){
+        if (mAcceptThread != null && mAcceptThread.isAlive()) {
+            mAcceptThread.cancel();
+        }
+        if(mConnectThread!=null && mConnectThread.isAlive()){
+            mConnectThread.cancel();
+        }
+        if (mCommThread != null && mCommThread.isAlive()) {
+            mCommThread.cancel();
+        }
         Intent intent = new Intent(c, TaskService.class);
         c.stopService(intent);
     }
@@ -292,7 +305,7 @@ public class TaskService extends Service {
                 }
                 if (!sucess) {
                     android.os.Message msg = mActivityHandler.obtainMessage();
-                    msg.what = Task.TASK_DISCONNECT;
+                    msg.what = Task.TASK_DISCONNECT1;
                     mActivityHandler.sendMessage(msg);
                 }
                 break;
@@ -444,8 +457,6 @@ public class TaskService extends Service {
         }
     }
 
-    private ConnectedThread mCommThread;
-
     private void manageConnectedSocket(BluetoothSocket socket) {
         // 启动子线程来维持连接
         mCommThread = new ConnectedThread(socket);
@@ -560,7 +571,7 @@ public class TaskService extends Service {
                     }
                     mCommThread = null;
                     //-----------------------------------
-                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT1));
                     //-----------------------------------
                     break;
                 }

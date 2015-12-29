@@ -250,7 +250,22 @@ public class SearchFragment extends Fragment {
                             dialog.dismiss();
                         }
                     });
+                    builder.setCancelable(false);
                     builder.create().show();
+                    break;
+
+                case TaskService.Task.TASK_DISCONNECT1:
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    /*builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage("很抱歉连接中断或对方中断连接");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();*/
                     break;
 
                 case TaskService.Task.TASK_CONNECT_FAIL:
@@ -333,7 +348,6 @@ public class SearchFragment extends Fragment {
             TaskService.start(ctx, mHandler);
             TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
         }
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -442,13 +456,13 @@ public class SearchFragment extends Fragment {
         Rename();
         updateWants();
 
+        TaskService.mActivityHandler = mHandler;
+        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+
         search.removeMessages(0);
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
         Message message = search.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
         search.sendMessage(message);
-
-        TaskService.mActivityHandler = mHandler;
-        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
     }
 
     @Override

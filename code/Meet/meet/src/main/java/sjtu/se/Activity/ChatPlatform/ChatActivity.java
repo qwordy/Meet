@@ -566,8 +566,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 	protected void onDestroy() {
 		super.onDestroy();
 	}
-	
-	
+
 	@Override
 	public void onClick(View v) {
 		if(v == mSendBtn){
@@ -685,7 +684,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 		@Override
 		public void handleMessage(Message msg) {
 			switch(msg.what){
-                case Task.TASK_DISCONNECT:
+                case Task.TASK_DISCONNECT1:
                     showToast("连接已中断");
                     ((ChatActivity)ctx).finish();
                     break;

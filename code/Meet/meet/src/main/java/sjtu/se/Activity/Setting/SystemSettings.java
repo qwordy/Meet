@@ -3,6 +3,7 @@ package sjtu.se.Activity.Setting;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import sjtu.se.Meet.R;
 
 import android.content.BroadcastReceiver;
@@ -39,10 +40,11 @@ public class SystemSettings extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-
-        return true;
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -51,13 +53,10 @@ public class SystemSettings extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            //this.startActivity(new Intent(SystemSettings.this, SystemSettings.class));
-            return false;
+        if (id == android.R.id.home){
+            this.finish();
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

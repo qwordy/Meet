@@ -411,48 +411,4 @@ public class BaseInfoSettings extends Fragment {
 
         return view;
 	}
-
-	/*@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_news) {
-			return false;
-		}
-		if (id == R.id.action_settings) {
-			this.startActivity(new Intent(this, SystemSettings.class));
-			return true;
-		}
-        *//*if (id == R.id.action_personal){
-            this.startActivity(new Intent(this, BaseInfoSettings.class));
-            return true;
-        }*//*
-		*//*if (id == R.id.action_want){
-			this.startActivity(new Intent(this, WantSettings.class));
-			return true;
-		}
-		if (id == R.id.action_analysis){
-			return false;
-		}*//*
-		if (id == R.id.action_logout) {
-			super.finish();
-		}
-
-		return super.onOptionsItemSelected(item);
-	}*/
-
 }

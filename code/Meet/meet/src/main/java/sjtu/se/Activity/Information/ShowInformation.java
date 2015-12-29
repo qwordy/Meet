@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.UserInformation.Information;
 
@@ -186,5 +187,18 @@ public class ShowInformation extends AppCompatActivity {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == android.R.id.home){
+			this.finish();
+            return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }
