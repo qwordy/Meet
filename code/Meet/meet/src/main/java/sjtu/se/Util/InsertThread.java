@@ -9,41 +9,40 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.CommonDataKinds.Im;
-import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 
-public class ContactInterface {
+public  class InsertThread extends Thread {
+    private ContactCard contact;
+    private Context ctx;
+    public boolean status;
 
+    public InsertThread(String str, Context ctx) {
+        this.contact = ContactCard.parseContactCard(str);
+        this.ctx = ctx;
+        status = true;
 
-	public static boolean insert(String str, Context ctx){
-		ContactCard contact = ContactCard.parseContactCard(str);
-		return ContactInterface.insert(contact, ctx);
-	}
+        if(this.contact == null) status = false;
+        else if(this.contact.name.equals("") || this.contact.phone.equals("")) status = false;
+    }
 
-	public static boolean insert (ContactCard contact, Context ctx){
-        if (contact == null)
-			return false;
+    public void run() {
+        ContentValues values = new ContentValues();
+        Uri rawContactUri = ctx.getContentResolver().insert(RawContacts.CONTENT_URI, values);
+        long rawContactId = ContentUris.parseId(rawContactUri);
 
-         if(contact.name.equals("") || contact.phone.equals(""))
-             return false;
+        values.clear();
+        values.put(Data.RAW_CONTACT_ID, rawContactId);
+        values.put(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
+        values.put(StructuredName.GIVEN_NAME, contact.name);
+        ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
 
-		 ContentValues values = new ContentValues();
-         Uri rawContactUri = ctx.getContentResolver().insert(RawContacts.CONTENT_URI, values);
-         long rawContactId = ContentUris.parseId(rawContactUri);
-
-         values.clear();
-         values.put(Data.RAW_CONTACT_ID, rawContactId);
-         values.put(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
-         values.put(StructuredName.GIVEN_NAME, contact.name);
-         ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
-
-         values.clear();
-         values.put(Data.RAW_CONTACT_ID, rawContactId);
-         values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
-         values.put(Phone.NUMBER, contact.phone);
-         values.put(Phone.TYPE, Phone.TYPE_MOBILE);
-         ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
+        values.clear();
+        values.put(Data.RAW_CONTACT_ID, rawContactId);
+        values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
+        values.put(Phone.NUMBER, contact.phone);
+        values.put(Phone.TYPE, Phone.TYPE_MOBILE);
+        ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
 
         if(!contact.email.equals("")) {
             values.clear();
@@ -80,7 +79,5 @@ public class ContactInterface {
             values.put(Im.TYPE,Im.CUSTOM_PROTOCOL);
             ctx.getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
         }
-
-         return true;
-	}
+    }
 }

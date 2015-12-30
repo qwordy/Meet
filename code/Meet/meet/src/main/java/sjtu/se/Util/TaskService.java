@@ -28,9 +28,9 @@ import sjtu.se.Activity.ChatPlatform.ChatListViewAdapter;
 public class TaskService extends Service {
 
     public static class Task {
-        public static final int TASK_CONNECT_FAIL = -3;
-        //public static final int TASK_DISCONNECT2 = -2;
-        public static final int TASK_DISCONNECT1 = -1;
+        public static final int TASK_CANCEL = -3;
+        public static final int TASK_CONNECT_FAIL = -2;
+        public static final int TASK_DISCONNECT = -1;
         public static final int TASK_CONNECT = 0;
 
         public static final int TASK_START_ACCEPT = 1;
@@ -108,7 +108,7 @@ public class TaskService extends Service {
             switch (msg.what) {
                 case Task.TASK_GET_REMOTE_STATE:
                     if(mAcceptThread == null && mConnectThread == null && mCommThread == null )
-                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT1));
+                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
 
                     /*if (mCommThread != null && mCommThread.isAlive()) {
                         mActivityHandler.sendMessage(mActivityHandler.obtainMessage(111));
@@ -305,8 +305,20 @@ public class TaskService extends Service {
                 }
                 if (!sucess) {
                     android.os.Message msg = mActivityHandler.obtainMessage();
-                    msg.what = Task.TASK_DISCONNECT1;
+                    msg.what = Task.TASK_DISCONNECT;
                     mActivityHandler.sendMessage(msg);
+                }
+                break;
+
+            case Task.TASK_CANCEL:
+                if (mCommThread == null || !mCommThread.isAlive())
+                    Log.e(TAG, "mCommThread null");
+                else{
+                    try {
+                        byte[] cancel = {DataProtocol.HEAD, DataProtocol.TYPE_END};
+                        mCommThread.write(cancel);
+                    }
+                    catch(Exception e) {}
                 }
                 break;
         }
@@ -563,6 +575,11 @@ public class TaskService extends Service {
                         handlerMsg.obj = msg.msg;
                         mActivityHandler.sendMessage(handlerMsg);
 
+                    }else if(msg.type == DataProtocol.TYPE_END){
+                        handlerMsg = mActivityHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_CANCEL;
+                        mActivityHandler.sendMessage(handlerMsg);
+
                     }
                 } catch (Exception e) {
                     try {
@@ -571,7 +588,7 @@ public class TaskService extends Service {
                     }
                     mCommThread = null;
                     //-----------------------------------
-                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT1));
+                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
                     //-----------------------------------
                     break;
                 }

@@ -246,26 +246,13 @@ public class SearchFragment extends Fragment {
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_CANCEL, null));
                             TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                             dialog.dismiss();
                         }
                     });
                     builder.setCancelable(false);
                     builder.create().show();
-                    break;
-
-                case TaskService.Task.TASK_DISCONNECT1:
-                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
-                    /*builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage("很抱歉连接中断或对方中断连接");
-                    builder.setTitle("提示");
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.create().show();*/
                     break;
 
                 case TaskService.Task.TASK_CONNECT_FAIL:
@@ -288,6 +275,20 @@ public class SearchFragment extends Fragment {
                     intent.putExtra("REMOTE_USER", (String) msg.obj);
                     intent.putExtra("isclient", true);
                     ctx.startActivity(intent);
+                    break;
+
+                case TaskService.Task.TASK_CANCEL:
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage("很抱歉，对方取消连接");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
                     break;
             }
         }

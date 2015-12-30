@@ -14,6 +14,7 @@ public class DataProtocol {
 	}
 
 	public final static byte HEAD = 0xA;
+    public final static byte TYPE_END = 0xB;
 	public final static byte TYPE_MSG = 0xC;
 	public final static byte TYPE_FILE = 0xF;
 	public final static byte TYPE_CARD = 0xD;
@@ -114,6 +115,9 @@ public class DataProtocol {
             hiLen = data[2] & 0xFF;
             msg.length = hiLen << 8 | lowLen;
             msg.msg = new String(data, 4, msg.length, "UTF-8");
+            break;
+        case TYPE_END:
+            msg.type = TYPE_END;
             break;
 		}
 		return msg;

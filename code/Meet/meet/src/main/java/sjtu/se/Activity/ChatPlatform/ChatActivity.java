@@ -3,6 +3,7 @@ package sjtu.se.Activity.ChatPlatform;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -684,7 +685,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 		@Override
 		public void handleMessage(Message msg) {
 			switch(msg.what){
-                case Task.TASK_DISCONNECT1:
+                case Task.TASK_DISCONNECT:
                     showToast("连接已中断");
                     ((ChatActivity)ctx).finish();
                     break;
@@ -715,15 +716,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if(msg.obj == null) return;
                     final String card = (String)msg.obj;
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage("接收 "+remote_user.baseinfo.Nick+" 的名片吗？");
+                    builder.setMessage("接收 " + remote_user.baseinfo.Nick + " 的名片吗？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(ContactInterface.insert(card,ctx))
-								showToast("名片接收成功！");
-							else
-								showToast("名片接收失败。");
+                            InsertThread insert = new InsertThread(card,ctx);
+                            if(insert.status){
+                                insert.start();
+                                showToast("名片接收成功！");
+                            }
+                            else
+                                showToast("名片接收失败。");
                             dialog.dismiss();
                         }
                     });
@@ -833,8 +837,31 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
+            case R.id.action_game:
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setMessage("玩真心话游戏吗");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Random random = new Random();
+                        int index = random.nextInt(Questions.questions.length);
+                        TaskService.newTask(new Task(mHandler, Task.TASK_SEND_MSG, new Object[]{"真心话游戏："+Questions.questions[index]}));
+                        showOwnMessage("真心话游戏："+Questions.questions[index]);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                break;
+
 			case R.id.send_contact:
-				AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder = new AlertDialog.Builder(ctx);
 				builder.setMessage("向 "+remote_user.baseinfo.Nick+" 发送名片吗？");
 				builder.setTitle("提示");
 				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
