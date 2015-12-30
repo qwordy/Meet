@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import sjtu.se.Meet.R;
 
 import android.app.AlertDialog;
@@ -262,27 +263,16 @@ public class ContactInfoSettings extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.contact_information, menu);
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            this.startActivity(new Intent(ContactInfoSettings.this, SystemSettings.class));
-            return true;
-        }
         if (id == android.R.id.home){
             this.finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

@@ -9,11 +9,13 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.ShowInformation;
@@ -50,20 +52,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
 
         public void onClick(View v) {
             dev=list.get(getAdapterPosition());
-            String addr = dev.Address;
-            SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.DETAIL_INFORMATION, 0);
-            String res = sp.getString(addr, "Not found");
-            if (!res.equals("Not found")) {
-                Information info = Information.parseInformation(res);
-                if (info != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("information", info);
-                    Intent intent = new Intent(ctx, ShowInformation.class);
-                    intent.putExtras(bundle);
-                    ctx.startActivity(intent);
-                    return;
-                }
-            }
+
             Bundle bundle = new Bundle();
             Information info = new Information(dev.Info);
             bundle.putParcelable("information", info);
@@ -81,11 +70,12 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
-                    Intent intent = new Intent(ctx, ChatActivity.class);
-                    intent.putExtra("DEVICE", dev.mRemoteDevice);
-                    intent.putExtra("isclient", true);
-                    ctx.startActivity(intent);
+
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
+                    Toast tst = Toast.makeText(ctx, "正在连接请稍等...", Toast.LENGTH_LONG);
+                    tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+                    tst.show();
+
                     dialog.dismiss();
                 }
             });

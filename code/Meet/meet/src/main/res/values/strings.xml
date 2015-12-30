@@ -6,7 +6,7 @@
 	<string name="action_news">消息</string>
 	<string name="action_settings">系统设置</string>
 	<string name="action_personal">个人资料</string>
-	<!--<string name="action_contact">我的名片</string>-->
+	<string name="action_game">真心话游戏</string>
 	<string name="action_want">我的需求</string>
 	<string name="action_analysis">手机行为分析</string>
 	<string name="action_logout">退出</string>
@@ -68,7 +68,6 @@
 
 	<string-array name="menu_array">
 		<item>首页</item>
-		<item>消息</item>
 		<item>系统设置</item>
 		<item>个人资料</item>
 		<item>我的需求</item>

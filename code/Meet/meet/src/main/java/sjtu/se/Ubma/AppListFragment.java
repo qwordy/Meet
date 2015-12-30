@@ -166,7 +166,7 @@ public class AppListFragment extends Fragment {
 		Context context = getContext();
 		Intent intent = new Intent(context, MonitorService.class);
 		Bundle bundle = new Bundle();
-		
+
 		context.startService(intent);
 	}
 

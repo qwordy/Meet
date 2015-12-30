@@ -91,9 +91,6 @@ public class ActivityControlCenter {
 	public static String KEY_WANT_7 = "keywant7";
 	public static String KEY_WANT_8 = "keywant8";
 
-	// details
-	public static String DETAIL_INFORMATION = "detailinformation";
-
     // system settings
     public static String SYSTEM_SETTING = "systemsetting";
     public static String CMD = "cmd";

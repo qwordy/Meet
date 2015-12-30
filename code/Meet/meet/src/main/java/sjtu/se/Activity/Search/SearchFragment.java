@@ -20,9 +20,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.ChatPlatform.ChatActivity;
-import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
-import sjtu.se.UserInformation.ContactCard;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.UserInformation.Want;
 import sjtu.se.Util.*;
@@ -137,7 +135,6 @@ public class SearchFragment extends Fragment {
         full_user  = new Information();
 
         OpenBluetooth();
-
     }
 
     public void setFreshing(){
@@ -234,14 +231,13 @@ public class SearchFragment extends Fragment {
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage(info.baseinfo.Nick+" 和你打招呼，要建立连接么？");
+                    builder.setMessage(info.baseinfo.Nick + " 和你打招呼，要建立连接么？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            search.removeMessages(0);
                             Intent intent = new Intent(ctx, ChatActivity.class);
-                            intent.putExtra("DEVICE", device);
                             intent.putExtra("isclient", false);
                             ctx.startActivity(intent);
                             dialog.dismiss();
@@ -254,17 +250,44 @@ public class SearchFragment extends Fragment {
                             dialog.dismiss();
                         }
                     });
+                    builder.setCancelable(false);
                     builder.create().show();
                     break;
 
-                case TaskService.Task.TASK_DISCONNECT:
+                case TaskService.Task.TASK_DISCONNECT1:
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    /*builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage("很抱歉连接中断或对方中断连接");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();*/
                     break;
 
-                case 111:
-                    /*Intent intent = new Intent(ctx, ChatActivity.class);
-                    intent.putExtra("DEVICE", dev.mRemoteDevice);
+                case TaskService.Task.TASK_CONNECT_FAIL:
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage("很抱歉连接超时，请再试一次");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
+                    break;
+
+                case TaskService.Task.TASK_RECV_INFO:
+                    search.removeMessages(0);
+                    Intent intent = new Intent(ctx, ChatActivity.class);
+                    intent.putExtra("REMOTE_USER", (String) msg.obj);
                     intent.putExtra("isclient", true);
-                    ctx.startActivity(intent);*/
+                    ctx.startActivity(intent);
                     break;
             }
         }
@@ -325,7 +348,6 @@ public class SearchFragment extends Fragment {
             TaskService.start(ctx, mHandler);
             TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
         }
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -434,13 +456,13 @@ public class SearchFragment extends Fragment {
         Rename();
         updateWants();
 
+        TaskService.mActivityHandler = mHandler;
+        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+
         search.removeMessages(0);
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
         Message message = search.obtainMessage(sp.getInt(ActivityControlCenter.CMD, 0));
         search.sendMessage(message);
-
-        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
-        TaskService.mActivityHandler = mHandler;
     }
 
     @Override
@@ -453,7 +475,7 @@ public class SearchFragment extends Fragment {
             mBluetoothAdapter.cancelDiscovery();
         }
         // Unregister broadcast listeners
-        //ctx.unregisterReceiver(receiver);
+        ctx.unregisterReceiver(receiver);
         TaskService.stop(ctx);
     }
 

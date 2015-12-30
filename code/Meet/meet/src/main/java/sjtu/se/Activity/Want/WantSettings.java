@@ -244,13 +244,4 @@ public class WantSettings extends Fragment{
         //System.out.println("Resuming........................................");
         this.updateText();
     }
-
-/*    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
-
 }
