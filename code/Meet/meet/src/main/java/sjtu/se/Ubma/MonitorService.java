@@ -5,30 +5,55 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 public class MonitorService extends Service {
-	boolean started = false;
-	BroadcastReceiver receiver;
-	boolean screenOn;
-	Calendar calendar;
-	ActiveTimeData activeTimeData;
-	File file;
+	private BroadcastReceiver receiver;
+	private Calendar calendar;
+	private ActiveTimeData activeTimeData;
+	private File file;
+	private List<AppInfo> aiList;
+	private List<AppInfo> userAiList;
+	private UserBehaviourSummary userBehaviourSummary;
+	private IBinder mBinder = new MyBinder();
 
 	public MonitorService() {
 	}
 
+	public List<AppInfo> getAiList() {
+		return aiList;
+	}
+
+	public List<AppInfo> getUserAiList() {
+		return userAiList;
+	}
+
+	public UserBehaviourSummary getUserBehaviourSummary() {
+		while (userBehaviourSummary == null)
+			Thread.yield();
+		return userBehaviourSummary;
+	}
+
 	@Override
 	public void onCreate() {
+		Log.d("Meet", "MonitorService started");
 		//Log.d("Meet", getFilesDir().toString());
 		//Log.d("Meet", getCacheDir().toString());
+
+		new MyThread().start();
+
 		try {
 			file = new File(getFilesDir(), "activeTimeData");
 			if (file.exists()) {
@@ -45,8 +70,6 @@ public class MonitorService extends Service {
 			e.printStackTrace();
 		}
 
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		screenOn = pm.isScreenOn();
 		calendar = Calendar.getInstance();
 
 		IntentFilter intentFilter = new IntentFilter();
@@ -56,7 +79,33 @@ public class MonitorService extends Service {
 		registerReceiver(receiver, intentFilter);
 	}
 
-	class Receiver extends BroadcastReceiver {
+	private class MyThread extends Thread {
+		@Override
+		public void run() {
+			PackageManager pm = getPackageManager();
+			List<PackageInfo> piList = pm.getInstalledPackages(0);
+			aiList = new ArrayList<>();
+			userAiList = new ArrayList<>();
+			for (PackageInfo pi : piList) {
+				AppInfo appInfo = new AppInfo(
+						pi.packageName,
+						pi.versionName,
+						pi.versionCode,
+						pi.applicationInfo.loadLabel(pm).toString(),
+						pi.applicationInfo.loadIcon(pm),
+						pi.applicationInfo.loadLogo(pm));
+				aiList.add(appInfo);
+				if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
+					userAiList.add(appInfo);
+			}
+			Log.d("Meet", "MonitorService getAppList");
+
+			userBehaviourSummary = new UserBehaviourSummary(MonitorService.this);
+			userBehaviourSummary.appsTags();
+		}
+	}
+
+	private class Receiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Calendar newCalendar = Calendar.getInstance();
@@ -65,7 +114,6 @@ public class MonitorService extends Service {
 
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-				screenOn = false;
 				activeTimeData.addTime(calendar, newCalendar);
 				try {
 					ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
@@ -74,8 +122,6 @@ public class MonitorService extends Service {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} else if (action.equals(Intent.ACTION_SCREEN_ON)) {
-				screenOn = true;
 			}
 			calendar.setTimeInMillis(System.currentTimeMillis());
 		}
@@ -83,8 +129,8 @@ public class MonitorService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		/*Log.d("Meet", String.valueOf(started));
-		if (started) return START_STICKY;
+		Log.d("Meet", "MonitorService onStartCommand");
+		/*if (started) return START_STICKY;
 		started = true;
 		final int interval = 5000;
 		final Handler handler = new Handler();
@@ -108,9 +154,14 @@ public class MonitorService extends Service {
 		unregisterReceiver(receiver);
 	}
 
+	public class MyBinder extends Binder {
+		public MonitorService getService() {
+			return MonitorService.this;
+		}
+	}
+
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO: Return the communication channel to the service.
-		throw new UnsupportedOperationException("Not yet implemented");
+		return mBinder;
 	}
 }

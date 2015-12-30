@@ -2,10 +2,6 @@ package sjtu.se.Ubma;
 
 import android.graphics.drawable.Drawable;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 /**
  * Created by qwordy on 11/22/15.
  * Application infomation
@@ -19,7 +15,8 @@ public class AppInfo {
 		this.appLabel = appLabel;
 		this.appIcon = appIcon;
 		this.appLogo = appLogo;
-		this.category = appClassifier.classify(appLabel);
+		this.category = AppClassifier.classify(appLabel);
+		//Log.d("Meet", this.category.toString());
 	}
 
 	public String packageName;
@@ -28,5 +25,5 @@ public class AppInfo {
 	public String appLabel;
 	public Drawable appIcon;
 	public Drawable appLogo;
-	public appClassifier.Category category;
+	public AppClassifier.Category category;
 }

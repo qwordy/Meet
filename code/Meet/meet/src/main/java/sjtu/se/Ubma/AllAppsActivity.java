@@ -47,7 +47,7 @@ public class AllAppsActivity extends AppCompatActivity {
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Log.d("Meet", String.valueOf(id));
+				//Log.d("Meet", String.valueOf(id));
 				if (id == 0) {
 					if (!firstTime) {
 						listView.setAdapter(adapter);
@@ -98,8 +98,8 @@ public class AllAppsActivity extends AppCompatActivity {
 	void getAppList() {
 		PackageManager pm = getPackageManager();
 		List<PackageInfo> piList = pm.getInstalledPackages(0);
-		List<AppInfo> aiList = new ArrayList();
-		List<AppInfo> userAiList = new ArrayList();
+		List<AppInfo> aiList = new ArrayList<>();
+		List<AppInfo> userAiList = new ArrayList<>();
 		for (PackageInfo pi : piList) {
 			AppInfo appInfo = new AppInfo(
 					pi.packageName,

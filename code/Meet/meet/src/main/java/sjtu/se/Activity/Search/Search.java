@@ -9,6 +9,7 @@ import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Setting.SettingFragment;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
+import sjtu.se.Ubma.MonitorService;
 import sjtu.se.Ubma.UbmaDrawerActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,6 +63,9 @@ public class Search extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+
+        Intent intent = new Intent(this, MonitorService.class);
+        startService(intent);
 	}
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

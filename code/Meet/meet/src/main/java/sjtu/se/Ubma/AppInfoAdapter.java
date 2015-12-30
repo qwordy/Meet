@@ -51,7 +51,8 @@ public class AppInfoAdapter extends BaseAdapter {
 		AppInfo ai = (AppInfo) getItem(position);
 		((ImageView) view.findViewById(R.id.icon)).setImageDrawable(ai.appIcon);
 		((TextView) view.findViewById(R.id.packageName)).setText(ai.packageName);
-		((TextView) view.findViewById(R.id.appLabel)).setText(ai.appLabel);
+		((TextView) view.findViewById(R.id.appLabel))
+				.setText(ai.appLabel + " -> " + ai.category.toString());
 		((TextView) view.findViewById(R.id.version))
 				.setText(ai.versionName + ' ' + ai.versionCode);
 		return view;

@@ -101,7 +101,6 @@ public class UbmaDrawerActivity extends AppCompatActivity
 		actionBar.setTitle(mTitle);
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		restoreActionBar();
