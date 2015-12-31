@@ -10,9 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
-import android.widget.TextView;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -26,11 +24,7 @@ public class MonitorService extends Service {
 	private File file;
 	private List<AppInfo> aiList;
 	private List<AppInfo> userAiList;
-	private UserBehaviourSummary userBehaviourSummary;
 	private IBinder mBinder = new MyBinder();
-
-	public MonitorService() {
-	}
 
 	public List<AppInfo> getAiList() {
 		return aiList;
@@ -40,18 +34,14 @@ public class MonitorService extends Service {
 		return userAiList;
 	}
 
-	public UserBehaviourSummary getUserBehaviourSummary() {
-		while (userBehaviourSummary == null)
-			Thread.yield();
-		return userBehaviourSummary;
-	}
-
 	@Override
 	public void onCreate() {
 		Log.d("Meet", "MonitorService started");
 		//Log.d("Meet", getFilesDir().toString());
 		//Log.d("Meet", getCacheDir().toString());
 
+		aiList = new ArrayList<>();
+		userAiList = new ArrayList<>();
 		new MyThread().start();
 
 		try {
@@ -84,24 +74,28 @@ public class MonitorService extends Service {
 		public void run() {
 			PackageManager pm = getPackageManager();
 			List<PackageInfo> piList = pm.getInstalledPackages(0);
-			aiList = new ArrayList<>();
-			userAiList = new ArrayList<>();
-			for (PackageInfo pi : piList) {
-				AppInfo appInfo = new AppInfo(
-						pi.packageName,
-						pi.versionName,
-						pi.versionCode,
-						pi.applicationInfo.loadLabel(pm).toString(),
-						pi.applicationInfo.loadIcon(pm),
-						pi.applicationInfo.loadLogo(pm));
-				aiList.add(appInfo);
-				if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-					userAiList.add(appInfo);
+			synchronized (aiList) {
+				synchronized (userAiList) {
+					for (PackageInfo pi : piList) {
+						AppInfo appInfo = new AppInfo(
+								pi.packageName,
+								pi.versionName,
+								pi.versionCode,
+								pi.applicationInfo.loadLabel(pm).toString(),
+								pi.applicationInfo.loadIcon(pm),
+								pi.applicationInfo.loadLogo(pm));
+						aiList.add(appInfo);
+						if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
+							userAiList.add(appInfo);
+					}
+				}
 			}
 			Log.d("Meet", "MonitorService getAppList");
 
-			userBehaviourSummary = new UserBehaviourSummary(MonitorService.this);
-			userBehaviourSummary.appsTags();
+			Environment.setAiList(aiList);
+			Environment.setUserAiList(userAiList);
+			Environment.setUserBehaviourSummary(
+					new UserBehaviourSummary(MonitorService.this));
 		}
 	}
 

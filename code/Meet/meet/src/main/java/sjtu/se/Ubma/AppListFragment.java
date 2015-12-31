@@ -106,7 +106,7 @@ public class AppListFragment extends Fragment {
 
 			@Override
 			protected Object doInBackground(Object[] params) {
-				getAppList();
+				getAppList4();
 				return null;
 			}
 		}.execute();
@@ -168,6 +168,11 @@ public class AppListFragment extends Fragment {
 		Bundle bundle = new Bundle();
 
 		context.startService(intent);
+	}
+
+	private void getAppList4() {
+		mAdapter0 = new AppInfoAdapter(mActivity, Environment.getAiList());
+		mAdapter1 = new AppInfoAdapter(mActivity, Environment.getUserAiList());
 	}
 
 	@Override

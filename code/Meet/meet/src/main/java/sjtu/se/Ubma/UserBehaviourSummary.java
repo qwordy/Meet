@@ -17,17 +17,19 @@ public class UserBehaviourSummary implements IUserBehaviourSummary {
 	@Override
 	public List<AppClassifier.Category> appsTags() {
 		List<AppInfo> userAiList = mContext.getUserAiList();
-		Map<AppClassifier.Category, Integer> map = new HashMap<>();
-		for (AppInfo appInfo : userAiList) {
-			if (appInfo.category == AppClassifier.Category.OTHER)
-				continue;
-			Integer v = map.get(appInfo.category);
-			if (v == null)
-				map.put(appInfo.category, 1);
-			else
-				map.put(appInfo.category, v + 1);
+		Map<AppClassifier.Category, Integer> map;
+		synchronized (userAiList) {
+			map = new HashMap<>();
+			for (AppInfo appInfo : userAiList) {
+				if (appInfo.category == AppClassifier.Category.OTHER)
+					continue;
+				Integer v = map.get(appInfo.category);
+				if (v == null)
+					map.put(appInfo.category, 1);
+				else
+					map.put(appInfo.category, v + 1);
+			}
 		}
-
 		List<Map.Entry<AppClassifier.Category, Integer>> entryList = new ArrayList<>(map.entrySet());
 		Collections.sort(entryList, new Comparator<Map.Entry<AppClassifier.Category, Integer>>() {
 			@Override
