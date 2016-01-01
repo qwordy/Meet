@@ -98,6 +98,9 @@ public class ActivityControlCenter {
     public static String IS_SHAKE = "isshake";
     public static String IS_SOUND = "issound";
 
+	// history
+	public static String HISTORY = "history";
+
 	public static void SetOriginName(){
 		savedBTAdapter.setName(savedName);
 	}

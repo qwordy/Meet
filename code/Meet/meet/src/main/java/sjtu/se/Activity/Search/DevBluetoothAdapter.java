@@ -63,6 +63,8 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
 
         public boolean onLongClick(View view) {
             dev=list.get(getAdapterPosition());
+            if(dev.mRemoteDevice == null) return true;
+
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
             String nick = dev.Info.baseinfo.Nick;
             builder.setMessage("确定与 "+ nick +" 建立连接么？");

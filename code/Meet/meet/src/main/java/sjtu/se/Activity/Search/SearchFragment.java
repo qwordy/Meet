@@ -27,6 +27,7 @@ import sjtu.se.Util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 public class SearchFragment extends Fragment {
 
@@ -140,7 +141,7 @@ public class SearchFragment extends Fragment {
     public void setFreshing(){
         device_list_swipe.setColorSchemeResources(R.color.primary);
         device_list_swipe.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener(){
+                new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
                         UpdateDeviceList();
@@ -150,7 +151,7 @@ public class SearchFragment extends Fragment {
         );
         recomm_list_swipe.setColorSchemeResources(R.color.primary);
         recomm_list_swipe.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener(){
+                new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
                         UpdateDeviceList();
@@ -178,6 +179,59 @@ public class SearchFragment extends Fragment {
         }
         lst.add(new DevBluetooth(Addr, Info, in, device));
         adapter.notifyDataSetChanged();
+    }
+
+    public void addHistory(String Addr, String Info, Information in){
+
+        try {
+            int size = history_device_list.size();
+            for (int i = 0; i < size; i++) {
+                if (Addr.equals(history_device_list.get(i).Address)) {
+                    history_device_list.remove(i);
+                    size--;
+                    i--;
+                    break;
+                }
+            }
+            if (size == 30) {
+                history_device_list.remove(29);
+            }
+            history_device_list.add(0, new DevBluetooth(Addr, Info, in, null));
+
+            SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.HISTORY, 0);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.clear().commit();
+
+            for (int i = 0; i < history_device_list.size(); i++) {
+                editor.putString("" + i, history_device_list.get(i).Address + (char) 1 + history_device_list.get(i).Information);
+            }
+            editor.commit();
+
+            HistoryDevListAdapter.notifyDataSetChanged();
+        }
+        catch(Exception e){}
+    }
+
+    public void loadHistory(){
+
+        try {
+            SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.HISTORY, Context.MODE_PRIVATE);
+
+            Map<String, ?> history = sp.getAll();
+            String[] tmp_history = new String[history.size()];
+
+            for (Map.Entry<String, ?> entry : history.entrySet()) {
+                tmp_history[Integer.parseInt(entry.getKey())] = (String) entry.getValue();
+            }
+
+            history_device_list.clear();
+            for(int i = 0 ; i < tmp_history.length ;i++) {
+                String[] str=tmp_history[i].split(""+(char)1);
+                history_device_list.add(new DevBluetooth(str[0],str[1],Format.DeFormat(str[1]),null));
+            }
+            HistoryDevListAdapter.notifyDataSetChanged();
+        }
+        catch(Exception e){}
     }
 
     public void listReset(ArrayList<DevBluetooth> lst,RecyclerView.Adapter adapter){
@@ -311,6 +365,7 @@ public class SearchFragment extends Fragment {
 
                 if (info != null){
                     addItem(device_list, DeviceListAdapter, device.getAddress(), device.getName(), info, device);
+                    addHistory(device.getAddress(),device.getName(),info);
                     if (Match.isInterest(info, full_user) ||
                             Match.isWanted(info, want1) ||
                             Match.isWanted(info, want2) ||
@@ -456,6 +511,7 @@ public class SearchFragment extends Fragment {
 
         Rename();
         updateWants();
+        loadHistory();
 
         TaskService.mActivityHandler = mHandler;
         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
