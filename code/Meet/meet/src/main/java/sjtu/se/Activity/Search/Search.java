@@ -1,9 +1,13 @@
 package sjtu.se.Activity.Search;
 
+import android.annotation.TargetApi;
+import android.nfc.NfcAdapter;
+import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.*;
 import android.widget.*;
 import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.Activity.Setting.SettingFragment;
@@ -13,13 +17,18 @@ import sjtu.se.Ubma.MonitorService;
 import sjtu.se.Ubma.UbmaDrawerActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.KeyEvent;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
+import android.nfc.NfcEvent;
 
 import sjtu.se.Meet.R;
-public class Search extends AppCompatActivity {
+import sjtu.se.UserInformation.ContactCard;
+import sjtu.se.Util.InsertThread;
+
+public class Search extends AppCompatActivity implements CreateNdefMessageCallback, OnNdefPushCompleteCallback {
 
 	private String[] mMenuTitles;
 	private DrawerLayout mDrawerLayout;
@@ -27,6 +36,8 @@ public class Search extends AppCompatActivity {
 	private ListView mDrawerList;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
+
+    NfcAdapter mNfcAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +74,12 @@ public class Search extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (mNfcAdapter != null) {
+            mNfcAdapter.setNdefPushMessageCallback(this, this);
+            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+        }
 
         Intent intent = new Intent(this, MonitorService.class);
         startService(intent);
@@ -111,6 +128,69 @@ public class Search extends AppCompatActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        // onResume gets called after this to handle the intent
+        setIntent(intent);
+    }
+
+    @Override
+	protected void onResume(){
+		super.onResume();
+
+		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+	        processIntent(getIntent());
+	    }
+	}
+
+    void processIntent(Intent intent) {
+        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        // only one message sent during the beam
+        NdefMessage msg = (NdefMessage) rawMsgs[0];
+        // record 0 contains the MIME type, record 1 is the AAR, if present
+        String str = new String(msg.getRecords()[0].getPayload());
+        InsertThread insert = new InsertThread(str,this);
+        if(insert.status){
+            insert.start();
+
+            Toast tst = Toast.makeText(this, "名片已经接收！", Toast.LENGTH_LONG);
+            tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+            tst.show();
+        }
+        else{
+            Toast tst = Toast.makeText(this, "名片接收失败。", Toast.LENGTH_LONG);
+            tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+            tst.show();
+        }
+    }
+
+    @Override
+    public void onNdefPushComplete(NfcEvent event) {
+		// TODO Auto-generated method stub
+        Toast tst = Toast.makeText(this, "名片已经发送！", Toast.LENGTH_LONG);
+        tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+        tst.show();
+	}
+
+	@Override
+    @TargetApi(16)
+	public NdefMessage createNdefMessage(NfcEvent event) {
+		// TODO Auto-generated method stub
+        ContactCard card = new ContactCard();
+        card.setContactCard(this);
+		NdefMessage msg = new NdefMessage(NdefRecord.createMime("application/sjtu.se.Meet", card.toString().getBytes())
+         /**
+          * The Android Application Record (AAR) is commented out. When a device
+          * receives a push with an AAR in it, the application specified in the AAR
+          * is guaranteed to run. The AAR overrides the tag dispatch system.
+          * You can add it back in to guarantee that this
+          * activity starts when receiving a beamed message. For now, this code
+          * uses the tag dispatch system.
+          */
+        );
+        return msg;
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {

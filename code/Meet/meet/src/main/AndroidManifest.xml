@@ -31,6 +31,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <data android:mimeType="application/sjtu.se.Meet" />
+
             </intent-filter>
         </activity>
         
@@ -59,9 +63,6 @@
             android:name="sjtu.se.Activity.Information.ShowInformation"
             android:label="@string/title_activity_show_information"
             android:parentActivityName="sjtu.se.Activity.Search.Search" >
-            <!--meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="sjtu.se.Activity.Search.Search" /-->
         </activity>
 
         <activity
