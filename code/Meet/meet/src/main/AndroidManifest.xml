@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <!--action android:name="android.nfc.action.NDEF_DISCOVERED" /-->
-                <data android:mimeType="application/sjtu.se.Meet" />
+                <!--data android:mimeType="application/sjtu.se.Meet" /-->
 
             </intent-filter>
         </activity>
