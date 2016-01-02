@@ -100,11 +100,14 @@ public class BaseInfoSettings extends Fragment {
 
 	public void baseInfoGenderEdit(View view){
 		new AlertDialog.Builder(ctx).setTitle("选择性别")
-		.setSingleChoiceItems(new String[]{"男", "女"}, 0, new DialogInterface.OnClickListener() {
+		.setSingleChoiceItems(new String[]{"男", "女", "无"}, 0, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 String str = String.valueOf(which);
                 SharedPreferences.Editor editor = baseInfo.edit();
-                editor.putString(ActivityControlCenter.KEY_GENDER, str);
+                if(which ==2)
+                    editor.putString(ActivityControlCenter.KEY_GENDER, "");
+                else
+                    editor.putString(ActivityControlCenter.KEY_GENDER, str);
                 editor.commit();
                 item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(str)]);
                 dialog.dismiss();
@@ -116,32 +119,47 @@ public class BaseInfoSettings extends Fragment {
 		final DatePicker dp = new DatePicker(ctx);
 		new AlertDialog.Builder(ctx).setTitle("选择生日").setView(dp)
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				int y = dp.getYear();
-				int m = dp.getMonth() + 1;
-				int d = dp.getDayOfMonth();
-				String mdate;
-				if (m < 10) {
-					if (d < 10)
-						mdate = String.valueOf(y) + "-0" + String.valueOf(m) + "-0" + String.valueOf(d);
-					else
-						mdate = String.valueOf(y) + "-0" + String.valueOf(m) + "-" + String.valueOf(d);
-				} else {
-					if (d < 10)
-						mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-0" + String.valueOf(d);
-					else
-						mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-" + String.valueOf(d);
-				}
-				SharedPreferences.Editor editor = baseInfo.edit();
-				editor.putString(ActivityControlCenter.KEY_BIRTHDAY, mdate);
-				editor.commit();
-				item_birthday.setText(mdate);
-			}
-		}).setNegativeButton("返回", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                int y = dp.getYear();
+                int m = dp.getMonth() + 1;
+                int d = dp.getDayOfMonth();
+                String mdate;
+                if (m < 10) {
+                    if (d < 10)
+                        mdate = String.valueOf(y) + "-0" + String.valueOf(m) + "-0" + String.valueOf(d);
+                    else
+                        mdate = String.valueOf(y) + "-0" + String.valueOf(m) + "-" + String.valueOf(d);
+                } else {
+                    if (d < 10)
+                        mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-0" + String.valueOf(d);
+                    else
+                        mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-" + String.valueOf(d);
+                }
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_BIRTHDAY, mdate);
+                editor.commit();
+                item_birthday.setText(mdate);
+            }
+        }).setNegativeButton("返回", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
             }
         }).show();
 	}
+
+    public void baseInfoBirthdayDelete(View view){
+        new AlertDialog.Builder(ctx).setTitle("删除生日吗？")
+        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = baseInfo.edit();
+                editor.putString(ActivityControlCenter.KEY_BIRTHDAY, "");
+                editor.commit();
+                item_birthday.setText("");
+
+                dialog.dismiss();
+            }
+        }).setNegativeButton("取消", null).show();
+    }
 
 	public void baseInfoHomelandEdit(View view){
 		//LayoutInflater inflater = getLayoutInflater();
@@ -324,7 +342,10 @@ public class BaseInfoSettings extends Fragment {
             }
         });
         item_gender = (TextView) view.findViewById(R.id.base_info_gender);
-        item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2"))]);
+        if(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2").equals(""))
+            item_gender.setText("");
+        else
+            item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2"))]);
         item_gender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,6 +354,12 @@ public class BaseInfoSettings extends Fragment {
         });
         item_birthday = (TextView) view.findViewById(R.id.base_info_birthday);
         item_birthday.setText(baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, ""));
+        item_birthday.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                baseInfoBirthdayDelete(v);return true;
+            }
+        });
         item_birthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
