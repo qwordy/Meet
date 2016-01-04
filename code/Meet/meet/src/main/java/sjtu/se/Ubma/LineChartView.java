@@ -27,7 +27,7 @@ public class LineChartView extends View {
 	 * 0 for today, 1 for yesterday, ..., 6 for 6 days ago.
 	 * -1 for average.
 	 */
-	public int whichDay;
+	public int whichDay =-1;
 
 	private final int textColor = Color.GRAY;
 
