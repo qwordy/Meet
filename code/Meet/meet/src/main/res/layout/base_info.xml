@@ -1,160 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  xmlns:tools="http://schemas.android.com/tools"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
 			  android:orientation="vertical"
-			  tools:context=".Activity.Information.BaseInfoSettings">
+			  tools:context=".Activity.Information.BaseInfoSettings"
+              android:background="@color/background">
 
-	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F0F0F0" >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
-		<LinearLayout
-            android:id="@+id/LinearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-       	 	android:orientation="vertical"
-            android:background="#FFFFFF" android:visibility="gone">
-	        <TextView
-	            android:id="@+id/textView1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="昵称"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:padding="10dp"
-	            android:textSize="20sp" />
-	        <View  
-			   android:layout_width="fill_parent"  
-			   android:layout_height="2dp" 
-			   android:background="#F0F0F0" />
-	
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="50dp"
-	            android:gravity="center_vertical">
-	
-	            <TextView
-	                android:id="@+id/base_info_nick"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:clickable="true"
-	                android:textColor="#808080"
-	                android:textSize="18sp"
-            		android:padding="12dp" />
-	
-	        </LinearLayout>
-        </LinearLayout>
-
-        <View  
-		   android:layout_width="fill_parent"  
-		   android:layout_height="4dp" 
-		   android:background="#F0F0F0" />
-
+	<ScrollView
+			android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <LinearLayout
-            android:id="@+id/LinearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-       	 	android:orientation="vertical"
-            android:background="#FFFFFF" >  
-	        <TextView
-	            android:id="@+id/textView2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="姓名"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:textSize="20sp"
-	            android:padding="10dp" />
-	        <View  
-			   android:layout_width="fill_parent"  
-			   android:layout_height="2dp" 
-			   android:background="#F0F0F0" />
-	        
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="50dp"
-	            android:gravity="center_vertical" >
-	
-	            <TextView
-	                android:id="@+id/base_info_name"
-	                android:layout_width="0dip"
-	                android:layout_height="wrap_content"
-	                android:layout_weight="1"
-	                android:clickable="true"
-	                android:textColor="#808080"
-	                android:textSize="18sp"
-	            	android:padding="12dp" />
-	
-	            <Switch
-	                android:id="@+id/base_info_name_overt"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:textOff="已隐藏"
-	                android:textOn="已公开"
-	                android:textColorLink="#B5E61D" />
-	
-	        </LinearLayout>
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:focusableInTouchMode="true"
+                android:descendantFocusability="beforeDescendants">
 
-        <View  
-			   android:layout_width="fill_parent"  
-			   android:layout_height="4dp" 
-			   android:background="#F0F0F0" />
-        
-        <LinearLayout
-            android:id="@+id/LinearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-       	 	android:orientation="vertical"
-            android:background="#FFFFFF" >  
-	        <TextView
-	            android:id="@+id/textView3"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="性别"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:textSize="20sp"
-	            android:padding="10dp" />
-	        
-	        <View  
-			   android:layout_width="fill_parent"  
-			   android:layout_height="2dp" 
-			   android:background="#F0F0F0" />
-	
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="50dp"
-	            android:gravity="center_horizontal|center_vertical"
-	            android:orientation="horizontal" >
-	
-	            <TextView
-	                android:id="@+id/base_info_gender"
-	                android:layout_width="0dip"
-	                android:layout_height="wrap_content"
-	                android:layout_weight="1"
-	                android:clickable="true"
-	                android:textColor="#808080"
-	                android:textSize="18sp"
-	            	android:padding="12dp" />
-	
-	            <Switch
-	                android:id="@+id/base_info_gender_overt"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:textOff="已隐藏"
-	                android:textOn="已公开"
-	                android:textColorLink="#B5E61D"  />
-	
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/Theme.MyTheme.InputItem"
+                    android:orientation="horizontal">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="姓名："/>
+                <EditText
+                        android:id="@+id/base_info_name"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="text"
+                        android:imeOptions="actionDone"
+                        android:background="@null"/>
+                <ToggleButton
+                        android:id="@+id/base_info_name_overt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textOff="@string/hide"
+                        android:textOn="@string/overt"/>
+            </LinearLayout>
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#F0F0F0" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/Theme.MyTheme.InputItem"
+                    android:orientation="horizontal">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="性别："/>
+                <Spinner
+                        android:id="@+id/base_info_gender"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusableInTouchMode="true"/>
+	            <ToggleButton
+                        android:id="@+id/base_info_gender_overt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textOff="@string/hide"
+                        android:textOn="@string/overt"/>
 	        </LinearLayout>
-        </LinearLayout>
 		
         <View  
 			   android:layout_width="fill_parent"  
