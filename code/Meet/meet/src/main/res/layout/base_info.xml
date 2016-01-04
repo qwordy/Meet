@@ -195,7 +195,7 @@
 	                android:clickable="true"
 	                android:textColor="#808080"
 	                android:textSize="18sp"
-	                android:padding="12dp" />
+	                android:padding="12dp" android:longClickable="true"/>
 	
 	            <Switch
 	                android:id="@+id/base_info_birthday_overt"

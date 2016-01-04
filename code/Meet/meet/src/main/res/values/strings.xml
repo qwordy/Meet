@@ -17,7 +17,7 @@
 	<string name="pref_nickname_edit_title">输入自定义名称</string>
 	<string name="pref_sound_title">音效提示</string>
 	<string name="pref_shake_title">震动提示</string>
-	<string name="pref_analysis_title">行为分析</string>
+	<string name="pref_analysis_title">系统标签</string>
 	<string name="on">开启</string>
 	<string name="off">关闭</string>
 	<string name="empty">未设置</string>

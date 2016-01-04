@@ -66,10 +66,13 @@ public class ShowWants extends AppCompatActivity {
 
     public void wantGenderEdit(View view){
         new AlertDialog.Builder(this).setTitle("选择性别")
-                .setSingleChoiceItems(new String[]{"男", "女"}, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(new String[]{"男", "女", "不限"}, 0, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String str = String.valueOf(which);
-                        want.gender = str;
+                        if(which == 2)
+                            want.gender = "";
+                        else
+                            want.gender = str;
                         SharedPreferences.Editor editor = wantSettings.edit();
                         editor.putString(key, want.toString());
                         editor.commit();

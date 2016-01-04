@@ -174,7 +174,6 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 	}
 
 	@Override
-    @TargetApi(16)
 	public NdefMessage createNdefMessage(NfcEvent event) {
 		// TODO Auto-generated method stub
         ContactCard card = new ContactCard();
