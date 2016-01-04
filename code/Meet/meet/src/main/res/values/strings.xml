@@ -73,6 +73,13 @@
 		<item>我的需求</item>
 		<item>行为分析</item>
 	</string-array>
+
+	<string-array name="gender_array">
+		<item>男</item>
+		<item>女</item>
+		<item>无</item>
+	</string-array>
+
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
 </resources>
