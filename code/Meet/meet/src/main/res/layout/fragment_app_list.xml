@@ -13,11 +13,12 @@
 			  android:entries="@array/appType"
 			  style="@android:style/Widget.Holo.Light.Spinner"/>
 		<TextView android:id="@+id/appListText"
-				  android:layout_width="match_parent"
+				  android:layout_width="0dp"
 				  android:layout_height="match_parent"
 				  android:text="@string/loading"
 				  android:gravity="center|end"
-				  android:padding="5dp"/>
+				  android:layout_weight="1"
+				  android:padding="10dp"/>
 	</LinearLayout>
 
 	<ListView android:id="@+id/appListView"

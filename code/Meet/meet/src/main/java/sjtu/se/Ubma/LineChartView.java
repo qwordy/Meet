@@ -20,9 +20,19 @@ import java.io.ObjectInputStream;
  */
 
 public class LineChartView extends View {
+
 	private Paint paint;
-	private final int textColor = Color.DKGRAY;
+
+	/**
+	 * 0 for today, 1 for yesterday, ..., 6 for 6 days ago.
+	 * -1 for average.
+	 */
+	public int whichDay;
+
+	private final int textColor = Color.GRAY;
+
 	private final int chartColor = 0xff33b5e5;
+
 	private final int backgroundColor = 0xfffafafa;
 
 	public LineChartView(Context context) {
@@ -46,7 +56,7 @@ public class LineChartView extends View {
 	protected void onDraw(Canvas canvas) {
 		int height, width, i;
 
-		//Log.d("Meet", "draw");
+		Log.d("Meet", "draw");
 		super.onDraw(canvas);
 		canvas.drawColor(backgroundColor);
 		height = getHeight();
@@ -103,9 +113,9 @@ public class LineChartView extends View {
 				paint);
 
 		// Prepare data
-		double[] data = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				15, 21, 5, 2, 0, 0, 13, 15, 14, 0, 0, 0};
-		//double[] data = prepareData();
+		//double[] data = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		//		15, 21, 5, 2, 0, 0, 13, 15, 14, 0, 0, 0};
+		double[] data = prepareData();
 
 		// Draw line chart
 		paint.setColor(chartColor);
@@ -119,19 +129,12 @@ public class LineChartView extends View {
 	}
 
 	private double[] prepareData() {
-		ActiveTimeData activeTimeData = null;
-		try {
-			ObjectInputStream input = new ObjectInputStream(
-					new FileInputStream(new File(getContext().getFilesDir(), "activeTimeData")));
-			activeTimeData = (ActiveTimeData) input.readObject();
-			input.close();
-		} catch (Exception e) {
-			Log.d("Meet", "prepareData error");
-			e.printStackTrace();
-		}
+		ActiveTimeData activeTimeData = Environment.activeTimeData;
 		if (activeTimeData == null)
-			return new double[24];
-		else
+			activeTimeData = new ActiveTimeData();
+		if (whichDay == -1)
 			return activeTimeData.averageActiveTime();
+		else
+			return activeTimeData.dayActiveTime(whichDay);
 	}
 }

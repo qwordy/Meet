@@ -1,5 +1,6 @@
 package sjtu.se.Ubma;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -15,7 +16,9 @@ public class Environment {
 
 	private static UserBehaviourSummary userBehaviourSummary;
 
-	private static String activeTimeFilePath;
+	public static File activeTimeFile;
+
+	public static ActiveTimeData activeTimeData;
 
 	public static void setAiList(List<AppInfo> aiList) {
 		Environment.aiList = aiList;

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import sjtu.se.Meet.R;
 
 /**
@@ -16,6 +18,8 @@ import sjtu.se.Meet.R;
  */
 
 public class ActiveTimeFragment extends Fragment {
+	LineChartView mLineChartView;
+
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,6 +30,29 @@ public class ActiveTimeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_active_time, container, false);
+	}
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		View view = getView();
+		if (view == null) return;
+		mLineChartView = (LineChartView) view.findViewById(R.id.lineChartView);
+		Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Log.d("Meet", String.valueOf(position));
+				mLineChartView.whichDay = position - 1;
+				mLineChartView.invalidate();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
 	}
 
 	@Override

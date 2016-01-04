@@ -2,7 +2,7 @@ package sjtu.se.Ubma;
 
 import android.util.Log;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -11,21 +11,62 @@ import java.util.Calendar;
  * ActiveTimeData
  */
 
-public class ActiveTimeData implements Serializable {
-	private int size;	// actual size
-	private int sampleSize;
-	private int tail;	// tail position
-	private int tailDay;
-	private final int MAX = 30;
-	private double[][] times = new double[MAX][24];	// in ms
+public class ActiveTimeData {
 
+	private int tail;	// tail position
+
+	private int tailDay;
+
+	private int[][] times = new int[7][24];	// in ms
+
+	private double[] ansTimes = new double[24];
+
+	/**
+	 * Construct an instance from storage or construct a new instance.
+	 */
 	public ActiveTimeData() {
-		size = 1;
-		tail = 0;
+		File file = Environment.activeTimeFile;
+		if (file.exists()) {
+			try {
+				DataInputStream input = new DataInputStream(
+						new BufferedInputStream(new FileInputStream(file)));
+				tail = input.readInt();
+				tailDay = input.readInt();
+				for (int i = 0; i < 7; i++)
+					for (int j = 0; j < 24; j++)
+						times[i][j] = input.readInt();
+				input.close();
+			} catch (Exception e) {
+				Log.d("Meet", "new ActiveTimeData fail");
+				e.printStackTrace();
+			}
+		} else {
+			tailDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			writeInstance();
+		}
 	}
 
-	public void setSampleSize(int sampleSize) {
-		this.sampleSize = sampleSize;
+	/**
+	 * Write the instance to storage.
+	 * @return 0 if sucess.
+	 */
+	public int writeInstance() {
+		try {
+			File file = Environment.activeTimeFile;
+			DataOutputStream output = new DataOutputStream(
+					new BufferedOutputStream(new FileOutputStream(file)));
+			output.writeInt(tail);
+			output.writeInt(tailDay);
+			for (int i = 0; i < 7; i++)
+				for (int j = 0; j < 24; j++)
+					output.writeInt(times[i][j]);
+			output.close();
+			return 0;
+		} catch (Exception e) {
+			Log.d("Meet", "writeInstance fail");
+			e.printStackTrace();
+			return 1;
+		}
 	}
 
 	public void addTime(Calendar begin, Calendar end) {
@@ -42,7 +83,7 @@ public class ActiveTimeData implements Serializable {
 		if (day1 != tailDay) {
 			tailDay = day1;
 			tail++;
-			if (tail == MAX) tail = 0;
+			if (tail == 7) tail = 0;
 			Arrays.fill(times[tail], 0);
 		}
 		if (day0 == day1) {
@@ -74,30 +115,39 @@ public class ActiveTimeData implements Serializable {
 				calendar.get(Calendar.MILLISECOND);
 	}
 
-	// Return average active time in minite
+	/**
+	 * @return Average active time in minite
+	 */
 	public double[] averageActiveTime() {
-		int i, j, n, count, hour;
-		double averageTimes[] = new double[24];
+		int i, j, hour;
 
-		n = Math.min(size, sampleSize);
-		count = 0;
-		i = tail;
-		while (count < n) {
+		Arrays.fill(ansTimes, 0);
+
+		for (i = 0; i < 7; i++)
 			for (j = 0; j < 24; j++)
-				averageTimes[j] += times[i][j];
-			count++;
-			i--;
-			if (i < 0) i = MAX - 1;
-		}
+				ansTimes[j] += times[i][j];
+
 		Calendar calendar = Calendar.getInstance();
 		hour = calendar.get(Calendar.HOUR_OF_DAY);
-		for (i = 0; i < hour; i++)
-			averageTimes[i] = averageTimes[i] / n / 60000;
-		for (i = hour; i < 24; i++)
-			averageTimes[i] = averageTimes[i] / (n - 1) / 60000;
+		for (i = 0; i <= hour; i++)
+			ansTimes[i] = ansTimes[i] / 7.0 / 60000;
+		for (i = hour + 1; i < 24; i++)
+			ansTimes[i] = ansTimes[i] / 6.0 / 60000;
 
-		Log.d("Meet", Arrays.toString(averageTimes));
-		return averageTimes;
+		Log.d("Meet", Arrays.toString(ansTimes));
+		return ansTimes;
 	}
 
+	/**
+	 * @param dayBefore Number of days before today (0 <= day <= 6).
+	 * @return Active time on the day
+	 */
+	public double[] dayActiveTime(int dayBefore) {
+		int i, p;
+		p = tail - dayBefore;
+		if (p < 0) p += 7;
+		for (i = 0; i < 24; i++)
+			ansTimes[i] = times[p][i] / 60000.0;
+		return ansTimes;
+	}
 }

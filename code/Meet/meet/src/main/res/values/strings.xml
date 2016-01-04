@@ -50,7 +50,7 @@
 	<string name="title_activity_all_apps">All apps</string>
 	<string name="loading">获取中..</string>
 	<string name="title_activity_active_time">Active time</string>
-	<string name="active_time_distribution">用户日平均使用手机时间分布</string>
+	<string name="active_time_distribution">用户使用手机时间分布</string>
 	<string name="title_activity_ubma_drawer">UbmaDrawerActivity</string>
 
 	<string name="ubma_title">用户行为分析</string>
