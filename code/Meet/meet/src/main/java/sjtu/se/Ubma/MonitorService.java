@@ -21,7 +21,6 @@ public class MonitorService extends Service {
 	private BroadcastReceiver receiver;
 	private Calendar calendar;
 	private ActiveTimeData activeTimeData;
-	private File file;
 	private List<AppInfo> aiList;
 	private List<AppInfo> userAiList;
 	private IBinder mBinder = new MyBinder();
@@ -38,30 +37,15 @@ public class MonitorService extends Service {
 	public void onCreate() {
 		Log.d("Meet", "MonitorService started");
 		//Log.d("Meet", getFilesDir().toString());
-		//Log.d("Meet", getCacheDir().toString());
 
+		Environment.activeTimeFile = new File(getFilesDir(), "activeTimeData");
+		Environment.activeTimeData = activeTimeData = new ActiveTimeData();
 		aiList = new ArrayList<>();
 		userAiList = new ArrayList<>();
+		calendar = Calendar.getInstance();
 		new MyThread().start();
 
-		try {
-			file = new File(getFilesDir(), "activeTimeData");
-			if (file.exists()) {
-				ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
-				activeTimeData = (ActiveTimeData) input.readObject();
-				input.close();
-			} else {
-				activeTimeData = new ActiveTimeData();
-				ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
-				output.writeObject(activeTimeData);
-				output.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		calendar = Calendar.getInstance();
-
+		// Screen on/off receiver
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		intentFilter.addAction(Intent.ACTION_SCREEN_ON);
@@ -109,13 +93,7 @@ public class MonitorService extends Service {
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				activeTimeData.addTime(calendar, newCalendar);
-				try {
-					ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
-					output.writeObject(activeTimeData);
-					output.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				activeTimeData.writeInstance();
 			}
 			calendar.setTimeInMillis(System.currentTimeMillis());
 		}

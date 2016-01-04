@@ -4,4 +4,14 @@
 		<item>所有应用</item>
 		<item>用户应用</item>
 	</string-array>
+	<string-array name="activeTimeType">
+		<item>7日平均</item>
+		<item>今日</item>
+		<item>昨日</item>
+		<item>2日前</item>
+		<item>3日前</item>
+		<item>4日前</item>
+		<item>5日前</item>
+		<item>6日前</item>
+	</string-array>
 </resources>
