@@ -333,12 +333,12 @@ public class BaseInfoSettings extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == KeyEvent.ACTION_DOWN || actionId == EditorInfo.IME_ACTION_DONE
-                    || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
                     String str = v.getText().toString();
                     SharedPreferences.Editor editor = baseInfo.edit();
                     editor.putString(ActivityControlCenter.KEY_NAME, str);
                     editor.apply();
-                    InputMethodManager imm =(InputMethodManager)ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     v.clearFocus();
                     //Log.e(" ", "没有响应");
@@ -362,25 +362,26 @@ public class BaseInfoSettings extends Fragment {
         item_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                String[] languages = getResources().getStringArray(R.array.gender_array);
-
+                //String[] languages = getResources().getStringArray(R.array.gender_array);
+                String str = String.valueOf(pos);
+                SharedPreferences.Editor editor = baseInfo.edit();
+                if (pos == 2)
+                    editor.putString(ActivityControlCenter.KEY_GENDER, "");
+                else
+                    editor.putString(ActivityControlCenter.KEY_GENDER, str);
+                editor.commit();
+                //item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(str)]);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Another interface callback
             }
         });
-
-        /*if(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2").equals(""))
-            item_gender.setText("");
+        if(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2").equals(""))
+            item_gender.setSelection(2);
         else
-            item_gender.setText(ActivityControlCenter.genders[Integer.parseInt(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2"))]);
-        item_gender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                baseInfoGenderEdit(v);
-            }
-        });*/
+            item_gender.setSelection(Integer.parseInt(baseInfo.getString(ActivityControlCenter.KEY_GENDER, "2")));
 
         item_birthday = (TextView) view.findViewById(R.id.base_info_birthday);
         item_birthday.setText(baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, ""));
