@@ -6,7 +6,9 @@ import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import sjtu.se.Activity.ActivityControlCenter;
+import sjtu.se.Meet.R;
 
 import java.util.Calendar;
 
@@ -46,5 +48,7 @@ public class DatePickerFragment extends DialogFragment
         SharedPreferences.Editor editor = baseInfo.edit();
         editor.putString(ActivityControlCenter.KEY_BIRTHDAY, mdate);
         editor.commit();
+        ((TextView)(getActivity().findViewById(R.id.base_info_birthday)))
+                .setText(baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, ""));
     }
 }

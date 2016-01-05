@@ -11,6 +11,7 @@
 			android:layout_width="match_parent"
             android:layout_height="match_parent">
         <LinearLayout
+                android:id="@+id/focus_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -59,8 +60,7 @@
                         android:id="@+id/base_info_gender"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:focusableInTouchMode="true"/>
+                        android:layout_weight="1"/>
 	            <ToggleButton
                         android:id="@+id/base_info_gender_overt"
                         android:layout_width="wrap_content"
@@ -184,57 +184,42 @@
                         android:textOff="@string/hide"
                         android:textOn="@string/overt"/>
             </LinearLayout>
+            <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#F0F0F0" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" 
-            android:background="#FFFFFF">
-            
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:padding="14dp"
-                android:text="联系方式"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="20sp" />
-            
-            <View  
-			   android:layout_width="fill_parent"  
-			   android:layout_height="4dp" 
-			   android:background="#F0F0F0" />
-            
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:onClick="goToEducationInfo"
-                android:padding="14dp"
-                android:text="教育背景"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="20sp" />
-            
-            <View  
-			   android:layout_width="fill_parent"  
-			   android:layout_height="4dp" 
-			   android:background="#F0F0F0" />
-            
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:onClick="goToHobbyInfo"
-                android:padding="14dp"
-                android:text="兴趣爱好"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="20sp" />
-            
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <Button
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="5dp"
+                        android:background="#ffffff"
+                        android:text="联系方式"/>
+                <Button
+                        android:id="@+id/textView10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="5dp"
+                        android:background="#ffffff"
+                        android:text="教育背景"/>
+                <Button
+                        android:id="@+id/textView11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="5dp"
+                        android:background="#ffffff"
+                        android:text="兴趣爱好"/>
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
 </LinearLayout>
