@@ -27,9 +27,10 @@ import sjtu.se.Util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment{
 
     private static final int REQUEST_FOR_ENABLE = 1;
 
@@ -81,21 +82,21 @@ public class SearchFragment extends Fragment {
         DeviceList.setHasFixedSize(true);
         DeviceList.setLayoutManager(new LinearLayoutManager(ctx));
         device_list = new ArrayList<DevBluetooth>();
-        DeviceListAdapter = new DevBluetoothAdapter(ctx,device_list,mHandler);
+        DeviceListAdapter = new DevBluetoothAdapter(ctx,device_list,mHandler,search);
         DeviceList.setAdapter(DeviceListAdapter);
 
         RecommendDeviceList = (RecyclerView)view.findViewById(R.id.RecommendDeviceList);
         RecommendDeviceList.setHasFixedSize(true);
         RecommendDeviceList.setLayoutManager(new LinearLayoutManager(ctx));
         recommend_device_list = new ArrayList<DevBluetooth>();
-        RecommendDevListAdapter = new DevBluetoothAdapter(ctx,recommend_device_list,mHandler);
+        RecommendDevListAdapter = new DevBluetoothAdapter(ctx,recommend_device_list,mHandler,search);
         RecommendDeviceList.setAdapter(RecommendDevListAdapter);
 
         HistoryDeviceList = (RecyclerView)view.findViewById(R.id.HistoryDeviceList);
         HistoryDeviceList.setHasFixedSize(true);
         HistoryDeviceList.setLayoutManager(new LinearLayoutManager(ctx));
         history_device_list = new ArrayList<DevBluetooth>();
-        HistoryDevListAdapter = new DevBluetoothAdapter(ctx,history_device_list,mHandler);
+        HistoryDevListAdapter = new DevBluetoothAdapter(ctx,history_device_list,mHandler,search);
         HistoryDeviceList.setAdapter(HistoryDevListAdapter);
 
         HistoryDeviceList.setVisibility(View.GONE);
@@ -333,6 +334,7 @@ public class SearchFragment extends Fragment {
 
                 case TaskService.Task.TASK_CANCEL:
                     TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    search.sendMessage(search.obtainMessage(0));
                     builder = new AlertDialog.Builder(ctx);
                     builder.setMessage("很抱歉，对方取消连接");
                     builder.setTitle("提示");

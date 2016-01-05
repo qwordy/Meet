@@ -9,6 +9,10 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Meet.R;
+import sjtu.se.Ubma.AppClassifier;
+import sjtu.se.Ubma.Environment;
+
+import java.util.List;
 
 public class SettingFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -106,15 +110,37 @@ public class SettingFragment extends PreferenceFragment
             }
         }
         if(key.equals(KEY_ANALYSIS_SWITCH)) {
+            SharedPreferences baseinfo = getActivity().getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
+            SharedPreferences.Editor editor = baseinfo.edit();
+
             if(sharedPreferences.getBoolean(key,false)) {
-                SharedPreferences.Editor editor = systemSettings.edit();
-                editor.putBoolean(ActivityControlCenter.IS_ANALYSE, true);
-                editor.commit();
+                try {
+                    String str = " [ ";
+                    List<AppClassifier.Category> list = Environment.getUserBehaviourSummary().appsTags();
+                    for (int i = 0; i < list.size(); i++) {
+                        str += list.get(i).toString()+ " ";
+                    }
+
+                    str += "]";
+                    String keyword = baseinfo.getString(ActivityControlCenter.KEY_KEYWORDS, "") + str;
+                    editor.putString(ActivityControlCenter.KEY_KEYWORDS, keyword);
+                    editor.commit();
+                }catch(Exception e){}
             }
             else {
-                SharedPreferences.Editor editor = systemSettings.edit();
-                editor.putBoolean(ActivityControlCenter.IS_ANALYSE, false);
-                editor.commit();
+                try {
+                    String keyword = baseinfo.getString(ActivityControlCenter.KEY_KEYWORDS, "");
+                    int l = keyword.indexOf("[");
+                    int r = keyword.indexOf("]");
+                    if( l > 0 )
+                        if(keyword.charAt(l-1) == ' ')
+                            l-=1;
+                    String left = keyword.substring(0, l);
+                    String right = keyword.substring(r + 1, keyword.length());
+
+                    editor.putString(ActivityControlCenter.KEY_KEYWORDS, left + right);
+                    editor.commit();
+                }catch(Exception e){}
             }
         }
     }

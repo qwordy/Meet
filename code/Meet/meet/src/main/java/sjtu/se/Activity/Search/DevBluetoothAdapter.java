@@ -29,6 +29,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
     private ArrayList<DevBluetooth> lst;
     private Context ctx;
     public static Handler mHandler;
+    public static Handler search;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
     {
@@ -72,12 +73,15 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
+                        Toast tst = Toast.makeText(ctx, "正在连接请稍等...", Toast.LENGTH_LONG);
+                        tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+                        tst.show();
 
-                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
-                    Toast tst = Toast.makeText(ctx, "正在连接请稍等...", Toast.LENGTH_LONG);
-                    tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
-                    tst.show();
-
+                        search.removeMessages(0);
+                    }
+                    catch(Exception e){}
                     dialog.dismiss();
                 }
             });
@@ -92,10 +96,11 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
         }
     }
 
-    public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l,Handler handler){
+    public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l,Handler handler,Handler search){
         this.lst=l;
         this.ctx = context;
         this.mHandler = handler;
+        this.search = search;
     }
 
     public long getItemId(int position) {
