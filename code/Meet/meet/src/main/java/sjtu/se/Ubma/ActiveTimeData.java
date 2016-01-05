@@ -41,6 +41,7 @@ public class ActiveTimeData {
 				e.printStackTrace();
 			}
 		} else {
+			tail = 0;
 			tailDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 			writeInstance();
 		}
@@ -134,12 +135,12 @@ public class ActiveTimeData {
 		for (i = hour + 1; i < 24; i++)
 			ansTimes[i] = ansTimes[i] / 6.0 / 60000;
 
-		Log.d("Meet", Arrays.toString(ansTimes));
+		//Log.d("Meet", Arrays.toString(ansTimes));
 		return ansTimes;
 	}
 
 	/**
-	 * @param dayBefore Number of days before today (0 <= day <= 6).
+	 * @param dayBefore Number of days before today (0 <= dayBefore <= 6).
 	 * @return Active time on the day
 	 */
 	public double[] dayActiveTime(int dayBefore) {

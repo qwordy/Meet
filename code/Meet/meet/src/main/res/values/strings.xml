@@ -49,16 +49,17 @@
 	<string name="time_in_use">Time in use</string>
 	<string name="title_activity_all_apps">All apps</string>
 	<string name="loading">获取中..</string>
+	<string name="app_analysis">排名</string>
 	<string name="title_activity_active_time">Active time</string>
 	<string name="active_time_distribution">用户使用手机时间分布</string>
 	<string name="title_activity_ubma_drawer">UbmaDrawerActivity</string>
 
 	<string name="ubma_title">用户行为分析</string>
-	<string name="title_section1">使用时间</string>
-	<string name="title_section2">应用列表</string>
-	<string name="title_section3">偏好应用</string>
-	<string name="title_section4">关于</string>
-    <string name="title_section5">返回</string>
+	<string name="app_list">应用列表</string>
+	<string name="preferenced_app">偏好应用</string>
+	<string name="active_time">使用时间</string>
+	<string name="active_time_analysis">时间分析</string>
+	<string name="ubma_about">关于</string>
 
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
@@ -75,4 +76,5 @@
 	</string-array>
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
+
 </resources>

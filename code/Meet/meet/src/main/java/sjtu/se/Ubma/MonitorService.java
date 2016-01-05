@@ -21,17 +21,7 @@ public class MonitorService extends Service {
 	private BroadcastReceiver receiver;
 	private Calendar calendar;
 	private ActiveTimeData activeTimeData;
-	private List<AppInfo> aiList;
-	private List<AppInfo> userAiList;
 	private IBinder mBinder = new MyBinder();
-
-	public List<AppInfo> getAiList() {
-		return aiList;
-	}
-
-	public List<AppInfo> getUserAiList() {
-		return userAiList;
-	}
 
 	@Override
 	public void onCreate() {
@@ -40,8 +30,8 @@ public class MonitorService extends Service {
 
 		Environment.activeTimeFile = new File(getFilesDir(), "activeTimeData");
 		Environment.activeTimeData = activeTimeData = new ActiveTimeData();
-		aiList = new ArrayList<>();
-		userAiList = new ArrayList<>();
+		Environment.setAiList(new ArrayList<AppInfo>());
+		Environment.setUserAiList(new ArrayList<AppInfo>());
 		calendar = Calendar.getInstance();
 		new MyThread().start();
 
@@ -56,30 +46,27 @@ public class MonitorService extends Service {
 	private class MyThread extends Thread {
 		@Override
 		public void run() {
+			List<AppInfo> aiList = Environment.getAiList();
+			List<AppInfo> userAiList = Environment.getUserAiList();
 			PackageManager pm = getPackageManager();
 			List<PackageInfo> piList = pm.getInstalledPackages(0);
-			synchronized (aiList) {
-				synchronized (userAiList) {
-					for (PackageInfo pi : piList) {
-						AppInfo appInfo = new AppInfo(
-								pi.packageName,
-								pi.versionName,
-								pi.versionCode,
-								pi.applicationInfo.loadLabel(pm).toString(),
-								pi.applicationInfo.loadIcon(pm),
-								pi.applicationInfo.loadLogo(pm));
-						aiList.add(appInfo);
-						if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-							userAiList.add(appInfo);
-					}
-				}
+			for (PackageInfo pi : piList) {
+				AppInfo appInfo = new AppInfo(
+						pi.packageName,
+						pi.versionName,
+						pi.versionCode,
+						pi.applicationInfo.loadLabel(pm).toString(),
+						pi.applicationInfo.loadIcon(pm),
+						pi.applicationInfo.loadLogo(pm));
+				aiList.add(appInfo);
+				if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
+					userAiList.add(appInfo);
 			}
 			Log.d("Meet", "MonitorService getAppList");
 
 			Environment.setAiList(aiList);
 			Environment.setUserAiList(userAiList);
-			Environment.setUserBehaviourSummary(
-					new UserBehaviourSummary(MonitorService.this));
+			Environment.setUserBehaviourSummary(new UserBehaviourSummary());
 		}
 	}
 

@@ -1,17 +1,11 @@
 package sjtu.se.Ubma;
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,25 +16,19 @@ import android.view.ViewGroup;
 import android.widget.*;
 import sjtu.se.Meet.R;
 
-import java.util.ArrayList;
-import java.util.List;
+//import sjtu.se.Meet.R;
 
 /**
  * Created by qwordy on 12/8/15.
- *
+ * AppListFragment
  */
 
 public class AppListFragment extends Fragment {
 	private Activity mActivity;
 	private ListView mListView;
 	private AppInfoAdapter mAdapter0, mAdapter1;
-	Spinner mSpinner;
-	MonitorService service;
-
-	/*public static AppListFragment newInstance(Context context) {
-		AppListFragment fragment = new AppListFragment();
-		Bundle bundle = new Bundle();
-	}*/
+	private Spinner mSpinner;
+	private Button mButton;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,9 +49,16 @@ public class AppListFragment extends Fragment {
 		init();
 	}
 
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		((UbmaDrawerActivity)activity).setTitle(getString(R.string.app_list));
+	}
+
 	private void init() {
 		View view = getView();
 		if (view == null) return;
+
 		mSpinner = (Spinner) view.findViewById(R.id.spinner);
 		mSpinner.setEnabled(false);
 		mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -79,9 +74,7 @@ public class AppListFragment extends Fragment {
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-
-			}
+			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 
 		mListView = (ListView) getView().findViewById(R.id.appListView);
@@ -102,6 +95,7 @@ public class AppListFragment extends Fragment {
 				else
 					setAppListView(mAdapter1);
 				mSpinner.setEnabled(true);
+				mButton.setEnabled(true);
 			}
 
 			@Override
@@ -110,6 +104,25 @@ public class AppListFragment extends Fragment {
 				return null;
 			}
 		}.execute();
+
+		mButton = (Button) view.findViewById(R.id.button);
+		mButton.setEnabled(false);
+		mButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				UserBehaviourSummary userBehaviourSummary = Environment.getUserBehaviourSummary();
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				if (mSpinner.getSelectedItemPosition() == 0)
+					builder.setTitle("所有应用分类排名")
+							.setMessage(userBehaviourSummary.allAppSortToString());
+				else
+					builder.setTitle("用户应用分类排名")
+							.setMessage(userBehaviourSummary.userAppSortToString());
+				builder.setPositiveButton("确定", null);
+				builder.setNegativeButton("取消", null);
+				builder.create().show();
+			}
+		});
 	}
 
 	private void setAppListView(AppInfoAdapter adapter) {
@@ -119,65 +132,60 @@ public class AppListFragment extends Fragment {
 				"共" + adapter.getCount() + "个应用");
 	}
 
-	private void getAppList() {
-		PackageManager pm = mActivity.getPackageManager();
-		List<PackageInfo> piList = pm.getInstalledPackages(0);
-		List<AppInfo> aiList = new ArrayList<>();
-		List<AppInfo> userAiList = new ArrayList<>();
-		for (PackageInfo pi : piList) {
-			AppInfo appInfo = new AppInfo(
-					pi.packageName,
-					pi.versionName,
-					pi.versionCode,
-					pi.applicationInfo.loadLabel(pm).toString(),
-					pi.applicationInfo.loadIcon(pm),
-					pi.applicationInfo.loadLogo(pm));
-			aiList.add(appInfo);
-			if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-				userAiList.add(appInfo);
-		}
-		mAdapter0 = new AppInfoAdapter(mActivity, aiList);
-		mAdapter1 = new AppInfoAdapter(mActivity, userAiList);
-	}
-
-	private void getAppList2() {
-		Context context = getContext();
-		Intent intent = new Intent(context, MonitorService.class);
-		ServiceConnection conn = new ServiceConnection() {
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder binder) {
-				service = ((MonitorService.MyBinder) binder).getService();
-			}
-
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				service = null;
-			}
-		};
-		context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
-
-		mAdapter0 = new AppInfoAdapter(mActivity, service.getAiList());
-		mAdapter1 = new AppInfoAdapter(mActivity, service.getUserAiList());
-
-		context.unbindService(conn);
-	}
-
-	private void getAppList3() {
-		Context context = getContext();
-		Intent intent = new Intent(context, MonitorService.class);
-		Bundle bundle = new Bundle();
-
-		context.startService(intent);
-	}
-
 	private void getAppList4() {
 		mAdapter0 = new AppInfoAdapter(mActivity, Environment.getAiList());
 		mAdapter1 = new AppInfoAdapter(mActivity, Environment.getUserAiList());
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		((UbmaDrawerActivity)activity).setTitle(getString(R.string.title_section2));
-	}
+//	private void getAppList() {
+//		PackageManager pm = mActivity.getPackageManager();
+//		List<PackageInfo> piList = pm.getInstalledPackages(0);
+//		List<AppInfo> aiList = new ArrayList<>();
+//		List<AppInfo> userAiList = new ArrayList<>();
+//		for (PackageInfo pi : piList) {
+//			AppInfo appInfo = new AppInfo(
+//					pi.packageName,
+//					pi.versionName,
+//					pi.versionCode,
+//					pi.applicationInfo.loadLabel(pm).toString(),
+//					pi.applicationInfo.loadIcon(pm),
+//					pi.applicationInfo.loadLogo(pm));
+//			aiList.add(appInfo);
+//			if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
+//				userAiList.add(appInfo);
+//		}
+//		mAdapter0 = new AppInfoAdapter(mActivity, aiList);
+//		mAdapter1 = new AppInfoAdapter(mActivity, userAiList);
+//	}
+//
+//	private void getAppList2() {
+//		Context context = getContext();
+//		Intent intent = new Intent(context, MonitorService.class);
+//		ServiceConnection conn = new ServiceConnection() {
+//			@Override
+//			public void onServiceConnected(ComponentName name, IBinder binder) {
+//				service = ((MonitorService.MyBinder) binder).getService();
+//			}
+//
+//			@Override
+//			public void onServiceDisconnected(ComponentName name) {
+//				service = null;
+//			}
+//		};
+//		context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
+//
+//		mAdapter0 = new AppInfoAdapter(mActivity, service.getAiList());
+//		mAdapter1 = new AppInfoAdapter(mActivity, service.getUserAiList());
+//
+//		context.unbindService(conn);
+//	}
+//
+//	private void getAppList3() {
+//		Context context = getContext();
+//		Intent intent = new Intent(context, MonitorService.class);
+//		Bundle bundle = new Bundle();
+//
+//		context.startService(intent);
+//	}
+
 }

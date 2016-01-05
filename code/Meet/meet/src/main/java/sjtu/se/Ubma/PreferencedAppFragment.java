@@ -10,20 +10,21 @@ import android.view.ViewGroup;
 import sjtu.se.Meet.R;
 
 /**
- * Created by qwordy on 12/10/15.
- * AboutFragment
+ * Created by qwordy on 1/5/16.
+ * PreferencedAppFragment
  */
 
-public class AboutFragment extends Fragment {
+public class PreferencedAppFragment extends Fragment {
+
 	@Nullable
 	@Override
-	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_about, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_preferenced_app, container, false);
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((UbmaDrawerActivity)activity).setTitle(getString(R.string.ubma_about));
+		((UbmaDrawerActivity)activity).setTitle(getString(R.string.preferenced_app));
 	}
 }

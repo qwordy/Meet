@@ -53,11 +53,12 @@ public class ActiveTimeFragment extends Fragment {
 
 			}
 		});
+		spinner.setSelection(1);
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((UbmaDrawerActivity)activity).setTitle(getString(R.string.title_section1));
+		((UbmaDrawerActivity)activity).setTitle(getString(R.string.active_time));
 	}
 }

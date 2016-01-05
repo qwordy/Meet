@@ -5,12 +5,10 @@ package sjtu.se;
  * UbmaTest
  */
 
-import android.app.Activity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.runner.AndroidJUnitRunner;
 import android.test.ActivityInstrumentationTestCase2;
 
 import static org.hamcrest.Matchers.*;
@@ -63,7 +61,7 @@ public class UbmaTest
 		ActionBar toolbar = mActivity.getSupportActionBar();
 
 		// Check title 1
-		assertEquals(toolbar.getTitle(), getString(R.string.title_section1));
+		assertEquals(toolbar.getTitle(), getString(R.string.preferenced_app));
 		//onView(withId(android.R.id.home)).perform(click());
 
 		// Open drawer
@@ -78,7 +76,7 @@ public class UbmaTest
 				.perform(click());
 
 		// Check title 1
-		assertEquals(toolbar.getTitle(), getString(R.string.title_section1));
+		assertEquals(toolbar.getTitle(), getString(R.string.preferenced_app));
 
 		// Open drawer
 		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
@@ -86,11 +84,11 @@ public class UbmaTest
 
 		// Click title 1
 		onData(allOf(is(instanceOf(String.class)),
-				is(getString(R.string.title_section1))))
+				is(getString(R.string.preferenced_app))))
 				.perform(click());
 
 		// Check title 1
-		assertEquals(toolbar.getTitle(), getString(R.string.title_section1));
+		assertEquals(toolbar.getTitle(), getString(R.string.preferenced_app));
 
 		// Open drawer
 		onView(withContentDescription(getString(R.string.navigation_drawer_open)))
@@ -98,7 +96,7 @@ public class UbmaTest
 
 		// Click title 2
 		onData(allOf(is(instanceOf(String.class)),
-				is(getString(R.string.title_section2))))
+				is(getString(R.string.active_time))))
 				.perform(click());
 
 		// Swipe
@@ -124,7 +122,7 @@ public class UbmaTest
 
 		// Click title 4
 		onData(allOf(is(instanceOf(String.class)),
-				is(getString(R.string.title_section4))))
+				is(getString(R.string.ubma_about))))
 				.inAdapterView(withId(R.id.navigation_drawer))
 				.perform(click());
 
@@ -134,7 +132,7 @@ public class UbmaTest
 
 		// Click title 2
 		onData(allOf(is(instanceOf(String.class)),
-				is(getString(R.string.title_section2))))
+				is(getString(R.string.active_time))))
 				.perform(click());
 
 		//try {Thread.sleep(1000);}catch (Exception e) {}

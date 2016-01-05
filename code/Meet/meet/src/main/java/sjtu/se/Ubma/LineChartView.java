@@ -27,7 +27,7 @@ public class LineChartView extends View {
 	 * 0 for today, 1 for yesterday, ..., 6 for 6 days ago.
 	 * -1 for average.
 	 */
-	public int whichDay;
+	public int whichDay = 0;
 
 	private final int textColor = Color.GRAY;
 
@@ -132,9 +132,9 @@ public class LineChartView extends View {
 		ActiveTimeData activeTimeData = Environment.activeTimeData;
 		if (activeTimeData == null)
 			activeTimeData = new ActiveTimeData();
-		if (whichDay == -1)
-			return activeTimeData.averageActiveTime();
-		else
+		if (whichDay >= 0 && whichDay <= 6)
 			return activeTimeData.dayActiveTime(whichDay);
+		else
+			return activeTimeData.averageActiveTime();
 	}
 }

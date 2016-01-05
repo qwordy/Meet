@@ -12,6 +12,10 @@
 			  android:layout_height="match_parent"
 			  android:entries="@array/appType"
 			  style="@android:style/Widget.Holo.Light.Spinner"/>
+		<Button android:id="@+id/button"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:text="@string/app_analysis"/>
 		<TextView android:id="@+id/appListText"
 				  android:layout_width="0dp"
 				  android:layout_height="match_parent"
