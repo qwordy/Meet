@@ -1,6 +1,5 @@
 package sjtu.se.Activity.Search;
 
-import android.annotation.TargetApi;
 import android.app.FragmentTransaction;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
@@ -20,7 +19,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
 import android.nfc.NfcAdapter.CreateNdefMessageCallback;
 import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
@@ -56,13 +54,13 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getSupportActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -95,6 +93,10 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 
     private void selectItem(int position) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mMenuTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
         switch(position){
             case 0:
                 ft.replace(R.id.pref_fragment_container, new SearchFragment());
@@ -117,10 +119,6 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
             ft.addToBackStack(null);
         }*/
         ft.commit();
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mMenuTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
