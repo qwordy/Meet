@@ -1,6 +1,7 @@
 package sjtu.se.Activity.Search;
 
 import android.annotation.TargetApi;
+import android.app.FragmentTransaction;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
@@ -93,23 +94,29 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     }
 
     private void selectItem(int position) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch(position){
             case 0:
-                getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+                ft.replace(R.id.pref_fragment_container, new SearchFragment());
                 break;
             case 1:
-                getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SettingFragment()).commit();
+                ft.replace(R.id.pref_fragment_container, new SettingFragment());
                 break;
             case 2:
-                getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new BaseInfoSettings()).commit();
+                ft.replace(R.id.pref_fragment_container, new BaseInfoSettings());
                 break;
             case 3:
-                getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new WantSettings()).commit();
+                ft.replace(R.id.pref_fragment_container, new WantSettings());
                 break;
             case 4:
                 startActivity(new Intent(this, UbmaDrawerActivity.class));
                 break;
         }
+        /*if(position != 4) {
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.addToBackStack(null);
+        }*/
+        ft.commit();
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mMenuTitles[position]);
@@ -196,6 +203,13 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return true;
 		}
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            mDrawerList.setItemChecked(0, true);
+            setTitle(mMenuTitles[0]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+            getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+            return true;
+        }
 		return super.onKeyDown(keyCode, event);
 	}
 

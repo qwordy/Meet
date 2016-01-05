@@ -122,6 +122,7 @@ public class SearchFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         ctx=getActivity();
+
         intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
@@ -130,7 +131,6 @@ public class SearchFragment extends Fragment {
         intentFilter.addAction(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED);
         intentFilter.addAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
         intentFilter.addAction(ActivityControlCenter.ACTION_LAUNCHED);
-        ctx.registerReceiver(receiver, intentFilter);
 
         overt_user = new Information();
         full_user  = new Information();
@@ -512,6 +512,8 @@ public class SearchFragment extends Fragment {
         Rename();
         updateWants();
         loadHistory();
+
+        ctx.registerReceiver(receiver, intentFilter);
 
         TaskService.mActivityHandler = mHandler;
         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));

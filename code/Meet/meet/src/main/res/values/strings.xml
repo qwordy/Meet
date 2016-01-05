@@ -9,7 +9,7 @@
 	<string name="action_game">真心话游戏</string>
 	<string name="action_want">我的需求</string>
 	<string name="action_analysis">手机行为分析</string>
-	<string name="action_logout">退出</string>
+	<string name="action_logout">退出</string>['
 
 	<string name="title_activity_system_settings">系统设置</string>
 	<string name="pref_alert_title">匹配开关</string>
@@ -74,6 +74,13 @@
 		<item>我的需求</item>
 		<item>行为分析</item>
 	</string-array>
+
+	<string-array name="gender_array">
+		<item>男</item>
+		<item>女</item>
+		<item>无</item>
+	</string-array>
+
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
 

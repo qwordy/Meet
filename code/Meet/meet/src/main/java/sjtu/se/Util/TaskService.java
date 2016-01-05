@@ -107,8 +107,10 @@ public class TaskService extends Service {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case Task.TASK_GET_REMOTE_STATE:
-                    if(mAcceptThread == null && mConnectThread == null && mCommThread == null )
-                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                    try {
+                        if (mAcceptThread == null && mConnectThread == null && mCommThread == null)
+                            mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                    }catch(Exception e){}
 
                     /*if (mCommThread != null && mCommThread.isAlive()) {
                         mActivityHandler.sendMessage(mActivityHandler.obtainMessage(111));
@@ -262,10 +264,12 @@ public class TaskService extends Service {
                     }
                 }
                 if (!sucess) {
-                    android.os.Message returnMsg = mActivityHandler.obtainMessage();
-                    returnMsg.what = Task.TASK_SEND_MSG;
-                    returnMsg.obj = "消息发送失败";
-                    mActivityHandler.sendMessage(returnMsg);
+                    try {
+                        android.os.Message returnMsg = mActivityHandler.obtainMessage();
+                        returnMsg.what = Task.TASK_SEND_MSG;
+                        returnMsg.obj = "消息发送失败";
+                        mActivityHandler.sendMessage(returnMsg);
+                    }catch(Exception e){}
                 }
                 break;
 
@@ -283,11 +287,13 @@ public class TaskService extends Service {
                         sucess = false;
                     }
                 }
-                android.os.Message returnMsg = mActivityHandler.obtainMessage();
-                returnMsg.what = Task.TASK_SEND_CARD;
-                if (sucess) returnMsg.obj = "名片已发送";
-                else  returnMsg.obj = "名片发送失败";
-                mActivityHandler.sendMessage(returnMsg);
+                try {
+                    android.os.Message returnMsg = mActivityHandler.obtainMessage();
+                    returnMsg.what = Task.TASK_SEND_CARD;
+                    if (sucess) returnMsg.obj = "名片已发送";
+                    else returnMsg.obj = "名片发送失败";
+                    mActivityHandler.sendMessage(returnMsg);
+                }catch(Exception e){}
                 break;
 
             case Task.TASK_SEND_INFO:
@@ -304,9 +310,11 @@ public class TaskService extends Service {
                     }
                 }
                 if (!sucess) {
-                    android.os.Message msg = mActivityHandler.obtainMessage();
-                    msg.what = Task.TASK_DISCONNECT;
-                    mActivityHandler.sendMessage(msg);
+                    try {
+                        android.os.Message msg = mActivityHandler.obtainMessage();
+                        msg.what = Task.TASK_DISCONNECT;
+                        mActivityHandler.sendMessage(msg);
+                    }catch(Exception e){}
                 }
                 break;
 
@@ -379,9 +387,11 @@ public class TaskService extends Service {
                 if (socket != null) {
                     //---------------------
 
-                    android.os.Message handlerMsg = mActivityHandler.obtainMessage(Task.TASK_CONNECT);
-                    handlerMsg.obj = socket.getRemoteDevice();
-                    mActivityHandler.sendMessage(handlerMsg);
+                    try {
+                        android.os.Message handlerMsg = mActivityHandler.obtainMessage(Task.TASK_CONNECT);
+                        handlerMsg.obj = socket.getRemoteDevice();
+                        mActivityHandler.sendMessage(handlerMsg);
+                    }catch(Exception e){}
 
                     manageConnectedSocket(socket);
                     //---------------------
@@ -453,7 +463,9 @@ public class TaskService extends Service {
                 }
                 //---------------------
                 cancel();
-                mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_CONNECT_FAIL));
+                try {
+                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_CONNECT_FAIL));
+                }catch(Exception e){}
                 //---------------------
                 return;
             } // Do work to manage the connection (in a separate thread)
@@ -588,7 +600,9 @@ public class TaskService extends Service {
                     }
                     mCommThread = null;
                     //-----------------------------------
-                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                    try {
+                        mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_DISCONNECT));
+                    }catch(Exception e2){}
                     //-----------------------------------
                     break;
                 }
