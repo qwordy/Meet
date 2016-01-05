@@ -1,5 +1,6 @@
 package sjtu.se.Activity.Information;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import android.os.Bundle;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Setting.SystemSettings;
+import sjtu.se.Util.DatePickerFragment;
 
 public class BaseInfoSettings extends Fragment {
 
@@ -46,10 +48,10 @@ public class BaseInfoSettings extends Fragment {
 
 	private ToggleButton item_name_overt;
 	private ToggleButton item_gender_overt;
-	private Switch item_birthday_overt;
-	private Switch item_homeland_overt;
-	private Switch item_location_overt;
-	private Switch item_keywords_overt;
+	private ToggleButton item_birthday_overt;
+	private ToggleButton item_homeland_overt;
+	private ToggleButton item_location_overt;
+	private ToggleButton item_keywords_overt;
 
 	/*public void baseInfoNickEdit(View v){
 		//LayoutInflater inflater = ctx.getLayoutInflater();
@@ -117,11 +119,13 @@ public class BaseInfoSettings extends Fragment {
 	}
 
 	public void baseInfoBirthdayEdit(View view){
-		final DatePicker dp = new DatePicker(ctx);
-		new AlertDialog.Builder(ctx).setTitle("选择生日").setView(dp)
-		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                int y = dp.getYear();
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+		//final DatePicker dp = new DatePicker(ctx);
+		//new AlertDialog.Builder(ctx).setTitle("选择生日").setView(dp)
+		//.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        //    public void onClick(DialogInterface dialog, int which) {
+               /* int y = dp.getYear();
                 int m = dp.getMonth() + 1;
                 int d = dp.getDayOfMonth();
                 String mdate;
@@ -135,16 +139,18 @@ public class BaseInfoSettings extends Fragment {
                         mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-0" + String.valueOf(d);
                     else
                         mdate = String.valueOf(y) + "-" + String.valueOf(m) + "-" + String.valueOf(d);
-                }
-                SharedPreferences.Editor editor = baseInfo.edit();
+                }*/
+        //String mdate;
+               /* SharedPreferences.Editor editor = baseInfo.edit();
                 editor.putString(ActivityControlCenter.KEY_BIRTHDAY, mdate);
                 editor.commit();
-                item_birthday.setText(mdate);
-            }
+                item_birthday.setText(mdate);*/
+         /*   }
         }).setNegativeButton("返回", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
             }
-        }).show();
+        }).show();*/
+        //item_birthday.setText(newFragment.birthday);
 	}
 
     public void baseInfoBirthdayDelete(View view){
@@ -156,13 +162,12 @@ public class BaseInfoSettings extends Fragment {
                 editor.putString(ActivityControlCenter.KEY_BIRTHDAY, "");
                 editor.commit();
                 item_birthday.setText("");
-
                 dialog.dismiss();
             }
         }).setNegativeButton("取消", null).show();
     }
 
-	public void baseInfoHomelandEdit(View view){
+	/*public void baseInfoHomelandEdit(View view){
 		//LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.text_edit_place_16, (ViewGroup) view.findViewById(R.layout.text_edit_place_16));
 		final EditText et = (EditText) layout.findViewById(R.id.edittext_place_16);
@@ -184,9 +189,9 @@ public class BaseInfoSettings extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
             }
         }).show();
-	}
+	}*/
 
-	public void baseInfoLocationEdit(View view0){
+	/*public void baseInfoLocationEdit(View view0){
 		//LayoutInflater inflater = ctx.getLayoutInflater();
 		View layout = inflater.inflate(R.layout.text_edit_place_16, (ViewGroup) view.findViewById(R.layout.text_edit_place_16));
 		final EditText et = (EditText) layout.findViewById(R.id.edittext_place_16);
@@ -208,9 +213,9 @@ public class BaseInfoSettings extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
             }
         }).show();
-	}
+	}*/
 
-	public void baseInfoKeywordsEdit(View view){
+/*	public void baseInfoKeywordsEdit(View view){
 		final EditText et = new EditText(ctx);
 		et.setText(baseInfo.getString(ActivityControlCenter.KEY_KEYWORDS, ""));
 
@@ -230,7 +235,7 @@ public class BaseInfoSettings extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
             }
         }).show();
-	}
+	}*/
 
 	public void setBaseInfoNameOvertListener(){
 		item_name_overt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -397,30 +402,69 @@ public class BaseInfoSettings extends Fragment {
                 baseInfoBirthdayEdit(v);
             }
         });
+
         item_homeland = (TextView) view.findViewById(R.id.base_info_homeland);
         item_homeland.setText(baseInfo.getString(ActivityControlCenter.KEY_HOMELAND, ""));
-        item_homeland.setOnClickListener(new View.OnClickListener() {
+        item_homeland.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                baseInfoHomelandEdit(v);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == KeyEvent.ACTION_DOWN || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    String str = v.getText().toString();
+                    SharedPreferences.Editor editor = baseInfo.edit();
+                    editor.putString(ActivityControlCenter.KEY_HOMELAND, str);
+                    editor.apply();
+                    InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    v.clearFocus();
+                    handled = true;
+                }
+                return handled;
             }
         });
+
         item_location = (TextView) view.findViewById(R.id.base_info_location);
         item_location.setText(baseInfo.getString(ActivityControlCenter.KEY_LOCATION, ""));
-        item_location.setOnClickListener(new View.OnClickListener() {
+        item_location.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                baseInfoLocationEdit(v);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == KeyEvent.ACTION_DOWN || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    String str = v.getText().toString();
+                    SharedPreferences.Editor editor = baseInfo.edit();
+                    editor.putString(ActivityControlCenter.KEY_LOCATION, str);
+                    editor.apply();
+                    InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    v.clearFocus();
+                    handled = true;
+                }
+                return handled;
             }
         });
         item_keywords = (TextView) view.findViewById(R.id.base_info_keywords);
         item_keywords.setText(baseInfo.getString(ActivityControlCenter.KEY_KEYWORDS, ""));
-        item_keywords.setOnClickListener(new View.OnClickListener() {
+        item_keywords.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                baseInfoKeywordsEdit(v);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == KeyEvent.ACTION_DOWN || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    String str = v.getText().toString();
+                    SharedPreferences.Editor editor = baseInfo.edit();
+                    editor.putString(ActivityControlCenter.KEY_KEYWORDS, str);
+                    editor.apply();
+                    InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    v.clearFocus();
+                    handled = true;
+                }
+                return handled;
             }
         });
+
         item_name_overt = (ToggleButton) view.findViewById(R.id.base_info_name_overt);
         item_name_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_NAME_OVERT, false));
         setBaseInfoNameOvertListener();
@@ -429,19 +473,19 @@ public class BaseInfoSettings extends Fragment {
         item_gender_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_GENDER_OVERT, false));
         setBaseInfoGenderOvertListener();
 
-        item_birthday_overt = (Switch) view.findViewById(R.id.base_info_birthday_overt);
+        item_birthday_overt = (ToggleButton) view.findViewById(R.id.base_info_birthday_overt);
         item_birthday_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_BIRTHDAY_OVERT, false));
         setBaseInfoBirthdayOvertListener();
 
-        item_homeland_overt = (Switch) view.findViewById(R.id.base_info_homeland_overt);
+        item_homeland_overt = (ToggleButton) view.findViewById(R.id.base_info_homeland_overt);
         item_homeland_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_HOMELAND_OVERT, false));
         setBaseInfoHomelandOvertListener();
 
-        item_location_overt = (Switch) view.findViewById(R.id.base_info_location_overt);
+        item_location_overt = (ToggleButton) view.findViewById(R.id.base_info_location_overt);
         item_location_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_LOCATION_OVERT, false));
         setBaseInfoLocationOvertListener();
 
-        item_keywords_overt = (Switch) view.findViewById(R.id.base_info_keywords_overt);
+        item_keywords_overt = (ToggleButton) view.findViewById(R.id.base_info_keywords_overt);
         item_keywords_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_KEYWORDS_OVERT, false));
         setBaseInfoKeywordsOvertListener();
 
