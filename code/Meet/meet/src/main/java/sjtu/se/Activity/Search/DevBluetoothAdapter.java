@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
     public static Handler mHandler;
     public static Handler search;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         public TextView nickname;
         public TextView information;
@@ -39,6 +40,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
         public ArrayList<DevBluetooth> list;
         public Context ctx;
         public DevBluetooth dev;
+        public ImageButton chat_button;
 
         public ViewHolder(ViewGroup v,ArrayList<DevBluetooth> lst,Context context) {
             super(v);
@@ -47,22 +49,56 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             gender = (ImageView)v.getChildAt(0);
             nickname = (TextView)v.getChildAt(1);
             information = (TextView)v.getChildAt(2);
+            chat_button = (ImageButton)v.getChildAt(3);
             v.setOnClickListener(this);
-            v.setOnLongClickListener(this);
+            chat_button.setOnClickListener(this);
+            //v.setOnLongClickListener(this);
         }
 
         public void onClick(View v) {
             dev=list.get(getAdapterPosition());
 
-            Bundle bundle = new Bundle();
-            Information info = new Information(dev.Info);
-            bundle.putParcelable("information", info);
-            Intent intent = new Intent(ctx, ShowInformation.class);
-            intent.putExtras(bundle);
-            ctx.startActivity(intent);
+            if(v==chat_button){
+                if(dev.mRemoteDevice == null) return;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                String nick = dev.Info.baseinfo.Nick;
+                builder.setMessage("确定与 "+ nick +" 建立连接么？");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
+                            Toast tst = Toast.makeText(ctx, "正在连接请稍等...", Toast.LENGTH_LONG);
+                            tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
+                            tst.show();
+
+                            search.removeMessages(0);
+                        }
+                        catch(Exception e){}
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                //return true;
+            }else{
+                Bundle bundle = new Bundle();
+                Information info = new Information(dev.Info);
+                bundle.putParcelable("information", info);
+                Intent intent = new Intent(ctx, ShowInformation.class);
+                intent.putExtras(bundle);
+                ctx.startActivity(intent);
+            }
         }
 
-        public boolean onLongClick(View view) {
+        /*public boolean onLongClick(View view) {
             dev=list.get(getAdapterPosition());
             if(dev.mRemoteDevice == null) return true;
 
@@ -93,7 +129,7 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             });
             builder.create().show();
             return true;
-        }
+        }*/
     }
 
     public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l,Handler handler,Handler search){
