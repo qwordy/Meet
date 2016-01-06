@@ -20,11 +20,18 @@ public class DatePickerFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
+        int year,month,day;
+        year = 1990;
+        month=0;
+        day=1;
         baseInfo=getActivity().getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        String birthday = baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, "");
+        String[] str= birthday.split("-");
+        if(str.length==3){
+            year = Integer.parseInt(str[0]);
+            month=Integer.parseInt(str[1])-1;
+            day=Integer.parseInt(str[2]);
+        }
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 

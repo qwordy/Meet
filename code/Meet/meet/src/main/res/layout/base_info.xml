@@ -61,7 +61,8 @@
                         android:id="@+id/base_info_gender"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:focusableInTouchMode="true"/>
 	            <ToggleButton
                         android:id="@+id/base_info_gender_overt"
                         android:layout_width="wrap_content"

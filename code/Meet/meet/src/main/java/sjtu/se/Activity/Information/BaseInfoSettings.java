@@ -168,6 +168,14 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
         baseInfo = ctx.getSharedPreferences(ActivityControlCenter.PERSONAL_BASE_INFO, 0);
 
         container = (ViewGroup)view.findViewById(R.id.focus_container);
+        container.setOnTouchListener(new View.OnTouchListener(){
+            public boolean onTouch (View v, MotionEvent event){
+                InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                v.requestFocus();
+                return true;
+            }
+        });
 
         item_name = (TextView) view.findViewById(R.id.base_info_name);
         item_name.setText(baseInfo.getString(ActivityControlCenter.KEY_NAME, ""));
@@ -190,6 +198,7 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
                 return handled;
             }
         });
+        item_name.setOnFocusChangeListener(this);
 
         item_gender = (Spinner) view.findViewById(R.id.base_info_gender);
         ArrayAdapter<CharSequence> gender_adapter = ArrayAdapter.createFromResource(ctx,
@@ -258,6 +267,7 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
                 return handled;
             }
         });
+        item_homeland.setOnFocusChangeListener(this);
 
         item_location = (TextView) view.findViewById(R.id.base_info_location);
         item_location.setText(baseInfo.getString(ActivityControlCenter.KEY_LOCATION, ""));
@@ -279,6 +289,8 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
                 return handled;
             }
         });
+        item_location.setOnFocusChangeListener(this);
+
         item_keywords = (TextView) view.findViewById(R.id.base_info_keywords);
         item_keywords.setText(baseInfo.getString(ActivityControlCenter.KEY_KEYWORDS, ""));
         item_keywords.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -299,6 +311,7 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
                 return handled;
             }
         });
+        item_keywords.setOnFocusChangeListener(this);
 
         item_name_overt = (ToggleButton) view.findViewById(R.id.base_info_name_overt);
         item_name_overt.setChecked(baseInfo.getBoolean(ActivityControlCenter.KEY_NAME_OVERT, false));
@@ -350,6 +363,26 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
 	}
 
     public void onFocusChange(View v, boolean hasFocus){
-        item_birthday.setText(baseInfo.getString(ActivityControlCenter.KEY_BIRTHDAY, ""));
+        if(v==item_name && !hasFocus){
+            String str = ((TextView)v).getText().toString();
+            SharedPreferences.Editor editor = baseInfo.edit();
+            editor.putString(ActivityControlCenter.KEY_NAME, str);
+            editor.apply();
+        }else if(v==item_homeland && !hasFocus){
+            String str = ((TextView)v).getText().toString();
+            SharedPreferences.Editor editor = baseInfo.edit();
+            editor.putString(ActivityControlCenter.KEY_HOMELAND, str);
+            editor.apply();
+        }else if(v==item_location && !hasFocus){
+            String str = ((TextView)v).getText().toString();
+            SharedPreferences.Editor editor = baseInfo.edit();
+            editor.putString(ActivityControlCenter.KEY_LOCATION, str);
+            editor.apply();
+        }else if(v==item_keywords){
+            String str = ((TextView)v).getText().toString();
+            SharedPreferences.Editor editor = baseInfo.edit();
+            editor.putString(ActivityControlCenter.KEY_KEYWORDS, str);
+            editor.apply();
+        }
     }
 }
