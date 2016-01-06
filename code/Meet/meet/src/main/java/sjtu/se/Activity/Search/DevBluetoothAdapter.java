@@ -3,7 +3,6 @@ package sjtu.se.Activity.Search;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -17,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import sjtu.se.Activity.ActivityControlCenter;
-import sjtu.se.Activity.ChatPlatform.ChatActivity;
 import sjtu.se.Activity.Information.ShowInformation;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.Information;
@@ -52,7 +49,6 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
             chat_button = (ImageButton)v.getChildAt(3);
             v.setOnClickListener(this);
             chat_button.setOnClickListener(this);
-            //v.setOnLongClickListener(this);
         }
 
         public void onClick(View v) {
@@ -87,7 +83,6 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
                     }
                 });
                 builder.create().show();
-                //return true;
             }else{
                 Bundle bundle = new Bundle();
                 Information info = new Information(dev.Info);
@@ -97,39 +92,6 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
                 ctx.startActivity(intent);
             }
         }
-
-        /*public boolean onLongClick(View view) {
-            dev=list.get(getAdapterPosition());
-            if(dev.mRemoteDevice == null) return true;
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-            String nick = dev.Info.baseinfo.Nick;
-            builder.setMessage("确定与 "+ nick +" 建立连接么？");
-            builder.setTitle("提示");
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    try {
-                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_CONN_THREAD, new Object[]{dev.mRemoteDevice}));
-                        Toast tst = Toast.makeText(ctx, "正在连接请稍等...", Toast.LENGTH_LONG);
-                        tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
-                        tst.show();
-
-                        search.removeMessages(0);
-                    }
-                    catch(Exception e){}
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.create().show();
-            return true;
-        }*/
     }
 
     public DevBluetoothAdapter(Context context,ArrayList<DevBluetooth> l,Handler handler,Handler search){

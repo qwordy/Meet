@@ -74,11 +74,11 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 
 		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
 
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        /*mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             mNfcAdapter.setNdefPushMessageCallback(this, this);
             mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
-        }
+        }*/
 
         Intent intent = new Intent(this, MonitorService.class);
         startService(intent);
@@ -173,9 +173,9 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     @Override
     public void onNdefPushComplete(NfcEvent event) {
 		// TODO Auto-generated method stub
-        Toast tst = Toast.makeText(this, "名片已经发送！", Toast.LENGTH_LONG);
+        /*Toast tst = Toast.makeText(this, "名片已经发送！", Toast.LENGTH_LONG);
         tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
-        tst.show();
+        tst.show();*/
 	}
 
 	@Override

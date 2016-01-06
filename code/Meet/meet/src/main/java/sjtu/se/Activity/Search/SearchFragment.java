@@ -284,7 +284,7 @@ public class SearchFragment extends Fragment{
                 case TaskService.Task.TASK_CONNECT:
                     final BluetoothDevice device = (BluetoothDevice)msg.obj;
                     Information info = Format.DeFormat(device.getName());
-                    if(info.baseinfo.Nick.equals("")) {
+                    if(info == null || info.baseinfo.Nick.equals("")) {
                         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                         return;
                     }
