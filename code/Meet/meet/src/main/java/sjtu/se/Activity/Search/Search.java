@@ -1,8 +1,11 @@
 package sjtu.se.Activity.Search;
 
 
-import android.annotation.TargetApi;
+
+import android.app.PendingIntent;
 import android.nfc.NfcAdapter;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -38,7 +41,12 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 	private ListView mDrawerList;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
+
     private static UbmaFragment mUbmaFragment;
+    private static SearchFragment mSearchFragment;
+    private static SettingFragment mSettingFragment;
+    private static BaseInfoSettings mBaseInfoSettings;
+    private static WantSettings mWantSettings;
 
     NfcAdapter mNfcAdapter;
 
@@ -82,6 +90,7 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
         if (mNfcAdapter != null) {
             mNfcAdapter.setNdefPushMessageCallback(this, this);
             mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+            onNewIntent(getIntent());
         }
 
         Intent intent = new Intent(this, MonitorService.class);
@@ -108,28 +117,29 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 
         switch(position){
             case 0:
-                ft.replace(R.id.pref_fragment_container, new SearchFragment());
+                ft.replace(R.id.pref_fragment_container, mSearchFragment == null ?
+                        mSearchFragment = new SearchFragment():
+                        mSearchFragment);
                 break;
             case 1:
                 //ft.replace(R.id.pref_fragment_container, new SettingFragment());
                 break;
             case 2:
-                ft.replace(R.id.pref_fragment_container, new BaseInfoSettings());
+                ft.replace(R.id.pref_fragment_container, mBaseInfoSettings == null ?
+                        mBaseInfoSettings = new BaseInfoSettings():
+                        mBaseInfoSettings);
                 break;
             case 3:
-                ft.replace(R.id.pref_fragment_container, new WantSettings());
+                ft.replace(R.id.pref_fragment_container, mWantSettings == null ?
+                        mWantSettings = new WantSettings():
+                        mWantSettings);
                 break;
             case 4:
                 ft.replace(R.id.pref_fragment_container, mUbmaFragment == null ?
                         mUbmaFragment = new UbmaFragment() :
                         mUbmaFragment);
-                //startActivity(new Intent(this, UbmaDrawerActivity.class));
                 break;
         }
-        /*if(position != 4) {
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.addToBackStack(null);
-        }*/
         ft.commit();
     }
 
@@ -149,17 +159,32 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     @Override
     public void onNewIntent(Intent intent) {
         // onResume gets called after this to handle the intent
-        setIntent(intent);
+        super.onNewIntent(intent);
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            processIntent(intent);
+        }
     }
 
     @Override
 	protected void onResume(){
 		super.onResume();
-
-		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-	        processIntent(getIntent());
-	    }
+        try {
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            mNfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        } catch(Exception e){}
 	}
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mNfcAdapter != null)
+        {
+            try {
+                mNfcAdapter.disableForegroundDispatch(this);
+            } catch (Exception e) {}
+        }
+    }
 
     void processIntent(Intent intent) {
         Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -185,17 +210,16 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     @Override
     public void onNdefPushComplete(NfcEvent event) {
 		// TODO Auto-generated method stub
-        Toast tst = Toast.makeText(this, "名片已经发送！", Toast.LENGTH_LONG);
-        tst.setGravity(Gravity.CENTER | Gravity.TOP, 0, 240);
-        tst.show();
+        mHandler.obtainMessage(0).sendToTarget();
 	}
 
 	@Override
 	public NdefMessage createNdefMessage(NfcEvent event) {
 		// TODO Auto-generated method stub
+
         ContactCard card = new ContactCard();
         card.setContactCard(this);
-		NdefMessage msg = new NdefMessage(NdefRecord.createMime("application/sjtu.se.Meet", card.toString().getBytes())
+		NdefMessage msg = new NdefMessage(NdefRecord.createMime("application/sjtu.se", card.toString().getBytes())
          /**
           * The Android Application Record (AAR) is commented out. When a device
           * receives a push with an AAR in it, the application specified in the AAR
@@ -208,6 +232,17 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
         return msg;
 	}
 
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    Toast.makeText(getApplicationContext(), "名片已经递送！", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    };
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -217,7 +252,9 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
             mDrawerList.setItemChecked(0, true);
             setTitle(mMenuTitles[0]);
             mDrawerLayout.closeDrawer(mDrawerList);
-            getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, mSearchFragment == null ?
+                    mSearchFragment = new SearchFragment():
+                    mSearchFragment).commit();
             return true;
         }
 		return super.onKeyDown(keyCode, event);
@@ -241,33 +278,6 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 			this.startActivity(new Intent(Search.this, SystemSettings.class));
 			return true;
 		}
-		/*if (id == R.id.action_personal){
-			this.startActivity(new Intent(Search.this, BaseInfoSettings.class));
-			return true;
-		}
-		if (id == R.id.action_want){
-			this.startActivity(new Intent(Search.this, WantSettings.class));
-			return true;
-		}
-        if(id == R.id.action_analysis) {
-            this.startActivity(new Intent(Search.this, UbmaDrawerActivity.class));
-            return true;
-        }*/
-		/*if (id == R.id.action_contact){
-			this.startActivity(new Intent(Search.this, ContactCardSettings.class));
-			return true;
-		}*/
-		/*if (id == R.id.action_logout){
-			ActivityControlCenter.SetOriginName();
-			Intent intent = new Intent(Search.this, Server.class);
-			this.stopService(intent);
-			intent = new Intent();
-			intent.setAction(ActivityControlCenter.ACTIVITY_EXIT_ACTION);
-			this.sendBroadcast(intent);
-			super.finish();
-			//ActivityControlCenter.AllExit();
-			//finish();
-		}*/
 		if (id == R.id.action_logout) {
 			super.finish();
 		}

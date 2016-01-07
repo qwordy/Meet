@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.Fragment;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Meet.R;
 import sjtu.se.Ubma.AppClassifier;
@@ -25,15 +26,6 @@ public class SettingFragment extends PreferenceFragment
 
     public static SharedPreferences prefs;
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(ActivityControlCenter.ACTIVITY_EXIT_ACTION)){
-                getActivity().finish();
-            }
-        }
-    };
 
     @Override
     public void onCreate(final Bundle savedInstanceState){
