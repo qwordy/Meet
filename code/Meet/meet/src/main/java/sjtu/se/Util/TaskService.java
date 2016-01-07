@@ -422,8 +422,8 @@ public class TaskService extends Service {
      * @author Administrator
      */
     private class ConnectThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
+        private  BluetoothSocket mmSocket;
+        private  BluetoothDevice mmDevice;
 
         public ConnectThread(BluetoothDevice device) {
 
@@ -450,25 +450,39 @@ public class TaskService extends Service {
         public void run() {
             // Cancel discovery because it will slow down the connection
             mBluetoothAdapter.cancelDiscovery();
-            try {
-                // Connect the device through the socket. This will block
-                // until it succeeds or throws an exception
-                mmSocket.connect();
-            } catch (Exception connectException) {
-                // Unable to connect; close the socket and get out
-                Log.e(TAG, "Connect server failed");
+            int cnt = 0;
+            while(true) {
                 try {
-                    mmSocket.close();
-                } catch (Exception closeException) {
+                    // Connect the device through the socket. This will block
+                    // until it succeeds or throws an exception
+                    mmSocket.connect();
+                } catch (Exception connectException) {
+                    // Unable to connect; close the socket and get out
+                    Log.e(TAG, "Connect server failed");
+                    try {
+                        mmSocket.close();
+                    } catch (Exception closeException) {
+                    }
+                    //---------------------
+                    if(cnt == 5) {
+                        cancel();
+                        try {
+                            mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_CONNECT_FAIL));
+                        } catch (Exception e) {}
+                        return;
+                    }
+                    else{
+                        try {
+                            mmSocket = mmDevice.createRfcommSocketToServiceRecord(UUID.fromString(UUID_STR));
+                        }catch( Exception e){}
+                        cnt++;
+                        continue;
+                    }
+                    //---------------------
                 }
-                //---------------------
-                cancel();
-                try {
-                    mActivityHandler.sendMessage(mActivityHandler.obtainMessage(Task.TASK_CONNECT_FAIL));
-                }catch(Exception e){}
-                //---------------------
-                return;
-            } // Do work to manage the connection (in a separate thread)
+                break;
+            }
+            // Do work to manage the connection (in a separate thread)
             manageConnectedSocket(mmSocket);
         }
 

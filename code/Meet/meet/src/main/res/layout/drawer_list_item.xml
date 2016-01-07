@@ -8,5 +8,5 @@
           android:paddingLeft="16dp"
           android:paddingRight="16dp"
           android:textColor="#626262"
-          android:background="?android:attr/activatedBackgroundIndicator"
-          android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
+          android:minHeight="54dp"
+          android:background="@drawable/selector"/>

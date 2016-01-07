@@ -112,13 +112,32 @@ public class Match {
 		if(!isMatch(info.edu.High_School, want.High_School)) return false;
 		if(!isMatch(info.edu.Middle_School, want.Middle_School)) return false;
 		if(!isMatch(info.edu.Primary_School, want.Primary_School)) return false;
-		if(!isMatch(info.keywords, want.keywords)) return false;
+		if(!isMatchKeywords(info.keywords, want.keywords)) return false;
 		return true;
 	}
 	
 	public static boolean isMatch(String info, String want){
 		if(want.equals("")) return true;
 		String[] strs = want.split(";");
+		if(strs.length == 1){
+			if(info.contains(strs[0]))
+				return true;
+			return false;
+		}
+		else{
+			for(String str : strs){
+				if(!str.isEmpty() && info.contains(str)){
+					//System.out.println("str:" + str);
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public static boolean isMatchKeywords(String info, String want){
+		if(want.equals("")) return true;
+		String[] strs = want.split(";| |,|[|]");
 		if(strs.length == 1){
 			if(info.contains(strs[0]))
 				return true;

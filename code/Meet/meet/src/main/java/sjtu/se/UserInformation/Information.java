@@ -27,13 +27,13 @@ public class Information implements Parcelable {
 		this.keywords = i.keywords;
 	}
 	
-	public Information(BaseInfo b, ContactInfo c, Education e, Hobby h, String k){
+	/*public Information(BaseInfo b, ContactInfo c, Education e, Hobby h, String k){
 		this.baseinfo = new BaseInfo(b);
 		this.contactinfo = new ContactInfo(c);
 		this.edu = new Education(e);
 		this.hobby = new Hobby(h);
 		this.keywords = k;
-	}
+	}*/
 	
 	public String toString(){
 		String str = "";
