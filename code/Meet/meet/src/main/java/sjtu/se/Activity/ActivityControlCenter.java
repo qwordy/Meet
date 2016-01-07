@@ -94,7 +94,6 @@ public class ActivityControlCenter {
     // system settings
     public static String SYSTEM_SETTING = "systemsetting";
     public static String CMD = "cmd";
-    public static String IS_ANALYSE = "isanalyse";
     public static String IS_SHAKE = "isshake";
     public static String IS_SOUND = "issound";
 
