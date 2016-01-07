@@ -1,9 +1,9 @@
 package sjtu.se.Activity.Search;
 
 import android.annotation.TargetApi;
-import android.app.FragmentTransaction;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +26,7 @@ import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 
 import sjtu.se.Meet.R;
+import sjtu.se.Ubma.UbmaFragment;
 import sjtu.se.UserInformation.ContactCard;
 import sjtu.se.Util.InsertThread;
 
@@ -37,6 +38,7 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 	private ListView mDrawerList;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
+    private static UbmaFragment mUbmaFragment;
 
     NfcAdapter mNfcAdapter;
 
@@ -74,7 +76,7 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mMenuTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+		getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
@@ -94,13 +96,13 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     }
 
     private void selectItem(int position) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch(position){
             case 0:
                 ft.replace(R.id.pref_fragment_container, new SearchFragment());
                 break;
             case 1:
-                ft.replace(R.id.pref_fragment_container, new SettingFragment());
+                //ft.replace(R.id.pref_fragment_container, new SettingFragment());
                 break;
             case 2:
                 ft.replace(R.id.pref_fragment_container, new BaseInfoSettings());
@@ -109,7 +111,10 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
                 ft.replace(R.id.pref_fragment_container, new WantSettings());
                 break;
             case 4:
-                startActivity(new Intent(this, UbmaDrawerActivity.class));
+                ft.replace(R.id.pref_fragment_container, mUbmaFragment == null ?
+                        mUbmaFragment = new UbmaFragment() :
+                        mUbmaFragment);
+                //startActivity(new Intent(this, UbmaDrawerActivity.class));
                 break;
         }
         /*if(position != 4) {
@@ -207,7 +212,7 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
             mDrawerList.setItemChecked(0, true);
             setTitle(mMenuTitles[0]);
             mDrawerLayout.closeDrawer(mDrawerList);
-            getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
             return true;
         }
 		return super.onKeyDown(keyCode, event);

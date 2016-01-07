@@ -59,6 +59,6 @@ public class ActiveTimeFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((UbmaDrawerActivity)activity).setTitle(getString(R.string.active_time));
+		//((UbmaDrawerActivity)activity).setTitle(getString(R.string.active_time));
 	}
 }
