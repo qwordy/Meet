@@ -1,11 +1,13 @@
 package sjtu.se.Activity.Search;
 
-import android.app.FragmentTransaction;
+
+
 import android.app.PendingIntent;
 import android.nfc.NfcAdapter;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 
 import sjtu.se.Meet.R;
+import sjtu.se.Ubma.UbmaFragment;
 import sjtu.se.UserInformation.ContactCard;
 import sjtu.se.Util.InsertThread;
 
@@ -38,6 +41,12 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 	private ListView mDrawerList;
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
+
+    private static UbmaFragment mUbmaFragment;
+    private static SearchFragment mSearchFragment;
+    private static SettingFragment mSettingFragment;
+    private static BaseInfoSettings mBaseInfoSettings;
+    private static WantSettings mWantSettings;
 
     NfcAdapter mNfcAdapter;
 
@@ -75,7 +84,7 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mMenuTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+		getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
@@ -96,32 +105,38 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     }
 
     private void selectItem(int position) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mMenuTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+
         switch(position){
             case 0:
-                ft.replace(R.id.pref_fragment_container, new SearchFragment());
+                ft.replace(R.id.pref_fragment_container, mSearchFragment == null ?
+                        mSearchFragment = new SearchFragment():
+                        mSearchFragment);
                 break;
             case 1:
-                ft.replace(R.id.pref_fragment_container, new SettingFragment());
+                //ft.replace(R.id.pref_fragment_container, new SettingFragment());
                 break;
             case 2:
-                ft.replace(R.id.pref_fragment_container, new BaseInfoSettings());
+                ft.replace(R.id.pref_fragment_container, mBaseInfoSettings == null ?
+                        mBaseInfoSettings = new BaseInfoSettings():
+                        mBaseInfoSettings);
                 break;
             case 3:
-                ft.replace(R.id.pref_fragment_container, new WantSettings());
+                ft.replace(R.id.pref_fragment_container, mWantSettings == null ?
+                        mWantSettings = new WantSettings():
+                        mWantSettings);
                 break;
             case 4:
-                startActivity(new Intent(this, UbmaDrawerActivity.class));
+                ft.replace(R.id.pref_fragment_container, mUbmaFragment == null ?
+                        mUbmaFragment = new UbmaFragment() :
+                        mUbmaFragment);
                 break;
         }
-        /*if(position != 4) {
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.addToBackStack(null);
-        }*/
         ft.commit();
     }
 
@@ -234,7 +249,9 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
             mDrawerList.setItemChecked(0, true);
             setTitle(mMenuTitles[0]);
             mDrawerLayout.closeDrawer(mDrawerList);
-            getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SearchFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, mSearchFragment == null ?
+                    mSearchFragment = new SearchFragment():
+                    mSearchFragment).commit();
             return true;
         }
 		return super.onKeyDown(keyCode, event);

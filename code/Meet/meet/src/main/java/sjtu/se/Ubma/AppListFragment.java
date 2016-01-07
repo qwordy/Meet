@@ -52,7 +52,7 @@ public class AppListFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((UbmaDrawerActivity)activity).setTitle(getString(R.string.app_list));
+		//((UbmaDrawerActivity)activity).setTitle(getString(R.string.app_list));
 	}
 
 	private void init() {

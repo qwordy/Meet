@@ -17,7 +17,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class WantSettings extends Fragment{
+public class WantSettings extends android.support.v4.app.Fragment{
 
     private Context ctx;
     private View view;

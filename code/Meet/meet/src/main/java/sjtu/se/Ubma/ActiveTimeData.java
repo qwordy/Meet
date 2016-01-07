@@ -120,20 +120,28 @@ public class ActiveTimeData {
 	 * @return Average active time in minite
 	 */
 	public double[] averageActiveTime() {
-		int i, j, hour;
+		int i, j, hour, count, sum;
 
 		Arrays.fill(ansTimes, 0);
-
-		for (i = 0; i < 7; i++)
-			for (j = 0; j < 24; j++)
+		count = 0;
+		for (i = 0; i < 7; i++) {
+			sum = 0;
+			for (j = 0; j < 24; j++) {
 				ansTimes[j] += times[i][j];
+				sum += times[i][j];
+			}
+			if (sum > 0) count++;
+		}
 
-		Calendar calendar = Calendar.getInstance();
-		hour = calendar.get(Calendar.HOUR_OF_DAY);
-		for (i = 0; i <= hour; i++)
-			ansTimes[i] = ansTimes[i] / 7.0 / 60000;
-		for (i = hour + 1; i < 24; i++)
-			ansTimes[i] = ansTimes[i] / 6.0 / 60000;
+		for (i = 0; i < 24; i++)
+			ansTimes[i] = ansTimes[i] / count / 60000;
+
+//		Calendar calendar = Calendar.getInstance();
+//		hour = calendar.get(Calendar.HOUR_OF_DAY);
+//		for (i = 0; i <= hour; i++)
+//			ansTimes[i] = ansTimes[i] / 7.0 / 60000;
+//		for (i = hour + 1; i < 24; i++)
+//			ansTimes[i] = ansTimes[i] / 6.0 / 60000;
 
 		//Log.d("Meet", Arrays.toString(ansTimes));
 		return ansTimes;

@@ -51,7 +51,7 @@
 	<string name="loading">获取中..</string>
 	<string name="app_analysis">排名</string>
 	<string name="title_activity_active_time">Active time</string>
-	<string name="active_time_distribution">用户使用手机时间分布</string>
+	<string name="active_time_distribution">时间分布</string>
 	<string name="title_activity_ubma_drawer">UbmaDrawerActivity</string>
 
 	<string name="ubma_title">用户行为分析</string>
@@ -59,6 +59,7 @@
 	<string name="preferenced_app">偏好应用</string>
 	<string name="active_time">使用时间</string>
 	<string name="active_time_analysis">时间分析</string>
+	<string name="analysis">分析</string>
 	<string name="ubma_about">关于</string>
 
 	<string name="navigation_drawer_open">Open navigation drawer</string>
