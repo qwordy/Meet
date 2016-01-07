@@ -8,4 +8,6 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
 	<dimen name="navigation_drawer_width">240dp</dimen>
 
+    <dimen name="tab_bar_height">40dp</dimen>
+
 </resources>

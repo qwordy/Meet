@@ -49,12 +49,6 @@ public class AppListFragment extends Fragment {
 		init();
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		//((UbmaDrawerActivity)activity).setTitle(getString(R.string.app_list));
-	}
-
 	private void init() {
 		View view = getView();
 		if (view == null) return;
@@ -114,12 +108,11 @@ public class AppListFragment extends Fragment {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				if (mSpinner.getSelectedItemPosition() == 0)
 					builder.setTitle("所有应用分类排名")
-							.setMessage(userBehaviourSummary.allAppSortToString());
+							.setMessage(userBehaviourSummary.allAppCategoryAnalyse());
 				else
 					builder.setTitle("用户应用分类排名")
-							.setMessage(userBehaviourSummary.userAppSortToString());
-				builder.setPositiveButton("确定", null);
-				builder.setNegativeButton("取消", null);
+							.setMessage(userBehaviourSummary.userAppCategoryAnalyse());
+				builder.setPositiveButton(R.string.ok, null);
 				builder.create().show();
 			}
 		});
@@ -129,7 +122,7 @@ public class AppListFragment extends Fragment {
 		mListView.setAdapter(adapter);
 		if (getView() == null) return;
 		((TextView) getView().findViewById(R.id.appListText)).setText(
-				"共" + adapter.getCount() + "个应用");
+				adapter.getCount() + "个应用");
 	}
 
 	private void getAppList4() {

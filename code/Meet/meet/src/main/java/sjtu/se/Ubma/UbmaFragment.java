@@ -18,10 +18,6 @@ import sjtu.se.Meet.R;
 
 public class UbmaFragment extends Fragment {
 
-	private ViewPager mViewPager;
-
-	private UbmaPagerAdapter mPagerAdapter;
-
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,15 +30,31 @@ public class UbmaFragment extends Fragment {
 
 		View view = getView();
 		if (view == null) return;
-		mPagerAdapter = new UbmaPagerAdapter(getChildFragmentManager());
-		mViewPager = (ViewPager) view.findViewById(R.id.pager);
-		mViewPager.setAdapter(mPagerAdapter);
+		UbmaPagerAdapter pagerAdapter = new UbmaPagerAdapter(getChildFragmentManager());
+		final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
+		viewPager.setAdapter(pagerAdapter);
 
-//		TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
-//		tabLayout.addTab(tabLayout.newTab().setText("tab 0"));
-//		tabLayout.addTab(tabLayout.newTab().setText("tab 1"));
-//		tabLayout.addTab(tabLayout.newTab().setText("tab 2"));
+		TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
+		tabLayout.addTab(tabLayout.newTab().setText("应用"));
+		tabLayout.addTab(tabLayout.newTab().setText("时间"));
+		tabLayout.addTab(tabLayout.newTab().setText("关于"));
 
+		viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+		tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				viewPager.setCurrentItem(tab.getPosition());
+			}
 
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+
+			}
+		});
 	}
 }

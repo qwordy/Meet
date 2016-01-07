@@ -100,7 +100,10 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mMenuTitles[position]);
+        if (position == 4)
+            setTitle(getString(R.string.ubma_title));
+        else
+            setTitle(mMenuTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
 
         switch(position){

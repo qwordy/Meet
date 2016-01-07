@@ -11,13 +11,11 @@
 	>
 	<Button android:layout_width="match_parent"
 			android:layout_height="60dp"
-			android:text="@string/all_apps"
 			android:onClick="AppListActivity"
 			android:textAllCaps="false"
 	/>
 	<Button android:layout_width="match_parent"
 			android:layout_height="60dp"
-			android:text="@string/time_in_use"
 			android:onClick="ActiveTimeActivity"
 			android:textAllCaps="false"
 	/>

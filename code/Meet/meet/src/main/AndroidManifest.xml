@@ -82,24 +82,10 @@
                     android:value="sjtu.se.Activity.Search.Search" />
         </activity>
 
-        <service android:name="sjtu.se.Util.TaskService" >
-        </service>
-
-        <activity
-            android:name="sjtu.se.Ubma.ActiveTimeActivity"
-            android:label="使用手机时间" />
-        <activity android:name="sjtu.se.Ubma.AllAppsActivity" />
-
-        <activity
-            android:name="sjtu.se.Ubma.UbmaActivity"
-            android:label="用户行为分析" />
+        <service android:name="sjtu.se.Util.TaskService" />
 
         <service android:name="sjtu.se.Ubma.MonitorService" />
 
-        <activity
-            android:name="sjtu.se.Ubma.UbmaDrawerActivity"
-            android:label="@string/title_activity_ubma_drawer" >
-        </activity>
     </application>
 
 </manifest>

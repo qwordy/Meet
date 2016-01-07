@@ -14,7 +14,7 @@ public class UserBehaviourSummary {
 	 */
 	public List<AppClassifier.Category> appsTags() {
 		List<Map.Entry<AppClassifier.Category, Integer>> sortList =
-				sortAppList(Environment.getUserAiList());
+				sortAppListByCategory(Environment.getUserAiList());
 		List<AppClassifier.Category> list = new ArrayList<>();
 		if (sortList.size() > 0)
 			list.add(sortList.get(0).getKey());
@@ -26,14 +26,10 @@ public class UserBehaviourSummary {
 	}
 
 	/**
-	 * @param tag Tag of apps
-	 * @return Description of the tag
+	 * @param aiList An AppInfo list
+	 * @return A sorted list of pair(category, count)
 	 */
-	public String appsTagDescription(AppClassifier.Category tag) {
-		return tag.toString();
-	}
-
-	private List<Map.Entry<AppClassifier.Category, Integer>> sortAppList(List<AppInfo> aiList) {
+	private List<Map.Entry<AppClassifier.Category, Integer>> sortAppListByCategory(List<AppInfo> aiList) {
 		Map<AppClassifier.Category, Integer> map = new HashMap<>();
 		for (AppInfo appInfo : aiList) {
 			//if (appInfo.category == AppClassifier.Category.OTHER)
@@ -56,17 +52,21 @@ public class UserBehaviourSummary {
 		return sortList;
 	}
 
-	public String allAppSortToString() {
-		return appSort(Environment.getAiList());
+	public String allAppCategoryAnalyse() {
+		return appCategoryAnalyse(Environment.getAiList());
 	}
 
-	public String userAppSortToString() {
-		return appSort(Environment.getUserAiList());
+	public String userAppCategoryAnalyse() {
+		return appCategoryAnalyse(Environment.getUserAiList());
 	}
 
-	private String appSort(List<AppInfo> aiList) {
+	/**
+	 * @param aiList An AppInfo list
+	 * @return Description of category rank
+	 */
+	private String appCategoryAnalyse(List<AppInfo> aiList) {
 		List<Map.Entry<AppClassifier.Category, Integer>> sortList =
-				sortAppList(aiList);
+				sortAppListByCategory(aiList);
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Map.Entry<AppClassifier.Category, Integer> entry : sortList) {
 			stringBuilder.append(entry.getKey().toString())
@@ -96,7 +96,27 @@ public class UserBehaviourSummary {
 		return ActiveTimeCategory.MEDIUM;
 	}
 
-	public String activeTimeCategoryDescription(ActiveTimeCategory category) {
-		return category.toString();
+	public String activeTimeAnalyse() {
+		int i, j;
+		double[] times;
+		double sum;
+		String[] dayStr = {"今日", "昨日", "2日前", "3日前",
+				"4日前", "5日前", "6日前", "平均"};
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("每日使用手机时间(分钟)\n");
+		ActiveTimeData activeTimeData = Environment.activeTimeData;
+		for (i = 0; i <= 7; i++) {
+			if (i < 7)
+				times = activeTimeData.dayActiveTime(i);
+			else
+				times = activeTimeData.averageActiveTime();
+			sum = 0;
+			for (j = 0; j < times.length; j++)
+				sum += times[j];
+			stringBuilder.append(dayStr[i])
+					.append(": ")
+					.append(String.format("%.2f\n", sum));
+		}
+		return stringBuilder.toString();
 	}
 }

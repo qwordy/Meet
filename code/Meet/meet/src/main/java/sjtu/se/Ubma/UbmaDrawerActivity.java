@@ -57,10 +57,6 @@ public class UbmaDrawerActivity extends AppCompatActivity
 			fragment = mFragment0 == null ?
 					mFragment0 = new AppListFragment() :
 					mFragment0;
-		else if (position == 1)
-			fragment = mFragment1 == null ?
-					mFragment1 = new PreferencedAppFragment() :
-					mFragment1;
 		else if (position == 2)
 			fragment = mFragment2 == null ?
 					mFragment2 = new ActiveTimeFragment() :

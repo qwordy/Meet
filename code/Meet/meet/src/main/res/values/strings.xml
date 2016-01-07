@@ -41,32 +41,21 @@
 	<string name="send_contact">递送名片</string>
 	<string name="action_information">TA的信息</string>
 
-
-	<string name="edit_message">write somthing</string>
-	<string name="button_send">send</string>
-	<string name="title_activity_main2">Main2Activity</string>
-	<string name="all_apps">All apps</string>
-	<string name="time_in_use">Time in use</string>
-	<string name="title_activity_all_apps">All apps</string>
 	<string name="loading">获取中..</string>
 	<string name="app_analysis">排名</string>
-	<string name="title_activity_active_time">Active time</string>
-	<string name="active_time_distribution">时间分布</string>
-	<string name="title_activity_ubma_drawer">UbmaDrawerActivity</string>
-
+	<string name="active_time_distribution">使用手机时间分布</string>
 	<string name="ubma_title">用户行为分析</string>
-	<string name="app_list">应用列表</string>
-	<string name="preferenced_app">偏好应用</string>
-	<string name="active_time">使用时间</string>
 	<string name="active_time_analysis">时间分析</string>
-	<string name="analysis">分析</string>
+	<string name="option">选项</string>
 	<string name="ubma_about">关于</string>
+	<string name="ok">确定</string>
+	<string name="cancel">取消</string>
+	<string name="hint">提示</string>
+	<string name="ubmaAbout">用户行为分析\n1.1\niamyfy@163.com\nyfy</string>
 
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
-
 	<string name="action_example">Example action</string>
-	<string name="ubmaAbout">用户行为分析\niamyfy@163.com\nyfy</string>
 
 	<string-array name="menu_array">
 		<item>首页</item>

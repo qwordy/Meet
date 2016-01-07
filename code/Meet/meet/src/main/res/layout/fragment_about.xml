@@ -2,11 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:id="@+id/about"
 			  android:layout_width="match_parent"
-			  android:layout_height="match_parent">
-	<TextView android:layout_width="match_parent"
 			  android:layout_height="match_parent"
+			  android:orientation="vertical">
+	<TextView android:layout_width="match_parent"
+			  android:layout_height="0dp"
+			  android:layout_weight="2"
 			  android:text="@string/ubmaAbout"
-			  android:padding="10dp"
-	/>
-
+			  android:gravity="center"
+			  android:padding="10dp"/>
+	<View android:layout_width="match_parent"
+		  android:layout_height="0dp"
+		  android:layout_weight="1"/>
 </LinearLayout>

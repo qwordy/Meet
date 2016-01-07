@@ -29,6 +29,8 @@ public class LineChartView extends View {
 	 */
 	public int whichDay = 0;
 
+	public boolean timeValueVisible = false;
+
 	private final int textColor = Color.GRAY;
 
 	private final int chartColor = 0xff33b5e5;
@@ -48,7 +50,6 @@ public class LineChartView extends View {
 
 	private void init() {
 		paint = new Paint();
-		paint.setTextAlign(Paint.Align.CENTER);
 		paint.setTextSize(Utility.dp2px(14));
 	}
 
@@ -97,6 +98,7 @@ public class LineChartView extends View {
 
 		// Draw text
 		paint.setColor(textColor);
+		paint.setTextAlign(Paint.Align.CENTER);
 		for (i = 0; i <= 24; i++)
 			canvas.drawText(
 					String.valueOf(i),
@@ -118,14 +120,27 @@ public class LineChartView extends View {
 		double[] data = prepareData();
 
 		// Draw line chart
-		paint.setColor(chartColor);
-		for (i = 0; i < 24; i++)
+		for (i = 0; i < 24; i++) {
+			float xEnd = (float) (x0 + (x1 - x0) * (data[i] / 60));
+			float yBegin = (float) (y0 + (y1 - y0) * (i / 24.0));
+			float yEnd = (float) (y0 + (y1 - y0) * ((i + 1) / 24.0));
+			paint.setColor(chartColor);
 			canvas.drawRect(
 					x0 + 1,
-					(float)(y0 + (y1 - y0) * (i / 24.0)) + 1,
-					(float)(x0 + (x1 - x0) * (data[i] / 60)),
-					(float)(y0 + (y1 - y0) * ((i + 1) / 24.0)) - 1,
+					yBegin + 1,
+					xEnd,
+					yEnd - 1,
 					paint);
+			// Draw value optionally
+			if (timeValueVisible) {
+				paint.setTextAlign(Paint.Align.LEFT);
+				paint.setColor(textColor);
+				canvas.drawText(String.format("%.2f", data[i]),
+						xEnd + 5,
+						(yBegin + yEnd) / 2 + bias,
+						paint);
+			}
+		}
 	}
 
 	private double[] prepareData() {
