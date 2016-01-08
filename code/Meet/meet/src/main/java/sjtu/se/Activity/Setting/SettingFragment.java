@@ -1,13 +1,9 @@
 package sjtu.se.Activity.Setting;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.support.v4.app.Fragment;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Meet.R;
 import sjtu.se.Ubma.AppClassifier;
@@ -15,7 +11,7 @@ import sjtu.se.Ubma.Environment;
 
 import java.util.List;
 
-public class SettingFragment extends PreferenceFragment
+public class SettingFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_PREF_NICKNAME = "pref_nickname";
@@ -27,13 +23,23 @@ public class SettingFragment extends PreferenceFragment
     public static SharedPreferences prefs;
 
 
-    @Override
+    /*@Override
     public void onCreate(final Bundle savedInstanceState){
         Preference nicknamePref;
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.system);
 
+        prefs = getPreferenceScreen().getSharedPreferences();
+        if((nicknamePref = findPreference(KEY_PREF_NICKNAME))!=null){
+            nicknamePref.setSummary(prefs.getString(KEY_PREF_NICKNAME, ""));
+        }
+    }*/
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        Preference nicknamePref;
+        addPreferencesFromResource(R.xml.system);
         prefs = getPreferenceScreen().getSharedPreferences();
         if((nicknamePref = findPreference(KEY_PREF_NICKNAME))!=null){
             nicknamePref.setSummary(prefs.getString(KEY_PREF_NICKNAME, ""));

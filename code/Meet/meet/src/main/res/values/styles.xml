@@ -4,6 +4,12 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="preferenceTheme">@style/Theme.MyTheme.PreferenceTheme</item>
+    </style>
+
+    <style name="Theme.MyTheme.PreferenceTheme" parent="@style/PreferenceThemeOverlay">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/text_gray</item>
     </style>
 
     <style name="Theme.MyTheme.ActionButton" parent="Base.Widget.AppCompat.Button.Borderless">

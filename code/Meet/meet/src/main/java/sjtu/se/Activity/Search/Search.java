@@ -122,7 +122,9 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
                         mSearchFragment);
                 break;
             case 1:
-                //ft.replace(R.id.pref_fragment_container, new SettingFragment());
+                ft.replace(R.id.pref_fragment_container, mSettingFragment == null ?
+                        mSettingFragment = new SettingFragment():
+                        mSettingFragment);
                 break;
             case 2:
                 ft.replace(R.id.pref_fragment_container, mBaseInfoSettings == null ?

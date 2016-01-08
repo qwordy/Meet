@@ -36,7 +36,7 @@ public class SystemSettings extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        getFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SettingFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, new SettingFragment()).commit();
     }
 
     @Override

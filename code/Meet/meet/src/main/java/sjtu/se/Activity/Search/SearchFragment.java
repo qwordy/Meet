@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 public class SearchFragment extends android.support.v4.app.Fragment {
 
     private static final int REQUEST_FOR_ENABLE = 1;
