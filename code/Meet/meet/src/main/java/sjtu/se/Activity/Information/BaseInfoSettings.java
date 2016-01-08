@@ -384,7 +384,7 @@ public class BaseInfoSettings extends Fragment implements View.OnFocusChangeList
             SharedPreferences.Editor editor = baseInfo.edit();
             editor.putString(ActivityControlCenter.KEY_LOCATION, str);
             editor.apply();
-        }else if(v==item_keywords){
+        }else if(v==item_keywords&& !hasFocus){
             String str = ((TextView)v).getText().toString();
             SharedPreferences.Editor editor = baseInfo.edit();
             editor.putString(ActivityControlCenter.KEY_KEYWORDS, str);
