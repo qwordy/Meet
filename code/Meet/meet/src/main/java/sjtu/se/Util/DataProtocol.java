@@ -19,6 +19,8 @@ public class DataProtocol {
 	public final static byte TYPE_FILE = 0xF;
 	public final static byte TYPE_CARD = 0xD;
 	public final static byte TYPE_INFO = 0xE;
+	public final static byte TYPE_ASK_ANALYSIS = 0x8;
+	public final static byte TYPE_ANALYSIS = 0x9;
 
 	public static byte[] packMsg(String msg) throws UnsupportedEncodingException{
 		byte[] msgbytes = msg.getBytes("UTF-8");
@@ -84,6 +86,19 @@ public class DataProtocol {
         return buf;
     }
 
+	public static byte[] packAnalysis(String analysis) throws UnsupportedEncodingException{
+		byte[] msgbytes = analysis.getBytes("UTF-8");
+		byte lowLen = (byte)(msgbytes.length & 0xFF);
+		byte hiLen = (byte)(msgbytes.length >> 8 & 0xFF);
+		byte[] buf = new byte[msgbytes.length + 4];
+		buf[0] = HEAD;
+		buf[1] = TYPE_ANALYSIS;
+		buf[2] = hiLen;
+		buf[3] = lowLen;
+		System.arraycopy(msgbytes, 0, buf, 4, msgbytes.length);
+		return buf;
+	}
+
 	public static Message unpackData(byte[] data) throws UnsupportedEncodingException{
 		if(data[0] != HEAD)
 			return null;
@@ -119,6 +134,12 @@ public class DataProtocol {
         case TYPE_END:
             msg.type = TYPE_END;
             break;
+		case TYPE_ANALYSIS:
+			msg.type = TYPE_ANALYSIS;
+			lowLen = data[3] & 0xFF;
+			hiLen = data[2] & 0xFF;
+			msg.length = hiLen << 8 | lowLen;
+			msg.msg = new String(data, 4, msg.length, "UTF-8");
 		}
 		return msg;
 	}

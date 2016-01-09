@@ -23,19 +23,6 @@ public class SettingFragment extends PreferenceFragmentCompat
     public static SharedPreferences prefs;
 
 
-    /*@Override
-    public void onCreate(final Bundle savedInstanceState){
-        Preference nicknamePref;
-
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.system);
-
-        prefs = getPreferenceScreen().getSharedPreferences();
-        if((nicknamePref = findPreference(KEY_PREF_NICKNAME))!=null){
-            nicknamePref.setSummary(prefs.getString(KEY_PREF_NICKNAME, ""));
-        }
-    }*/
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         Preference nicknamePref;

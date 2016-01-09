@@ -16,16 +16,6 @@ import sjtu.se.Activity.ActivityControlCenter;
 
 public class SystemSettings extends AppCompatActivity {
 
-	private BroadcastReceiver receiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (action.equals(ActivityControlCenter.ACTIVITY_EXIT_ACTION)){
-				finish();
-			}
-		}
-	};
-
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

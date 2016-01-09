@@ -19,7 +19,6 @@ import sjtu.se.Activity.Setting.SettingFragment;
 import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Activity.Want.WantSettings;
 import sjtu.se.Ubma.MonitorService;
-import sjtu.se.Ubma.UbmaDrawerActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.nfc.NdefMessage;
@@ -66,13 +65,11 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(mTitle);
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getSupportActionBar().setTitle(mDrawerTitle);
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);

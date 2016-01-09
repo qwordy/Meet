@@ -25,10 +25,11 @@ public class Notify {
 				.getNotification();
 
 		notify.defaults |= Notification.DEFAULT_VIBRATE;
-		notify.defaults |= Notification.DEFAULT_SOUND; // 调用系统自带声音
 		notify.flags |= Notification.FLAG_AUTO_CANCEL; // 点击清除按钮或点击通知后会自动消失
 		notify.defaults |= Notification.DEFAULT_LIGHTS;
-		notify.vibrate = new long[]{300, 500};
+        notify.defaults |= Notification.DEFAULT_SOUND; // 调用系统自带声音
+        notify.defaults |= Notification.DEFAULT_VIBRATE;
+        notify.vibrate = new long[]{300, 500};
 
 		manager.notify(NOTIFY_ID1, notify);
 	}

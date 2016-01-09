@@ -77,7 +77,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 	private ArrayList<HashMap<String, Object>> mChatContent2 = new ArrayList<HashMap<String, Object>>();
 	
 	private ArrayList<HashMap<String, Object>> mEmoList = new ArrayList<HashMap<String, Object>>();
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -687,6 +687,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 			switch(msg.what){
                 case Task.TASK_DISCONNECT:
                     showToast("连接已中断");
+					TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                     ((ChatActivity)ctx).finish();
                     break;
 
@@ -744,6 +745,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if(msg.obj == null) return;
                     remote_user = Information.parseInformation((String)msg.obj);
                     showToast("对方已上线");
+                    break;
+
+                case Task.TASK_SEND_ANALYSIS:
+                    if(msg.obj == null) return;
+                    showToast(msg.obj.toString());
+                    break;
+
+                case Task.TASK_RECV_ANALYSIS:
+                    if(msg.obj == null) return;
+                    break;
+
+                case Task.TASK_ASK_ANALYSIS:
+                    if(msg.obj == null) return;
+                    showToast(msg.obj.toString());
                     break;
 			}
 		}
@@ -812,6 +827,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                     ((ChatActivity)ctx).finish();
                     dialog.dismiss();
                 }
@@ -904,6 +920,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 						((ChatActivity)ctx).finish();
 						dialog.dismiss();
 					}

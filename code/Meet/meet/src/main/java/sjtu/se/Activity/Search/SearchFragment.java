@@ -15,7 +15,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.*;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import sjtu.se.Util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class SearchFragment extends android.support.v4.app.Fragment {
@@ -288,6 +286,7 @@ public class SearchFragment extends android.support.v4.app.Fragment {
                         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
                         return;
                     }
+                    Notify.notifyMessage(ctx, info.baseinfo.Nick+" 和你打招呼快去看看吧","有人和你打招呼，快去看看吧",info.baseinfo.Nick, getActivity());
                     AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
                     builder.setMessage(info.baseinfo.Nick + " 和你打招呼，要建立连接么？");
                     builder.setTitle("提示");
@@ -522,7 +521,6 @@ public class SearchFragment extends android.support.v4.app.Fragment {
         ctx.registerReceiver(receiver, intentFilter);
 
         TaskService.mActivityHandler = mHandler;
-        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
 
         search.removeMessages(0);
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
