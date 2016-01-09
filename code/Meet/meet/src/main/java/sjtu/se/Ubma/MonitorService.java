@@ -25,13 +25,11 @@ public class MonitorService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d("Meet", "MonitorService started");
+		Log.d("Meet", "MonitorService onCreate");
 		//Log.d("Meet", getFilesDir().toString());
 
 		Environment.activeTimeFile = new File(getFilesDir(), "activeTimeData");
-		Environment.activeTimeData = activeTimeData = new ActiveTimeData();
-		Environment.setAiList(new ArrayList<AppInfo>());
-		Environment.setUserAiList(new ArrayList<AppInfo>());
+		activeTimeData = Environment.getActiveTimeData();
 		calendar = Calendar.getInstance();
 		new MyThread().start();
 
@@ -46,8 +44,9 @@ public class MonitorService extends Service {
 	private class MyThread extends Thread {
 		@Override
 		public void run() {
-			List<AppInfo> aiList = Environment.getAiList();
-			List<AppInfo> userAiList = Environment.getUserAiList();
+			Log.d("Meet", "MonitorService getAppListStart");
+			List<AppInfo> aiList = new ArrayList<>();
+			List<AppInfo> userAiList = new ArrayList<>();
 			PackageManager pm = getPackageManager();
 			List<PackageInfo> piList = pm.getInstalledPackages(0);
 			for (PackageInfo pi : piList) {
@@ -62,11 +61,10 @@ public class MonitorService extends Service {
 				if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
 					userAiList.add(appInfo);
 			}
-			Log.d("Meet", "MonitorService getAppList");
+			Log.d("Meet", "MonitorService getAppListDone");
 
 			Environment.setAiList(aiList);
 			Environment.setUserAiList(userAiList);
-			Environment.setUserBehaviourSummary(new UserBehaviourSummary());
 		}
 	}
 
@@ -110,7 +108,10 @@ public class MonitorService extends Service {
 
 	@Override
 	public void onDestroy() {
+		Log.d("Meet", "MonitorService onDestroy");
 		unregisterReceiver(receiver);
+		//Environment.setAiList(null);
+		//Environment.setUserAiList(null);
 	}
 
 	public class MyBinder extends Binder {

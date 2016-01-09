@@ -18,7 +18,7 @@ public class Environment {
 
 	public static File activeTimeFile;
 
-	public static ActiveTimeData activeTimeData;
+	private static ActiveTimeData activeTimeData;
 
 	public static void setAiList(List<AppInfo> aiList) {
 		Environment.aiList = aiList;
@@ -40,13 +40,15 @@ public class Environment {
 		return userAiList;
 	}
 
-	public static void setUserBehaviourSummary(UserBehaviourSummary userBehaviourSummary) {
-		Environment.userBehaviourSummary = userBehaviourSummary;
+	public static UserBehaviourSummary getUserBehaviourSummary() {
+		if (userBehaviourSummary == null)
+			userBehaviourSummary = new UserBehaviourSummary();
+		return userBehaviourSummary;
 	}
 
-	public static UserBehaviourSummary getUserBehaviourSummary() {
-		while (userBehaviourSummary == null)
-			Thread.yield();
-		return userBehaviourSummary;
+	public static ActiveTimeData getActiveTimeData() {
+		if (activeTimeData == null)
+			activeTimeData = new ActiveTimeData();
+		return activeTimeData;
 	}
 }

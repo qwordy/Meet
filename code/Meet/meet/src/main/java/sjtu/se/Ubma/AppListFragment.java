@@ -10,9 +10,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 import sjtu.se.Meet.R;
 
@@ -24,41 +22,44 @@ import sjtu.se.Meet.R;
  */
 
 public class AppListFragment extends Fragment {
-	private Activity mActivity;
 	private ListView mListView;
 	private AppInfoAdapter mAdapter0, mAdapter1;
 	private Spinner mSpinner;
 	private Button mButton;
+	private boolean inited;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
-		Log.d("Meet", "AppListFragment create");
+		Log.d("Meet", "AppListFragment onCreate");
 		super.onCreate(savedInstanceState);
-		mActivity = getActivity();
+//		String str = Environment.getUserBehaviourSummary().toString();
+//		String sim = Environment.getUserBehaviourSummary().compare(str);
+//		Log.d("Meet", sim);
 	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_app_list, container, false);
+		Log.d("Meet", "AppListFragment onCreateView");
+		View view = inflater.inflate(R.layout.fragment_app_list, container, false);
+		init(view);
+		return view;
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		init();
+		Log.d("Meet", "AppListFragment onActivityCreated ");
 	}
 
-	private void init() {
-		View view = getView();
+	private void init(View view) {
 		if (view == null) return;
-
 		mSpinner = (Spinner) view.findViewById(R.id.spinner);
 		mSpinner.setEnabled(false);
 		mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Log.d("Meet", String.valueOf(id));
+				Log.d("Meet", "AppListSpinner " + String.valueOf(id));
 				if (!mSpinner.isEnabled())
 					return;
 				if (id == 0)
@@ -71,19 +72,29 @@ public class AppListFragment extends Fragment {
 			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 
-		mListView = (ListView) getView().findViewById(R.id.appListView);
+		mListView = (ListView) view.findViewById(R.id.appListView);
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
-						Uri.parse("package:" + ((TextView) view.findViewById(R.id.packageName)).getText()));
-				startActivity(intent);
+				mListView.showContextMenu();
+//				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
+//						Uri.parse("package:" + ((TextView) view.findViewById(R.id.packageName)).getText()));
+//				startActivity(intent);
 			}
 		});
+		mListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+			@Override
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+				menu.setHeaderTitle("选项");
+				menu.add(0, 0, 0, "启动应用");
+				menu.add(0, 1, 0, "详细信息");
+			}
+		});
+
 		new AsyncTask<Object, Object, Object>(){
 			@Override
 			protected void onPostExecute(Object o) {
-				if (getView() == null) return;
+				//Log.d("Meet", "AppListFragment onPostExecute");
 				if (mSpinner.getSelectedItemId() == 0)
 					setAppListView(mAdapter0);
 				else
@@ -126,8 +137,26 @@ public class AppListFragment extends Fragment {
 	}
 
 	private void getAppList4() {
-		mAdapter0 = new AppInfoAdapter(mActivity, Environment.getAiList());
-		mAdapter1 = new AppInfoAdapter(mActivity, Environment.getUserAiList());
+		mAdapter0 = new AppInfoAdapter(getActivity(), Environment.getAiList());
+		mAdapter1 = new AppInfoAdapter(getActivity(), Environment.getUserAiList());
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.d("Meet", "AppListFragment onResume");
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.d("Meet", "AppListFragment onPause");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.d("Meet", "AppListFragment onStop");
 	}
 
 //	private void getAppList() {

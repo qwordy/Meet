@@ -70,6 +70,13 @@ public class ActiveTimeData {
 		}
 	}
 
+	public void clear() {
+		tail = 0;
+		tailDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		times = new int[7][24];
+		writeInstance();
+	}
+
 	public void addTime(Calendar begin, Calendar end) {
 		int i, oldTail, day0, day1, hour0, hour1;
 		final int MS_PER_HOUR = 60 * 60 * 1000;

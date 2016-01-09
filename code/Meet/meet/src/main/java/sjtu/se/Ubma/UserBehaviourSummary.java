@@ -2,6 +2,12 @@ package sjtu.se.Ubma;
 
 import java.util.*;
 
+import android.util.Log;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+
 /**
  * Created by qwordy on 12/30/15.
  * UserBehaviourSummary
@@ -104,7 +110,7 @@ public class UserBehaviourSummary {
 				"4日前", "5日前", "6日前", "平均"};
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("每日使用手机时间(分钟)\n");
-		ActiveTimeData activeTimeData = Environment.activeTimeData;
+		ActiveTimeData activeTimeData = Environment.getActiveTimeData();
 		for (i = 0; i <= 7; i++) {
 			if (i < 7)
 				times = activeTimeData.dayActiveTime(i);
@@ -118,5 +124,79 @@ public class UserBehaviourSummary {
 					.append(String.format("%.2f\n", sum));
 		}
 		return stringBuilder.toString();
+	}
+
+	@Override
+	public String toString() {
+		JSONObject obj = new JSONObject();
+		obj.put("apps", appListJson());
+		obj.put("times", timeListJson());
+		Log.d("Meet", obj.toString());
+		return obj.toString();
+	}
+
+	private JSONArray appListJson() {
+		JSONArray list = new JSONArray();
+		List<AppInfo> appList = Environment.getUserAiList();
+		for (AppInfo info : appList)
+			list.add(info.packageName);
+		return list;
+	}
+
+	private JSONArray timeListJson() {
+		JSONArray list = new JSONArray();
+		double[] times = Environment.getActiveTimeData().averageActiveTime();
+		for (double time : times)
+			list.add(time);
+		return list;
+	}
+
+	public String compare(String summary) {
+		double appSim, timeSim, sim;
+		JSONParser parser = new JSONParser();
+		try {
+			JSONObject obj = (JSONObject) parser.parse(summary);
+			JSONArray appList = (JSONArray) obj.get("apps");
+			JSONArray timeList = (JSONArray) obj.get("times");
+			appSim = compareApps(appList);
+			timeSim = compareTimes(timeList);
+			sim = (appSim + timeSim) / 2;
+			String str = String.format(
+					"相似度：%d%%\n手机应用相似度：%d%%\n活跃时间相似度：%d%%",
+					Math.round(sim * 100),
+					Math.round(appSim * 100),
+					Math.round(timeSim * 100));
+			return str;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "获取相似度失败";
+	}
+
+	private double compareApps(JSONArray list) {
+		JSONArray list0 = appListJson();
+		HashSet<String> set = new HashSet<>();
+		for (Object pkg : list)
+			set.add((String) pkg);
+		int count = 0;
+		for (Object pkg : list0)
+			if (set.contains(pkg)) count++;
+		return (double) count / (list0.size() + list.size() - count);
+	}
+
+	private double compareTimes(JSONArray list) {
+		int i;
+		double product, model0, model;
+		JSONArray list0 = timeListJson();
+		product = model0 = model = 0;
+		for (i = 0; i < 24; i++)
+			product += (double) list0.get(i) * (double) list.get(i);
+		for (Object time : list0)
+			model0 += Math.pow((double) time, 2);
+		model0 = Math.sqrt(model0);
+		for (Object time : list)
+			model += Math.pow((double) time, 2);
+		model = Math.sqrt(model);
+		return product / model0 / model;
 	}
 }

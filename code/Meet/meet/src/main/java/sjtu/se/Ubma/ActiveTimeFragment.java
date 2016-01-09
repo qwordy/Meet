@@ -1,6 +1,5 @@
 package sjtu.se.Ubma;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -22,12 +21,41 @@ public class ActiveTimeFragment extends Fragment {
 	private LineChartView mLineChartView;
 	private Button mButton;
 	private boolean timeValueVisible = false;
-	private DialogInterface.OnClickListener clearDataDialogOnClickListener;
+	private AlertDialog.Builder mAnalysisDialogBuilder;
+	private AlertDialog mClearDataDialog, mClearDataSuccessDialog;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("Meet", "ActiveTimeFragment create");
+		Log.d("Meet", "ActiveTimeFragment onCreate");
+
+		mAnalysisDialogBuilder = new AlertDialog.Builder(getActivity())
+				.setTitle("数据分析")
+				.setPositiveButton("确定", null);
+
+		mClearDataDialog = new AlertDialog.Builder(getActivity())
+				.setTitle(R.string.hint)
+				.setMessage("确认清除数据？")
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						ActiveTimeData activeTimeData = Environment.getActiveTimeData();
+						if (activeTimeData == null)
+							activeTimeData = new ActiveTimeData();
+						activeTimeData.clear();
+						mLineChartView.invalidate();
+						mClearDataSuccessDialog.show();
+					}
+				})
+				.setNegativeButton(R.string.cancel, null)
+				.create();
+
+		mClearDataSuccessDialog = new AlertDialog.Builder(getActivity())
+				.setTitle(R.string.hint)
+				.setMessage("清除数据成功！")
+				.setPositiveButton(R.string.ok, null)
+				.create();
+		Log.d("Meet", "ActiveTimeFragment onCreateDone");
 	}
 
 	@Nullable
@@ -43,19 +71,18 @@ public class ActiveTimeFragment extends Fragment {
 		View view = getView();
 		if (view == null) return;
 		mLineChartView = (LineChartView) view.findViewById(R.id.lineChartView);
+		mLineChartView.timeValueVisible = timeValueVisible;
 		Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Log.d("Meet", String.valueOf(position));
+				Log.d("Meet", "ActiveTimeSpinner "+ String.valueOf(position));
 				mLineChartView.whichDay = position - 1;
 				mLineChartView.invalidate();
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-
-			}
+			public void onNothingSelected(AdapterView<?> parent) {}
 		});
 		spinner.setSelection(1);
 
@@ -97,12 +124,9 @@ public class ActiveTimeFragment extends Fragment {
 	}
 
 	public void analyse() {
-		UserBehaviourSummary userBehaviourSummary = Environment.getUserBehaviourSummary();
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("数据分析")
-				.setMessage(userBehaviourSummary.activeTimeAnalyse())
-				.setPositiveButton("确定", null);
-		builder.create().show();
+		mAnalysisDialogBuilder
+				.setMessage(Environment.getUserBehaviourSummary().activeTimeAnalyse())
+				.show();
 	}
 
 	public void showOrHideTimeValue() {
@@ -111,30 +135,6 @@ public class ActiveTimeFragment extends Fragment {
 	}
 
 	public void clearData() {
-		if (clearDataDialogOnClickListener == null)
-			clearDataDialogOnClickListener = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if (which == DialogInterface.BUTTON_POSITIVE) {
-						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-						builder.setTitle(R.string.hint)
-								.setMessage("清除数据成功！")
-								.setPositiveButton(R.string.ok, null);
-						builder.create().show();
-					}
-				}
-			};
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.hint)
-				.setMessage("确认清除数据？")
-				.setPositiveButton(R.string.ok, clearDataDialogOnClickListener)
-				.setNegativeButton(R.string.cancel, null);
-		builder.create().show();
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		//((UbmaDrawerActivity)activity).setTitle(getString(R.string.active_time));
+		mClearDataDialog.show();
 	}
 }

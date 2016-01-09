@@ -144,7 +144,7 @@ public class LineChartView extends View {
 	}
 
 	private double[] prepareData() {
-		ActiveTimeData activeTimeData = Environment.activeTimeData;
+		ActiveTimeData activeTimeData = Environment.getActiveTimeData();
 		if (activeTimeData == null)
 			activeTimeData = new ActiveTimeData();
 		if (whichDay >= 0 && whichDay <= 6)
