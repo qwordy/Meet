@@ -49,6 +49,10 @@ public class TaskService extends Service {
         public static final int TASK_SEND_INFO = 11;
         public static final int TASK_RECV_INFO = 12;
 
+        public static final int TASK_ASK_ANALYSIS = 13;
+        public static final int TASK_SEND_ANALYSIS = 14;
+        public static final int TASK_RECV_ANALYSIS = 15;
+
         // 任务ID
         private int mTaskID;
         // 任务参数列表
@@ -215,7 +219,7 @@ public class TaskService extends Service {
     }
 
     private void doTask(Task task) {
-        boolean sucess = false;
+        boolean success = false;
         switch (task.getTaskID()) {
             case Task.TASK_START_ACCEPT:
                 if (mAcceptThread != null && mAcceptThread.isAlive()) {
@@ -250,7 +254,7 @@ public class TaskService extends Service {
                 break;
 
             case Task.TASK_SEND_MSG:
-                sucess = false;
+                success = false;
                 if (mCommThread == null || !mCommThread.isAlive()
                         || task.mParams == null || task.mParams.length == 0) {
                     Log.e(TAG, "mCommThread or task.mParams null");
@@ -258,12 +262,12 @@ public class TaskService extends Service {
                     byte[] msg = null;
                     try {
                         msg = DataProtocol.packMsg((String) task.mParams[0]);
-                        sucess = mCommThread.write(msg);
+                        success = mCommThread.write(msg);
                     } catch (UnsupportedEncodingException e) {
-                        sucess = false;
+                        success = false;
                     }
                 }
-                if (!sucess) {
+                if (!success) {
                     try {
                         android.os.Message returnMsg = mActivityHandler.obtainMessage();
                         returnMsg.what = Task.TASK_SEND_MSG;
@@ -274,7 +278,7 @@ public class TaskService extends Service {
                 break;
 
             case Task.TASK_SEND_CARD:
-                sucess = false;
+                success = false;
                 if (mCommThread == null || !mCommThread.isAlive()
                         || task.mParams == null || task.mParams.length == 0) {
                     Log.e(TAG, "mCommThread or task.mParams null");
@@ -282,15 +286,15 @@ public class TaskService extends Service {
                     byte[] card = null;
                     try {
                         card = DataProtocol.packCard((String) task.mParams[0]);
-                        sucess = mCommThread.write(card);
+                        success = mCommThread.write(card);
                     } catch (UnsupportedEncodingException e) {
-                        sucess = false;
+                        success = false;
                     }
                 }
                 try {
                     android.os.Message returnMsg = mActivityHandler.obtainMessage();
                     returnMsg.what = Task.TASK_SEND_CARD;
-                    if (sucess) returnMsg.obj = "名片已发送";
+                    if (success) returnMsg.obj = "名片已发送";
                     else returnMsg.obj = "名片发送失败";
                     mActivityHandler.sendMessage(returnMsg);
                 }catch(Exception e){}
@@ -304,12 +308,12 @@ public class TaskService extends Service {
                     byte[] info = null;
                     try {
                         info = DataProtocol.packInfo((String) task.mParams[0]);
-                        sucess = mCommThread.write(info);
+                        success = mCommThread.write(info);
                     } catch (UnsupportedEncodingException e) {
-                        sucess = false;
+                        success = false;
                     }
                 }
-                if (!sucess) {
+                if (!success) {
                     try {
                         android.os.Message msg = mActivityHandler.obtainMessage();
                         msg.what = Task.TASK_DISCONNECT;
@@ -327,6 +331,42 @@ public class TaskService extends Service {
                         mCommThread.write(cancel);
                     }
                     catch(Exception e) {}
+                }
+                break;
+
+            case Task.TASK_ASK_ANALYSIS:
+                success = false;
+                if (mCommThread == null || !mCommThread.isAlive())
+                    Log.e(TAG, "mCommThread null");
+                else{
+                    try {
+                        byte[] analysis = {DataProtocol.HEAD, DataProtocol.TYPE_ASK_ANALYSIS};
+                        success = mCommThread.write(analysis);
+                    }
+                    catch(Exception e) {
+                        success = false;
+                    }
+                }
+                if(!success) {
+                    try {
+                        android.os.Message returnMsg = mActivityHandler.obtainMessage();
+                        returnMsg.what = Task.TASK_ASK_ANALYSIS;
+                        returnMsg.obj = "请求失败。";
+                        mActivityHandler.sendMessage(returnMsg);
+                    } catch (Exception e) {}
+                }
+                break;
+
+            case Task.TASK_SEND_ANALYSIS:
+                if (mCommThread == null || !mCommThread.isAlive()
+                        || task.mParams == null || task.mParams.length == 0) {
+                    Log.e(TAG, "mCommThread or task.mParams null");
+                }else{
+                    byte[] analysis = null;
+                    try {
+                        analysis = DataProtocol.packAnalysis((String) task.mParams[0]);
+                        mCommThread.write(analysis);
+                    } catch (UnsupportedEncodingException e) {}
                 }
                 break;
         }
@@ -604,6 +644,17 @@ public class TaskService extends Service {
                     }else if(msg.type == DataProtocol.TYPE_END){
                         handlerMsg = mActivityHandler.obtainMessage();
                         handlerMsg.what = Task.TASK_CANCEL;
+                        mActivityHandler.sendMessage(handlerMsg);
+
+                    }else if(msg.type == DataProtocol.TYPE_ASK_ANALYSIS){
+                        handlerMsg = mActivityHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_ASK_ANALYSIS;
+                        mActivityHandler.sendMessage(handlerMsg);
+
+                    }else if (msg.type == DataProtocol.TYPE_ANALYSIS) {
+                        handlerMsg = mActivityHandler.obtainMessage();
+                        handlerMsg.what = Task.TASK_RECV_ANALYSIS;
+                        handlerMsg.obj = msg.msg;
                         mActivityHandler.sendMessage(handlerMsg);
 
                     }

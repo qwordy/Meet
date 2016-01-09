@@ -51,9 +51,6 @@ import sjtu.se.Meet.R;
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
 	private final String TAG = "ChatActivity";
 	public static int sAliveCount = 0;
-	
-	// 蓝牙状态变量
-	private static int sBTState = -1;
 
     private Information remote_user;
     private Information overt_user;
@@ -77,7 +74,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 	private ArrayList<HashMap<String, Object>> mChatContent2 = new ArrayList<HashMap<String, Object>>();
 	
 	private ArrayList<HashMap<String, Object>> mEmoList = new ArrayList<HashMap<String, Object>>();
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -684,27 +681,29 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
+            AlertDialog.Builder builder;
 			switch(msg.what){
                 case Task.TASK_DISCONNECT:
                     showToast("连接已中断");
+					TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    Notify.clear(ctx);
                     ((ChatActivity)ctx).finish();
                     break;
 
                 case Task.TASK_SEND_MSG:
 				    showToast(msg.obj.toString());
-				    /*if(sAliveCount <= 0){
-					    Notify.notifyMessage(ChatActivity.this, "消息","遇见MEET",msg.obj.toString(), ChatActivity.this);
-				    }*/
 				    break;
 
                 case Task.TASK_RECV_MSG:
                     if(msg.obj == null) return;
                     if(msg.obj instanceof HashMap<?, ?>){
                         showTargetMessage((HashMap<String, Object>) msg.obj);
+                        if(sAliveCount <= 0){
+                            String text =(String)((HashMap<String, Object>) msg.obj).get(ChatListViewAdapter.KEY_TEXT);
+                            Notify.notifyMessage(ChatActivity.this,
+                                    remote_user.baseinfo.Nick +":"+text, remote_user.baseinfo.Nick,text, ChatActivity.this);
+                        }
                     }
-				    /*if(sAliveCount <= 0){
-					    Notify.notifyMessage(ChatActivity.this, "您有未读取消息","遇见MEET","您有未读取消息", ChatActivity.this);
-				    }*/
                     break;
 
                 case Task.TASK_SEND_CARD:
@@ -715,7 +714,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 case Task.TASK_RECV_CARD:
                     if(msg.obj == null) return;
                     final String card = (String)msg.obj;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder = new AlertDialog.Builder(ctx);
                     builder.setMessage("接收 " + remote_user.baseinfo.Nick + " 的名片吗？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -745,18 +744,31 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     remote_user = Information.parseInformation((String)msg.obj);
                     showToast("对方已上线");
                     break;
+
+                case Task.TASK_ASK_ANALYSIS:
+                    if(msg.obj == null)
+                        TaskService.newTask(new TaskService.Task(mHandler, Task.TASK_SEND_ANALYSIS, new Object[]{"A"}));
+                    else
+                        showToast(msg.obj.toString());
+                    break;
+
+                case Task.TASK_RECV_ANALYSIS:
+                    if(msg.obj == null) return;
+                    final String message = (String)msg.obj;
+                    builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage(message);
+                    builder.setTitle("相似度分析");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
+                    break;
 			}
 		}
 	};
-	
-	private boolean isBTStateChanged(int now){
-		if(sBTState != now){
-			sBTState = now;
-			return true;
-		}else{
-			return false;
-		}
-	}
 	
 	/**
 	 * 显示对方信息
@@ -812,6 +824,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    Notify.clear(ctx);
                     ((ChatActivity)ctx).finish();
                     dialog.dismiss();
                 }
@@ -904,7 +918,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						((ChatActivity)ctx).finish();
+                        TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                        Notify.clear(ctx);
+                        ((ChatActivity) ctx).finish();
 						dialog.dismiss();
 					}
 				});

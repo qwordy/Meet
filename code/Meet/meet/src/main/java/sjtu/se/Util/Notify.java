@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Meet.R;
 
 public class Notify {
@@ -15,6 +17,7 @@ public class Notify {
 
 		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, activity.getClass()), 0);
+        SharedPreferences sp = context.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
 
 		Notification notify = new Notification.Builder(context)
 				.setSmallIcon(R.drawable.icon) // 设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示，如果在那里需要更换更大的图片，可以使用setLargeIcon(Bitmap icon)
@@ -24,12 +27,20 @@ public class Notify {
 				.setContentIntent(pendingIntent)
 				.getNotification();
 
-		notify.defaults |= Notification.DEFAULT_VIBRATE;
-		notify.defaults |= Notification.DEFAULT_SOUND; // 调用系统自带声音
 		notify.flags |= Notification.FLAG_AUTO_CANCEL; // 点击清除按钮或点击通知后会自动消失
 		notify.defaults |= Notification.DEFAULT_LIGHTS;
-		notify.vibrate = new long[]{300, 500};
+        if (sp.getBoolean(ActivityControlCenter.IS_SOUND, true))
+            notify.defaults |= Notification.DEFAULT_SOUND; // 调用系统自带声音
+        if (sp.getBoolean(ActivityControlCenter.IS_SHAKE, true)) {
+            notify.defaults |= Notification.DEFAULT_VIBRATE;
+            notify.vibrate = new long[]{300, 500};
+        }
 
 		manager.notify(NOTIFY_ID1, notify);
 	}
+
+    public static void clear(Context context){
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancelAll();
+    }
 }

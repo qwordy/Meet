@@ -19,6 +19,8 @@ public class DataProtocol {
 	public final static byte TYPE_FILE = 0xF;
 	public final static byte TYPE_CARD = 0xD;
 	public final static byte TYPE_INFO = 0xE;
+	public final static byte TYPE_ASK_ANALYSIS = 0x8;
+	public final static byte TYPE_ANALYSIS = 0x9;
 
 	public static byte[] packMsg(String msg) throws UnsupportedEncodingException{
 		byte[] msgbytes = msg.getBytes("UTF-8");
@@ -84,41 +86,63 @@ public class DataProtocol {
         return buf;
     }
 
+	public static byte[] packAnalysis(String analysis) throws UnsupportedEncodingException{
+		byte[] msgbytes = analysis.getBytes("UTF-8");
+		byte lowLen = (byte)(msgbytes.length & 0xFF);
+		byte hiLen = (byte)(msgbytes.length >> 8 & 0xFF);
+		byte[] buf = new byte[msgbytes.length + 4];
+		buf[0] = HEAD;
+		buf[1] = TYPE_ANALYSIS;
+		buf[2] = hiLen;
+		buf[3] = lowLen;
+		System.arraycopy(msgbytes, 0, buf, 4, msgbytes.length);
+		return buf;
+	}
+
 	public static Message unpackData(byte[] data) throws UnsupportedEncodingException{
 		if(data[0] != HEAD)
 			return null;
 		Message msg = new Message();
         int lowLen,hiLen;
         switch(data[1]){
-		case TYPE_FILE:
-			msg.type = TYPE_FILE;
-			msg.total = data[2] << 24 | data[3] << 16 | data[4] << 8 | data[5];
-			msg.fileName = new String(data, 8, data[6] << 8 | data[7], "UTF-8");
-			break;
-		case TYPE_MSG:
-			msg.type = TYPE_MSG;
-            lowLen = data[3] & 0xFF;
-            hiLen = data[2] & 0xFF;
-            msg.length = hiLen << 8 | lowLen;
-			msg.msg = new String(data, 4, msg.length, "UTF-8");
-			break;
-		case TYPE_CARD:
-			msg.type = TYPE_CARD;
-            lowLen = data[3] & 0xFF;
-            hiLen = data[2] & 0xFF;
-            msg.length = hiLen << 8 | lowLen;
-			msg.msg = new String(data, 4, msg.length, "UTF-8");
-			break;
-        case TYPE_INFO:
-            msg.type = TYPE_INFO;
-            lowLen = data[3] & 0xFF;
-            hiLen = data[2] & 0xFF;
-            msg.length = hiLen << 8 | lowLen;
-            msg.msg = new String(data, 4, msg.length, "UTF-8");
-            break;
-        case TYPE_END:
-            msg.type = TYPE_END;
-            break;
+			case TYPE_FILE:
+				msg.type = TYPE_FILE;
+				msg.total = data[2] << 24 | data[3] << 16 | data[4] << 8 | data[5];
+				msg.fileName = new String(data, 8, data[6] << 8 | data[7], "UTF-8");
+				break;
+			case TYPE_MSG:
+				msg.type = TYPE_MSG;
+        	    lowLen = data[3] & 0xFF;
+        	    hiLen = data[2] & 0xFF;
+        	    msg.length = hiLen << 8 | lowLen;
+				msg.msg = new String(data, 4, msg.length, "UTF-8");
+				break;
+			case TYPE_CARD:
+				msg.type = TYPE_CARD;
+        	    lowLen = data[3] & 0xFF;
+        	    hiLen = data[2] & 0xFF;
+        	    msg.length = hiLen << 8 | lowLen;
+				msg.msg = new String(data, 4, msg.length, "UTF-8");
+				break;
+        	case TYPE_INFO:
+        	    msg.type = TYPE_INFO;
+        	    lowLen = data[3] & 0xFF;
+        	    hiLen = data[2] & 0xFF;
+        	    msg.length = hiLen << 8 | lowLen;
+        	    msg.msg = new String(data, 4, msg.length, "UTF-8");
+        	    break;
+        	case TYPE_END:
+        	    msg.type = TYPE_END;
+        	    break;
+			case TYPE_ASK_ANALYSIS:
+				msg.type = TYPE_ASK_ANALYSIS;
+				break;
+			case TYPE_ANALYSIS:
+				msg.type = TYPE_ANALYSIS;
+				lowLen = data[3] & 0xFF;
+				hiLen = data[2] & 0xFF;
+				msg.length = hiLen << 8 | lowLen;
+				msg.msg = new String(data, 4, msg.length, "UTF-8");
 		}
 		return msg;
 	}
