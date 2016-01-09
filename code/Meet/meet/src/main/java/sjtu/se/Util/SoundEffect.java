@@ -3,9 +3,11 @@ package sjtu.se.Util;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
+import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Meet.R;
 
 public class SoundEffect implements OnLoadCompleteListener {
@@ -17,6 +19,7 @@ public class SoundEffect implements OnLoadCompleteListener {
 	private SoundPool mSoundPool;
 	private int mLoadNum = 0;
 	private HashMap<Integer, Integer> mSoundMap;
+	private Context ctx;
 	
 	public static SoundEffect getInstance(Context context){
 		if(mSound == null){
@@ -26,6 +29,7 @@ public class SoundEffect implements OnLoadCompleteListener {
 	}
 	
 	private SoundEffect(Context context){
+		ctx = context;
 		mSoundMap = new HashMap<Integer, Integer>();
 		// SoundPool(int maxStreams, int streamType, int srcQuality)
 		mSoundPool= new SoundPool(2, AudioManager.STREAM_SYSTEM, 0);
@@ -50,11 +54,14 @@ public class SoundEffect implements OnLoadCompleteListener {
 	 * @param idx
 	 */
 	public void play(int idx){
-		if(idx > mSoundMap.size() || idx < 0)
-			return;
-		if(mLoadNum < 4)
-			return;
-		// play(int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
-		mSoundPool.play(mSoundMap.get(idx), 1, 1, 0, 0, 1);
+		SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
+		if (sp.getBoolean(ActivityControlCenter.IS_SOUND, true)) {
+			if (idx > mSoundMap.size() || idx < 0)
+				return;
+			if (mLoadNum < 4)
+				return;
+			// play(int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
+			mSoundPool.play(mSoundMap.get(idx), 1, 1, 0, 0, 1);
+		}
 	}
 }

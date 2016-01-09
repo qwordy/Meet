@@ -294,6 +294,7 @@ public class SearchFragment extends android.support.v4.app.Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             search.removeMessages(0);
+                            Notify.clear(ctx);
                             Intent intent = new Intent(ctx, ChatActivity.class);
                             intent.putExtra("isclient", false);
                             ctx.startActivity(intent);
@@ -328,6 +329,7 @@ public class SearchFragment extends android.support.v4.app.Fragment {
 
                 case TaskService.Task.TASK_RECV_INFO:
                     search.removeMessages(0);
+                    Notify.clear(ctx);
                     Intent intent = new Intent(ctx, ChatActivity.class);
                     intent.putExtra("REMOTE_USER", (String) msg.obj);
                     intent.putExtra("isclient", true);
@@ -462,25 +464,9 @@ public class SearchFragment extends android.support.v4.app.Fragment {
         }
         name = name.substring(0, name.length() - 2);
 
-        NotificationManager manager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, Search.class), 0);
-        // 通过Notification.Builder来创建通知，注意API Level
-        // API11之后才支持
-        Notification notify = new Notification.Builder(ctx)
-                .setSmallIcon(R.drawable.icon) // 设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示，如果在那里需要更换更大的图片，可以使用setLargeIcon(Bitmap icon)
-                .setTicker("附近有你可能感兴趣的人哦")// 设置在status bar上显示的提示文字
-                .setContentTitle("你可能感兴趣的人，快去看看吧")// 设置在下拉status bar后Activity，本例子中的NotififyMessage的TextView中显示的标题
-                .setContentText(name)// TextView中显示的详细内容
-                .setContentIntent(pendingIntent) // 关联PendingIntent
-                        //.setNumber(1) // 在TextView的右方显示的数字，可放大图片看，在最右侧。这个number同时也起到一个序列号的左右，如果多个触发多个通知（同一ID），可以指定显示哪一个。
-                .getNotification(); // 需要注意build()是在API level
-        // 16及之后增加的，在API11中可以使用getNotificatin()来代替
-        notify.flags |= Notification.FLAG_AUTO_CANCEL;
-        manager.notify(1, notify);
+        Notify.notifyMessage(getActivity(),"附近有你可能感兴趣的人哦", "你可能感兴趣的人，快去看看吧", name, getActivity());
 
         SharedPreferences sp = ctx.getSharedPreferences(ActivityControlCenter.SYSTEM_SETTING, 0);
-        if (sp.getBoolean(ActivityControlCenter.IS_SOUND, true))
-            SoundEffect.getInstance(ctx).play(SoundEffect.SOUND_RECV);
         if (sp.getBoolean(ActivityControlCenter.IS_SHAKE, true)) {
             Vibrator vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
             long[] pattern = {100, 400, 100, 400, 100, 400};

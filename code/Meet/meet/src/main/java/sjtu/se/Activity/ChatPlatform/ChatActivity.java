@@ -686,24 +686,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 case Task.TASK_DISCONNECT:
                     showToast("连接已中断");
 					TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    Notify.clear(ctx);
                     ((ChatActivity)ctx).finish();
                     break;
 
                 case Task.TASK_SEND_MSG:
 				    showToast(msg.obj.toString());
-				    /*if(sAliveCount <= 0){
-					    Notify.notifyMessage(ChatActivity.this, "消息","遇见MEET",msg.obj.toString(), ChatActivity.this);
-				    }*/
 				    break;
 
                 case Task.TASK_RECV_MSG:
                     if(msg.obj == null) return;
                     if(msg.obj instanceof HashMap<?, ?>){
                         showTargetMessage((HashMap<String, Object>) msg.obj);
+                        if(sAliveCount <= 0){
+                            String text =(String)((HashMap<String, Object>) msg.obj).get(ChatListViewAdapter.KEY_TEXT);
+                            Notify.notifyMessage(ChatActivity.this,
+                                    remote_user.baseinfo.Nick +":"+text, remote_user.baseinfo.Nick,text, ChatActivity.this);
+                        }
                     }
-				    /*if(sAliveCount <= 0){
-					    Notify.notifyMessage(ChatActivity.this, "您有未读取消息","遇见MEET","您有未读取消息", ChatActivity.this);
-				    }*/
                     break;
 
                 case Task.TASK_SEND_CARD:
@@ -825,6 +825,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
+                    Notify.clear(ctx);
                     ((ChatActivity)ctx).finish();
                     dialog.dismiss();
                 }
@@ -918,7 +919,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
                         TaskService.newTask(new TaskService.Task(mHandler, TaskService.Task.TASK_START_ACCEPT, null));
-						((ChatActivity)ctx).finish();
+                        Notify.clear(ctx);
+                        ((ChatActivity) ctx).finish();
 						dialog.dismiss();
 					}
 				});
