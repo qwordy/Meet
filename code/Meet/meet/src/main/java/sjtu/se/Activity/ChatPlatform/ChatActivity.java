@@ -51,9 +51,6 @@ import sjtu.se.Meet.R;
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
 	private final String TAG = "ChatActivity";
 	public static int sAliveCount = 0;
-	
-	// 蓝牙状态变量
-	private static int sBTState = -1;
 
     private Information remote_user;
     private Information overt_user;
@@ -684,6 +681,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
+            AlertDialog.Builder builder;
 			switch(msg.what){
                 case Task.TASK_DISCONNECT:
                     showToast("连接已中断");
@@ -716,7 +714,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 case Task.TASK_RECV_CARD:
                     if(msg.obj == null) return;
                     final String card = (String)msg.obj;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder = new AlertDialog.Builder(ctx);
                     builder.setMessage("接收 " + remote_user.baseinfo.Nick + " 的名片吗？");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -747,31 +745,30 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     showToast("对方已上线");
                     break;
 
-                case Task.TASK_SEND_ANALYSIS:
-                    if(msg.obj == null) return;
-                    showToast(msg.obj.toString());
+                case Task.TASK_ASK_ANALYSIS:
+                    if(msg.obj == null)
+                        TaskService.newTask(new TaskService.Task(mHandler, Task.TASK_SEND_ANALYSIS, new Object[]{"A"}));
+                    else
+                        showToast(msg.obj.toString());
                     break;
 
                 case Task.TASK_RECV_ANALYSIS:
                     if(msg.obj == null) return;
-                    break;
-
-                case Task.TASK_ASK_ANALYSIS:
-                    if(msg.obj == null) return;
-                    showToast(msg.obj.toString());
+                    final String message = (String)msg.obj;
+                    builder = new AlertDialog.Builder(ctx);
+                    builder.setMessage(message);
+                    builder.setTitle("相似度分析");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
                     break;
 			}
 		}
 	};
-	
-	private boolean isBTStateChanged(int now){
-		if(sBTState != now){
-			sBTState = now;
-			return true;
-		}else{
-			return false;
-		}
-	}
 	
 	/**
 	 * 显示对方信息

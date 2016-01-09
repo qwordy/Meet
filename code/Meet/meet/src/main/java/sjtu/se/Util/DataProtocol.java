@@ -105,41 +105,44 @@ public class DataProtocol {
 		Message msg = new Message();
         int lowLen,hiLen;
         switch(data[1]){
-		case TYPE_FILE:
-			msg.type = TYPE_FILE;
-			msg.total = data[2] << 24 | data[3] << 16 | data[4] << 8 | data[5];
-			msg.fileName = new String(data, 8, data[6] << 8 | data[7], "UTF-8");
-			break;
-		case TYPE_MSG:
-			msg.type = TYPE_MSG;
-            lowLen = data[3] & 0xFF;
-            hiLen = data[2] & 0xFF;
-            msg.length = hiLen << 8 | lowLen;
-			msg.msg = new String(data, 4, msg.length, "UTF-8");
-			break;
-		case TYPE_CARD:
-			msg.type = TYPE_CARD;
-            lowLen = data[3] & 0xFF;
-            hiLen = data[2] & 0xFF;
-            msg.length = hiLen << 8 | lowLen;
-			msg.msg = new String(data, 4, msg.length, "UTF-8");
-			break;
-        case TYPE_INFO:
-            msg.type = TYPE_INFO;
-            lowLen = data[3] & 0xFF;
-            hiLen = data[2] & 0xFF;
-            msg.length = hiLen << 8 | lowLen;
-            msg.msg = new String(data, 4, msg.length, "UTF-8");
-            break;
-        case TYPE_END:
-            msg.type = TYPE_END;
-            break;
-		case TYPE_ANALYSIS:
-			msg.type = TYPE_ANALYSIS;
-			lowLen = data[3] & 0xFF;
-			hiLen = data[2] & 0xFF;
-			msg.length = hiLen << 8 | lowLen;
-			msg.msg = new String(data, 4, msg.length, "UTF-8");
+			case TYPE_FILE:
+				msg.type = TYPE_FILE;
+				msg.total = data[2] << 24 | data[3] << 16 | data[4] << 8 | data[5];
+				msg.fileName = new String(data, 8, data[6] << 8 | data[7], "UTF-8");
+				break;
+			case TYPE_MSG:
+				msg.type = TYPE_MSG;
+        	    lowLen = data[3] & 0xFF;
+        	    hiLen = data[2] & 0xFF;
+        	    msg.length = hiLen << 8 | lowLen;
+				msg.msg = new String(data, 4, msg.length, "UTF-8");
+				break;
+			case TYPE_CARD:
+				msg.type = TYPE_CARD;
+        	    lowLen = data[3] & 0xFF;
+        	    hiLen = data[2] & 0xFF;
+        	    msg.length = hiLen << 8 | lowLen;
+				msg.msg = new String(data, 4, msg.length, "UTF-8");
+				break;
+        	case TYPE_INFO:
+        	    msg.type = TYPE_INFO;
+        	    lowLen = data[3] & 0xFF;
+        	    hiLen = data[2] & 0xFF;
+        	    msg.length = hiLen << 8 | lowLen;
+        	    msg.msg = new String(data, 4, msg.length, "UTF-8");
+        	    break;
+        	case TYPE_END:
+        	    msg.type = TYPE_END;
+        	    break;
+			case TYPE_ASK_ANALYSIS:
+				msg.type = TYPE_ASK_ANALYSIS;
+				break;
+			case TYPE_ANALYSIS:
+				msg.type = TYPE_ANALYSIS;
+				lowLen = data[3] & 0xFF;
+				hiLen = data[2] & 0xFF;
+				msg.length = hiLen << 8 | lowLen;
+				msg.msg = new String(data, 4, msg.length, "UTF-8");
 		}
 		return msg;
 	}
