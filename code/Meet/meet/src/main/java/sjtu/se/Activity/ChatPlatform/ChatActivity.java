@@ -42,6 +42,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Activity.Information.ShowInformation;
+import sjtu.se.Ubma.Environment;
 import sjtu.se.UserInformation.ContactCard;
 import sjtu.se.UserInformation.Information;
 import sjtu.se.Util.*;
@@ -746,8 +747,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 case Task.TASK_ASK_ANALYSIS:
-                    if(msg.obj == null)
-                        TaskService.newTask(new TaskService.Task(mHandler, Task.TASK_SEND_ANALYSIS, new Object[]{"A"}));
+                    if(msg.obj == null) {
+                        String analysis = Environment.getUserBehaviourSummary().toString();
+                        TaskService.newTask(new TaskService.Task(mHandler, Task.TASK_SEND_ANALYSIS, new Object[]{analysis}));
+                    }
                     else
                         showToast(msg.obj.toString());
                     break;
@@ -756,7 +759,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if(msg.obj == null) return;
                     final String message = (String)msg.obj;
                     builder = new AlertDialog.Builder(ctx);
-                    builder.setMessage(message);
+                    builder.setMessage(Environment.getUserBehaviourSummary().compare(message));
                     builder.setTitle("相似度分析");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
@@ -909,6 +912,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(ctx, ShowInformation.class);
                 intent.putExtras(bundle);
                 ctx.startActivity(intent);
+                break;
+
+            case R.id.action_compare:
+                TaskService.newTask(new TaskService.Task(mHandler, Task.TASK_ASK_ANALYSIS, null));
                 break;
 
 			case android.R.id.home:
