@@ -101,7 +101,7 @@ public class SettingFragment extends PreferenceFragmentCompat
             if(sharedPreferences.getBoolean(key,false)) {
                 try {
                     String str = " [ ";
-                    List<AppClassifier.Category> list = Environment.getUserBehaviourSummary().appsTags();
+                    List<AppClassifier.Category> list = Environment.getUserBehaviourSummary().appTag();
                     for (int i = 0; i < list.size(); i++) {
                         str += list.get(i).toString()+ " ";
                     }

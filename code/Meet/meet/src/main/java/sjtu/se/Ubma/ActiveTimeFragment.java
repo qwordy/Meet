@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import sjtu.se.Meet.R;
 
@@ -19,10 +20,10 @@ import sjtu.se.Meet.R;
 
 public class ActiveTimeFragment extends Fragment {
 	private LineChartView mLineChartView;
-	private Button mButton;
 	private boolean timeValueVisible = false;
-	private AlertDialog.Builder mAnalysisDialogBuilder;
+	private AlertDialog.Builder mAnalysisDialogBuilder, mTagDialogBuilder;
 	private AlertDialog mClearDataDialog, mClearDataSuccessDialog;
+	private PopupMenu mPopupMenu;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,8 +31,12 @@ public class ActiveTimeFragment extends Fragment {
 		Log.d("Meet", "ActiveTimeFragment onCreate");
 
 		mAnalysisDialogBuilder = new AlertDialog.Builder(getActivity())
-				.setTitle("数据分析")
-				.setPositiveButton("确定", null);
+				.setTitle("数据统计")
+				.setPositiveButton(R.string.ok, null);
+
+		mTagDialogBuilder = new AlertDialog.Builder(getActivity())
+				.setTitle("查看标签")
+				.setPositiveButton(R.string.ok, null);
 
 		mClearDataDialog = new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.hint)
@@ -55,12 +60,14 @@ public class ActiveTimeFragment extends Fragment {
 				.setMessage("清除数据成功！")
 				.setPositiveButton(R.string.ok, null)
 				.create();
+
 		Log.d("Meet", "ActiveTimeFragment onCreateDone");
 	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.d("Meet", "ActiveTimeFragment onCreateView");
 		return inflater.inflate(R.layout.fragment_active_time, container, false);
 	}
 
@@ -86,41 +93,48 @@ public class ActiveTimeFragment extends Fragment {
 		});
 		spinner.setSelection(1);
 
-		mButton = (Button) view.findViewById(R.id.button);
-		mButton.setOnClickListener(new View.OnClickListener() {
+		Button button = (Button) view.findViewById(R.id.button);
+		mPopupMenu = new PopupMenu(getActivity(), button);
+		Menu menu = mPopupMenu.getMenu();
+		menu.add(0, 0, 0, "数据统计");
+		menu.add(0, 1, 0, "查看标签");
+		if (timeValueVisible)
+			menu.add(0, 2, 0, "隐藏数值");
+		else
+			menu.add(0, 2, 0, "显示数值");
+		menu.add(0, 3, 0, "清除数据");
+		mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 			@Override
-			public void onClick(View v) {
-				mButton.showContextMenu();
+			public boolean onMenuItemClick(MenuItem item) {
+				//Log.d("Meet", "popupMenu" + item.getItemId());
+				switch (item.getItemId()) {
+					case 0:
+						analyse();
+						break;
+					case 1:
+						tag();
+						break;
+					case 2:
+						showOrHideTimeValue();
+						break;
+					case 3:
+						clearData();
+				}
+				return true;
 			}
 		});
-
-		mButton.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+		button.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-				menu.setHeaderTitle("选项");
-				menu.add(0, 0, 0, "数据分析");
-				if (timeValueVisible)
-					menu.add(0, 1, 0, "隐藏数值");
-				else
-					menu.add(0, 1, 0, "显示数值");
-				menu.add(0, 2, 0, "清除数据");
+			public void onClick(View v) {
+				mPopupMenu.show();
 			}
 		});
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case 0:
-				analyse();
-				break;
-			case 1:
-				showOrHideTimeValue();
-				break;
-			case 2:
-				clearData();
-		}
-		return true;
+	public void onResume() {
+		super.onResume();
+		mLineChartView.invalidate();
 	}
 
 	public void analyse() {
@@ -129,9 +143,19 @@ public class ActiveTimeFragment extends Fragment {
 				.show();
 	}
 
+	public void tag() {
+		mTagDialogBuilder
+				.setMessage(Environment.getUserBehaviourSummary().actimeTimeTag())
+				.show();
+	}
+
 	public void showOrHideTimeValue() {
 		mLineChartView.timeValueVisible = timeValueVisible = !timeValueVisible;
 		mLineChartView.invalidate();
+		if (timeValueVisible)
+			mPopupMenu.getMenu().getItem(2).setTitle("隐藏数值");
+		else
+			mPopupMenu.getMenu().getItem(2).setTitle("显示数值");
 	}
 
 	public void clearData() {

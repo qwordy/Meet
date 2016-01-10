@@ -1,8 +1,8 @@
 package sjtu.se.Ubma;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,8 +14,6 @@ import android.view.*;
 import android.widget.*;
 import sjtu.se.Meet.R;
 
-//import sjtu.se.Meet.R;
-
 /**
  * Created by qwordy on 12/8/15.
  * AppListFragment
@@ -26,7 +24,7 @@ public class AppListFragment extends Fragment {
 	private AppInfoAdapter mAdapter0, mAdapter1;
 	private Spinner mSpinner;
 	private Button mButton;
-	private boolean inited;
+	private View mListViewItem;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,29 +74,18 @@ public class AppListFragment extends Fragment {
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//mListView.showContextMenu();
-//				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
-//						Uri.parse("package:" + ((TextView) view.findViewById(R.id.packageName)).getText()));
-//				startActivity(intent);
+				mListViewItem = view;
+				mListView.showContextMenu();
 			}
 		});
-		mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+		mListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
-						Uri.parse("package:" + ((TextView) view.findViewById(R.id.packageName)).getText()));
-				startActivity(intent);
-				return true;
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+				menu.setHeaderTitle("选项");
+				menu.add(0, 0, 0, "启动应用");
+				menu.add(0, 1, 0, "详细信息");
 			}
 		});
-//		mListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//			@Override
-//			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//				menu.setHeaderTitle("选项");
-//				menu.add(0, 0, 0, "启动应用");
-//				menu.add(0, 1, 0, "详细信息");
-//			}
-//		});
 
 		new AsyncTask<Object, Object, Object>(){
 			@Override
@@ -136,6 +123,25 @@ public class AppListFragment extends Fragment {
 				builder.create().show();
 			}
 		});
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		//Log.d("Meet", "App" + item.toString());
+		if (item.getItemId() == 0) {
+			PackageManager packageManager = getActivity().getPackageManager();
+			Intent intent = packageManager.getLaunchIntentForPackage(
+					((TextView) mListViewItem.findViewById(R.id.packageName)).getText().toString());
+			if (intent == null)
+				Toast.makeText(getActivity(), "该应用不可启动", Toast.LENGTH_SHORT).show();
+			else
+				startActivity(intent);
+		} else if (item.getItemId() == 1) {
+			Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+					Uri.parse("package:" + ((TextView) mListViewItem.findViewById(R.id.packageName)).getText()));
+			startActivity(intent);
+		}
+		return true;
 	}
 
 	private void setAppListView(AppInfoAdapter adapter) {

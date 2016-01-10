@@ -5,7 +5,6 @@ import java.util.*;
 import android.util.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
 /**
@@ -18,7 +17,7 @@ public class UserBehaviourSummary {
 	/**
 	 * @return A sorted list of app tags. Length is 3 typically.
 	 */
-	public List<AppClassifier.Category> appsTags() {
+	public List<AppClassifier.Category> appTag() {
 		List<Map.Entry<AppClassifier.Category, Integer>> sortList =
 				sortAppListByCategory(Environment.getUserAiList());
 		List<AppClassifier.Category> list = new ArrayList<>();
@@ -126,6 +125,35 @@ public class UserBehaviourSummary {
 		return stringBuilder.toString();
 	}
 
+	public String actimeTimeTag () {
+		double sum, sumDay, sumNight;
+		int i;
+
+		ActiveTimeData activeTimeData = Environment.getActiveTimeData();
+		double[] times = activeTimeData.averageActiveTime();
+		StringBuilder stringBuilder = new StringBuilder("经系统分析，您的标签为：\n");
+		sum = sumDay = 0;
+
+		for (double time : times)
+			sum += time;
+		if (sum < 60)
+			stringBuilder.append("手机轻度依赖型\n");
+		else if (sum < 120)
+			stringBuilder.append("手机中度依赖型\n");
+		else
+			stringBuilder.append("手机重度依赖型\n");
+
+		for (i = 8; i < 20; i++)
+			sumDay += times[i];
+		sumNight = sum - sumDay;
+		if (sumDay > sumNight)
+			stringBuilder.append("非夜间用户");
+		else
+			stringBuilder.append("夜间用户");
+
+		return stringBuilder.toString();
+	}
+
 	public String toJsonString() {
 		JSONObject obj = new JSONObject();
 		obj.put("apps", appListJson());
@@ -161,7 +189,7 @@ public class UserBehaviourSummary {
 			timeSim = compareTimes(timeList);
 			sim = (appSim + timeSim) / 2;
 			String str = String.format(
-					"相似度：%d%%\n手机应用相似度：%d%%\n活跃时间相似度：%d%%",
+					"相似度：%d%%\n手机应用相似度：%d%%(Jaccard相似度)\n活跃时间相似度：%d%%（向量模型）",
 					Math.round(sim * 100),
 					Math.round(appSim * 100),
 					Math.round(timeSim * 100));
