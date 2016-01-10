@@ -28,7 +28,8 @@ public class Want {
 	}
 	
 	public boolean isEmpty(){
-		return (gender.isEmpty() && ageRange.isEmpty() && Homeland.isEmpty() &&
+		return (tableName.isEmpty() &&
+				gender.isEmpty() && ageRange.isEmpty() && Homeland.isEmpty() &&
 				Location.isEmpty() && College.isEmpty() && High_School.isEmpty() &&
 				Middle_School.isEmpty() && Primary_School.isEmpty() && keywords.isEmpty());
 	}
