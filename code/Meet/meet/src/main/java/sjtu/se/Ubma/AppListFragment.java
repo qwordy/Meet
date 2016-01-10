@@ -76,20 +76,29 @@ public class AppListFragment extends Fragment {
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				mListView.showContextMenu();
+				//mListView.showContextMenu();
 //				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
 //						Uri.parse("package:" + ((TextView) view.findViewById(R.id.packageName)).getText()));
 //				startActivity(intent);
 			}
 		});
-		mListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+		mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-				menu.setHeaderTitle("选项");
-				menu.add(0, 0, 0, "启动应用");
-				menu.add(0, 1, 0, "详细信息");
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS ,
+						Uri.parse("package:" + ((TextView) view.findViewById(R.id.packageName)).getText()));
+				startActivity(intent);
+				return true;
 			}
 		});
+//		mListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//			@Override
+//			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//				menu.setHeaderTitle("选项");
+//				menu.add(0, 0, 0, "启动应用");
+//				menu.add(0, 1, 0, "详细信息");
+//			}
+//		});
 
 		new AsyncTask<Object, Object, Object>(){
 			@Override
