@@ -1,16 +1,12 @@
 package sjtu.se.Activity.Want;
 
-import android.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.*;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import sjtu.se.Activity.ActivityControlCenter;
-import sjtu.se.Activity.Information.BaseInfoSettings;
 import sjtu.se.UserInformation.Want;
-import sjtu.se.Activity.Setting.SystemSettings;
 import sjtu.se.Meet.R;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +28,38 @@ public class WantSettings extends android.support.v4.app.Fragment{
     private TextView want6;
     private TextView want7;
     private TextView want8;
+
+    private WantAdapter madapter;
+
+    private String[] mTitles = {
+            ActivityControlCenter.KEY_WANT_1, ActivityControlCenter.KEY_WANT_2,
+            ActivityControlCenter.KEY_WANT_3,ActivityControlCenter.KEY_WANT_4,
+            ActivityControlCenter.KEY_WANT_5,ActivityControlCenter.KEY_WANT_6,
+            ActivityControlCenter.KEY_WANT_7,ActivityControlCenter.KEY_WANT_8
+    };
+
+    public void CreateWant(){
+        String msg = "";
+        String key = "";
+        Want want = null;
+        String txt = "";
+        int position=0;
+        Log.v("0", "0");
+        while(position<8){
+            txt = wantSettings.getString(mTitles[position], "");
+            want = Want.parseWant(txt);
+            position++;
+            if (want == null || want.isEmpty()){
+                break;
+            }
+        }
+        msg = wantSettings.getString(mTitles[position - 1], "");
+        key = mTitles[position - 1];
+        Intent intent = new Intent(ctx, ShowWants.class);
+        intent.putExtra("message", msg);
+        intent.putExtra("key", key);
+        ctx.startActivity(intent);
+    }
 
     public void CreateOrModify(View view){
         //System.out.println("hello paler!");
@@ -178,6 +206,20 @@ public class WantSettings extends android.support.v4.app.Fragment{
         ActivityControlCenter.WANTS_MAY_CHANGED = true;
 
         wantSettings = ctx.getSharedPreferences(ActivityControlCenter.WANT_SETTINGS, 0);
+
+        GridView gridview = (GridView) view.findViewById(R.id.gridview);
+        madapter = new WantAdapter(ctx);
+        gridview.setAdapter(madapter);
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Log.v("0",Integer.toString(position));
+                if(position==0){
+                    madapter.notifyDataSetChanged();
+                    CreateWant();
+                }
+            }
+        });
 
         want1 = (TextView)view.findViewById(R.id.wantSlot1);
         want1.setOnClickListener(new View.OnClickListener() {

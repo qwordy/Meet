@@ -9,6 +9,7 @@
 	<string name="action_game">真心话游戏</string>
 	<string name="action_want">我的需求</string>
 	<string name="action_analysis">手机行为分析</string>
+	<string name="action_compare">相似度比较</string>
 	<string name="action_logout">退出</string>['
 
 	<string name="title_activity_system_settings">系统设置</string>

@@ -5,6 +5,6 @@
     <item android:id="@+id/action_game" android:orderInCategory="100" android:title="@string/action_game"></item>
     <item android:id="@+id/send_contact" android:orderInCategory="103" android:title="@string/send_contact"></item>
     <item android:id="@+id/action_information" android:orderInCategory="104" android:title="@string/action_information"></item>
-    <item android:id="@+id/action_logout" android:orderInCategory="200" android:title="@string/action_logout"></item>
+    <item android:id="@+id/action_compare" android:orderInCategory="200" android:title="@string/action_compare"></item>
 
 </menu>
