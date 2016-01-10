@@ -11,6 +11,6 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textColor="@color/text_gray"
         android:drawablePadding="-20dp"/>

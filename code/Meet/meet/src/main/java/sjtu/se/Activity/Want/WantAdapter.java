@@ -7,25 +7,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 import sjtu.se.Activity.ActivityControlCenter;
 import sjtu.se.Meet.R;
 import sjtu.se.UserInformation.Want;
 
+import java.util.ArrayList;
+
 public class WantAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context mContext;
     private SharedPreferences wantSettings;
+    private ArrayList<Want> lst;
 
-    public WantAdapter(Context c) {
+    public WantAdapter(Context c,ArrayList<Want> list) {
+        this.lst=list;
         mContext = c;
         this.mInflater = LayoutInflater.from(c);
         wantSettings = mContext.getSharedPreferences(ActivityControlCenter.WANT_SETTINGS, 0);
     }
 
     public int getCount() {
-        return 9;
+        return lst.size()+1;
     }
 
     public Object getItem(int position) {
@@ -36,10 +39,10 @@ public class WantAdapter extends BaseAdapter {
         return 0;
     }
 
-    // create a new ImageView for each item referenced by the Adapter
+    // create a new View for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView wantView;
-        Want want = null;
+        Want want;
         String unname = "未命名";
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
@@ -52,19 +55,27 @@ public class WantAdapter extends BaseAdapter {
             topDrawable.setBounds(0,0,topDrawable.getMinimumWidth(),topDrawable.getMinimumHeight());
             wantView.setCompoundDrawables(null,topDrawable,null,null);
         }else{
-            String txt = "";
-            txt = wantSettings.getString(mTitles[position - 1], "");
-            want = Want.parseWant(txt);
-            if (want == null || want.isEmpty())
-                wantView.setVisibility(View.GONE);
-            else if(want.tableName.equals("")) {
-                wantView.setVisibility(View.VISIBLE);
+            want=lst.get(position-1);
+            wantView.setCompoundDrawables(null,null,null,null);
+            if(want==null || want.tableName.equals("")) {
                 wantView.setText(unname);
             }
-            else {
-                wantView.setVisibility(View.VISIBLE);
+            else
                 wantView.setText(want.tableName);
-            }
+            //String txt = "";
+            //txt = wantSettings.getString(mTitles[position - 1], "");
+            //want = Want.parseWant(txt);
+            want = lst.get(position-1);
+            /*if (want == null || want.isEmpty())
+                wantView.setVisibility(View.GONE);
+            else if(want.tableName.equals("")) {
+            wantView.setVisibility(View.VISIBLE);
+            wantView.setText(unname);
+        }
+        else {
+            wantView.setVisibility(View.VISIBLE);*/
+            //wantView.setText(want.tableName);
+            //}
         }
         return wantView;
     }
@@ -76,11 +87,11 @@ public class WantAdapter extends BaseAdapter {
             ActivityControlCenter.KEY_WANT_7,ActivityControlCenter.KEY_WANT_8
     };
 
-/*    private String[] ids = {
-            "wantSlot1", "wantSlot2",
-            "wantSlot3","wantSlot4",
-            "wantSlot5","wantSlot6",
-            "wantSlot7","wantSlot8"
+    /*private int[] ids = {
+            R.id.wantSlot1, R.id.wantSlot2,
+            R.id.wantSlot3,R.id.wantSlot4,
+            R.id.wantSlot5,R.id.wantSlot6,
+            R.id.wantSlot7,R.id.wantSlot8
     };*/
 
 }
