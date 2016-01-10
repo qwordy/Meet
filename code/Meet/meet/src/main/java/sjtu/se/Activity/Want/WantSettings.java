@@ -84,7 +84,7 @@ public class WantSettings extends android.support.v4.app.Fragment{
             txt = wantSettings.getString(mTitles[position], "");
             want = Want.parseWant(txt);
             if (want == null || want.isEmpty()){
-                break;
+                continue;
             }else
                 want_list.add(want);
             position++;
