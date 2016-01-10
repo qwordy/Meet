@@ -126,8 +126,7 @@ public class UserBehaviourSummary {
 		return stringBuilder.toString();
 	}
 
-	@Override
-	public String toString() {
+	public String toJsonString() {
 		JSONObject obj = new JSONObject();
 		obj.put("apps", appListJson());
 		obj.put("times", timeListJson());

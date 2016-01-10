@@ -748,7 +748,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                 case Task.TASK_ASK_ANALYSIS:
                     if(msg.obj == null) {
-                        String analysis = Environment.getUserBehaviourSummary().toString();
+                        String analysis = Environment.getUserBehaviourSummary().toJsonString();
                         TaskService.newTask(new TaskService.Task(mHandler, Task.TASK_SEND_ANALYSIS, new Object[]{analysis}));
                     }
                     else
