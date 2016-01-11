@@ -38,8 +38,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:background="@drawable/layout_bkg"
             android:orientation="vertical" >
+            <!--android:background="@drawable/layout_bkg"-->
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -52,20 +52,20 @@
                     android:id="@+id/emotionBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:src="@drawable/emo_bkg" />
 
                 <EditText
                     android:id="@+id/inputEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="12"
+                    android:layout_margin="2dp"
+                    android:layout_weight="14"
                     android:background="@drawable/selector_common_edit"
                     android:ems="10"
                     android:hint="输入聊天内容"
-                    android:padding="5dp"
-                    android:textSize="18sp" >
+                    android:padding="8dp"
+                    android:textSize="16sp" >
 
                     <requestFocus />
                 </EditText>
@@ -74,8 +74,8 @@
                     android:id="@+id/sendBtn"
                     style="@style/style_common_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="3dp"
                     android:layout_weight="2"
                     android:background="@drawable/selector_common_btn"
                     android:text="发送" />
