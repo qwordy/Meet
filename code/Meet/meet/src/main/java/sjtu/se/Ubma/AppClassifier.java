@@ -66,6 +66,7 @@ public class AppClassifier {
 		rules.add(new Pair<>("美拍", Category.VIDEO));
 		rules.add(new Pair<>("TV", Category.VIDEO));
 		rules.add(new Pair<>("直播", Category.VIDEO));
+		rules.add(new Pair<>("爱奇艺", Category.VIDEO));
 
 		rules.add(new Pair<>("相机", Category.PHOTO));
 		rules.add(new Pair<>("美图", Category.PHOTO));
@@ -98,12 +99,18 @@ public class AppClassifier {
 		rules.add(new Pair<>("保卫萝卜", Category.GAME));
 		rules.add(new Pair<>("部落战争", Category.GAME));
 		rules.add(new Pair<>("多玩", Category.GAME));
+		rules.add(new Pair<>("魔兽世界", Category.GAME));
+		rules.add(new Pair<>("魔灵", Category.GAME));
+		rules.add(new Pair<>("Flappy Bird", Category.GAME));
 
 		rules.add(new Pair<>("QQ", Category.CHAT));
 		rules.add(new Pair<>("微信", Category.CHAT));
 		rules.add(new Pair<>("易信", Category.CHAT));
 		rules.add(new Pair<>("陌陌", Category.CHAT));
 		rules.add(new Pair<>("飞信", Category.CHAT));
+		rules.add(new Pair<>("微博", Category.CHAT));
+		rules.add(new Pair<>("LINE", Category.CHAT));
+		rules.add(new Pair<>("MEET", Category.CHAT));
 
 		rules.add(new Pair<>("美团", Category.SHOPPING));
 		rules.add(new Pair<>("淘宝", Category.SHOPPING));
@@ -120,6 +127,7 @@ public class AppClassifier {
 		rules.add(new Pair<>("旅行", Category.TRIP));
 		rules.add(new Pair<>("出行", Category.TRIP));
 		rules.add(new Pair<>("路路通", Category.TRIP));
+		rules.add(new Pair<>("指南针", Category.TRIP));
 
 		rules.add(new Pair<>("天气", Category.LIFE));
 		rules.add(new Pair<>("闹钟", Category.LIFE));
@@ -130,6 +138,7 @@ public class AppClassifier {
 		rules.add(new Pair<>("同去", Category.LIFE));
 		rules.add(new Pair<>("菜谱", Category.LIFE));
 		rules.add(new Pair<>("营业厅", Category.LIFE));
+		rules.add(new Pair<>("生活", Category.LIFE));
 
 		rules.add(new Pair<>("Coursera", Category.EDU));
 		rules.add(new Pair<>("公开课", Category.EDU));
@@ -148,6 +157,7 @@ public class AppClassifier {
 		rules.add(new Pair<>("WPS", Category.OFFICE));
 		rules.add(new Pair<>("PDF", Category.OFFICE));
 		rules.add(new Pair<>("Office", Category.OFFICE));
+		rules.add(new Pair<>("Adobe Acrobat", Category.OFFICE));
 		rules.add(new Pair<>("Reader", Category.OFFICE));
 		rules.add(new Pair<>("邮件", Category.OFFICE));
 		rules.add(new Pair<>("邮箱", Category.OFFICE));
@@ -157,6 +167,7 @@ public class AppClassifier {
 		rules.add(new Pair<>("文档", Category.OFFICE));
 		rules.add(new Pair<>("扫描", Category.OFFICE));
 		rules.add(new Pair<>("全能王", Category.OFFICE));
+		rules.add(new Pair<>("Gmail", Category.OFFICE));
 
 		rules.add(new Pair<>("系统", Category.SYSTEM));
 		rules.add(new Pair<>("android", Category.SYSTEM));
@@ -209,6 +220,18 @@ public class AppClassifier {
 		rules.add(new Pair<>("网络", Category.SYSTEM));
 		rules.add(new Pair<>("设备", Category.SYSTEM));
 		rules.add(new Pair<>("SIM", Category.SYSTEM));
+		rules.add(new Pair<>("Manager", Category.SYSTEM));
+		rules.add(new Pair<>("Remote Desktop", Category.SYSTEM));
+		rules.add(new Pair<>("万能钥匙", Category.SYSTEM));
+		rules.add(new Pair<>("翻墙", Category.SYSTEM));
+		rules.add(new Pair<>("同步", Category.SYSTEM));
+		rules.add(new Pair<>("检测", Category.SYSTEM));
+		rules.add(new Pair<>("wallpaper", Category.SYSTEM));
+		rules.add(new Pair<>("storage", Category.SYSTEM));
+		rules.add(new Pair<>("Setting", Category.SYSTEM));
+		rules.add(new Pair<>("Service", Category.SYSTEM));
+		rules.add(new Pair<>("应用商店", Category.SYSTEM));
+		rules.add(new Pair<>("ui", Category.SYSTEM));
 	}
 }
 

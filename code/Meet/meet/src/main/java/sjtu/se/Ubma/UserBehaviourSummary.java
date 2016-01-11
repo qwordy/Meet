@@ -125,7 +125,7 @@ public class UserBehaviourSummary {
 		return stringBuilder.toString();
 	}
 
-	public String actimeTimeTag () {
+	public String activeTimeTag() {
 		double sum, sumDay, sumNight;
 		int i;
 
@@ -189,7 +189,7 @@ public class UserBehaviourSummary {
 			timeSim = compareTimes(timeList);
 			sim = (appSim + timeSim) / 2;
 			String str = String.format(
-					"相似度：%d%%\n手机应用相似度：%d%%(Jaccard相似度)\n活跃时间相似度：%d%%（向量模型）",
+					"相似度：%d%%\n手机应用相似度(Jaccard):\n%d%%\n活跃时间相似度(Vector):\n%d%%",
 					Math.round(sim * 100),
 					Math.round(appSim * 100),
 					Math.round(timeSim * 100));

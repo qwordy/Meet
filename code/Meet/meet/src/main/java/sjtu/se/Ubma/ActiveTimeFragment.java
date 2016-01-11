@@ -145,7 +145,7 @@ public class ActiveTimeFragment extends Fragment {
 
 	public void tag() {
 		mTagDialogBuilder
-				.setMessage(Environment.getUserBehaviourSummary().actimeTimeTag())
+				.setMessage(Environment.getUserBehaviourSummary().activeTimeTag())
 				.show();
 	}
 
