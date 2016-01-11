@@ -33,7 +33,7 @@ public class LineChartView extends View {
 
 	private final int textColor = Color.GRAY;
 
-	private final int chartColor = 0xff33b5e5;
+	private final int chartColor = 0xff64b5f6;
 
 	private final int backgroundColor = 0xfffafafa;
 
