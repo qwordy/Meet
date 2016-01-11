@@ -3,62 +3,62 @@
 
 	<string name="app_name">MEET</string>
 	<!-- top menu -->
-	<string name="action_news">消息</string>
-	<string name="action_settings">系统设置</string>
-	<string name="action_personal">个人资料</string>
-	<string name="action_game">真心话游戏</string>
-	<string name="action_want">我的需求</string>
-	<string name="action_analysis">手机行为分析</string>
-	<string name="action_compare">相似度比较</string>
-	<string name="action_logout">退出</string>['
+	<string translatable="false" name="action_news">消息</string>
+	<string translatable="false" name="action_settings">系统设置</string>
+	<string translatable="false" name="action_personal">个人资料</string>
+	<string translatable="false" name="action_game">真心话游戏</string>
+	<string translatable="false" name="action_want">我的需求</string>
+	<string translatable="false" name="action_analysis">手机行为分析</string>
+	<string translatable="false" name="action_compare">相似度比较</string>
+	<string translatable="false" name="action_logout">退出</string>['
 
-	<string name="title_activity_system_settings">系统设置</string>
-	<string name="pref_alert_title">匹配开关</string>
-	<string name="pref_nickname_title">显示名称</string>
-	<string name="pref_nickname_edit_title">输入自定义名称</string>
-	<string name="pref_sound_title">音效提示</string>
-	<string name="pref_shake_title">震动提示</string>
-	<string name="pref_analysis_title">系统标签</string>
-	<string name="on">开启</string>
-	<string name="off">关闭</string>
-	<string name="empty">未设置</string>
+	<string translatable="false" name="title_activity_system_settings">系统设置</string>
+	<string translatable="false" name="pref_alert_title">匹配开关</string>
+	<string translatable="false" name="pref_nickname_title">显示名称</string>
+	<string translatable="false" name="pref_nickname_edit_title">输入自定义名称</string>
+	<string translatable="false" name="pref_sound_title">音效提示</string>
+	<string translatable="false" name="pref_shake_title">震动提示</string>
+	<string translatable="false" name="pref_analysis_title">系统标签</string>
+	<string translatable="false" name="on">开启</string>
+	<string translatable="false" name="off">关闭</string>
+	<string translatable="false" name="empty">未设置</string>
 
-	<string name="overt">公开</string>
-	<string name="hide">隐藏</string>
-	<string name="devBtn">附近的人</string>
-	<string name="hisBtn">历史记录</string>
-	<string name="RecBtn">为您推荐</string>
-	<string name="title_activity_personal_information">个人资料</string>
-	<string name="title_activity_contact_information">联系方式</string>
-	<string name="title_activity_education_information">教育背景</string>
-	<string name="title_activity_hobby_information">兴趣爱好</string>
-	<string name="title_activity_show_information">TA的资料</string>
-	<string name="title_activity_want_settings">我的需求</string>
-	<string name="hello_world">Hello world!</string>
-	<string name="title_activity_show_wants">我的需求</string>
-	<string name="title_activity_chat_platform">聊天</string>
-	<string name="title_activity_contact_card_settings">我的名片</string>
-	<string name="title_activity_show_contact_card">我的名片</string>
-	<string name="send_contact">递送名片</string>
-	<string name="action_information">TA的信息</string>
+	<string translatable="false" name="overt">公开</string>
+	<string translatable="false" name="hide">隐藏</string>
+	<string translatable="false" name="devBtn">附近的人</string>
+	<string translatable="false" name="hisBtn">历史记录</string>
+	<string translatable="false" name="RecBtn">为您推荐</string>
+	<string translatable="false" name="title_activity_personal_information">个人资料</string>
+	<string translatable="false" name="title_activity_contact_information">联系方式</string>
+	<string translatable="false" name="title_activity_education_information">教育背景</string>
+	<string translatable="false" name="title_activity_hobby_information">兴趣爱好</string>
+	<string translatable="false" name="title_activity_show_information">TA的资料</string>
+	<string translatable="false" name="title_activity_want_settings">我的需求</string>
+	<string translatable="false" name="hello_world">Hello world!</string>
+	<string translatable="false" name="title_activity_show_wants">我的需求</string>
+	<string translatable="false" name="title_activity_chat_platform">聊天</string>
+	<string translatable="false" name="title_activity_contact_card_settings">我的名片</string>
+	<string translatable="false" name="title_activity_show_contact_card">我的名片</string>
+	<string translatable="false" name="send_contact">递送名片</string>
+	<string translatable="false" name="action_information">TA的信息</string>
 
-	<string name="loading">获取中..</string>
-	<string name="app_analysis">排名</string>
-	<string name="active_time_distribution">使用手机时间分布</string>
-	<string name="ubma_title">用户行为分析</string>
-	<string name="active_time_analysis">时间分析</string>
-	<string name="option">选项</string>
-	<string name="ubma_about">关于</string>
-	<string name="ok">确定</string>
-	<string name="cancel">取消</string>
-	<string name="hint">提示</string>
-	<string name="ubmaAbout">用户行为分析\niamyfy@163.com\nyfy</string>
+	<string translatable="false" name="loading">获取中..</string>
+	<string translatable="false" name="app_analysis">排名</string>
+	<string translatable="false" name="active_time_distribution">使用手机时间分布</string>
+	<string translatable="false" name="ubma_title">用户行为分析</string>
+	<string translatable="false" name="active_time_analysis">时间分析</string>
+	<string translatable="false" name="option">选项</string>
+	<string translatable="false" name="ubma_about">关于</string>
+	<string translatable="false" name="ok">确定</string>
+	<string translatable="false" name="cancel">取消</string>
+	<string translatable="false" name="hint">提示</string>
+	<string translatable="false" name="ubmaAbout">用户行为分析\niamyfy@163.com\nyfy</string>
 
-	<string name="navigation_drawer_open">Open navigation drawer</string>
-	<string name="navigation_drawer_close">Close navigation drawer</string>
-	<string name="action_example">Example action</string>
+	<string translatable="false" name="navigation_drawer_open">Open navigation drawer</string>
+	<string translatable="false" name="navigation_drawer_close">Close navigation drawer</string>
+	<string translatable="false" name="action_example">Example action</string>
 
-	<string-array name="menu_array">
+	<string-array translatable="false" name="menu_array">
 		<item>首页</item>
 		<item>系统设置</item>
 		<item>个人资料</item>
@@ -66,13 +66,13 @@
 		<item>行为分析</item>
 	</string-array>
 
-	<string-array name="gender_array">
+	<string-array translatable="false" name="gender_array">
 		<item>男</item>
 		<item>女</item>
 		<item>无</item>
 	</string-array>
 
-	<string name="drawer_open">Open navigation drawer</string>
-	<string name="drawer_close">Close navigation drawer</string>
+	<string translatable="false" name="drawer_open">Open navigation drawer</string>
+	<string translatable="false" name="drawer_close">Close navigation drawer</string>
 
 </resources>
