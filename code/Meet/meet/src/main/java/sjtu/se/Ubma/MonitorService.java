@@ -26,7 +26,7 @@ public class MonitorService extends Service {
 	@Override
 	public void onCreate() {
 		Log.d("Meet", "MonitorService onCreate");
-		//Log.d("Meet", getFilesDir().toString());
+		Log.d("Meet", getFilesDir().toString());
 
 		Environment.activeTimeFile = new File(getFilesDir(), "activeTimeData");
 		activeTimeData = Environment.getActiveTimeData();

@@ -97,7 +97,8 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
+            try{selectItem(position);}
+            catch(Exception e){}
         }
     }
 
@@ -248,12 +249,16 @@ public class Search extends AppCompatActivity implements CreateNdefMessageCallba
 			return true;
 		}
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            mDrawerList.setItemChecked(0, true);
-            setTitle(mMenuTitles[0]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-            getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, mSearchFragment == null ?
-                    mSearchFragment = new SearchFragment():
-                    mSearchFragment).commit();
+            try {
+                mDrawerList.setItemChecked(0, true);
+                setTitle(mMenuTitles[0]);
+                mDrawerLayout.closeDrawer(mDrawerList);
+                getSupportFragmentManager().beginTransaction().replace(R.id.pref_fragment_container, mSearchFragment == null ?
+                        mSearchFragment = new SearchFragment() :
+                        mSearchFragment).commit();
+            } catch (Exception e) {
+
+            }
             return true;
         }
 		return super.onKeyDown(keyCode, event);

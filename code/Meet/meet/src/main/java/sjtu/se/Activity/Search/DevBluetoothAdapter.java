@@ -52,7 +52,9 @@ public class DevBluetoothAdapter extends RecyclerView.Adapter<DevBluetoothAdapte
         }
 
         public void onClick(View v) {
-            dev=list.get(getAdapterPosition());
+            if (getAdapterPosition() < 0 || getAdapterPosition() >= list.size()) return;
+            try {dev=list.get(getAdapterPosition());}
+            catch (Exception e) {return;}
 
             if(v==chat_button){
                 if(dev.mRemoteDevice == null) return;

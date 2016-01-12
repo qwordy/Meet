@@ -33,18 +33,10 @@ android {
 		sourceCompatibility JavaVersion.VERSION_1_7
 		targetCompatibility JavaVersion.VERSION_1_7
 	}
-	signingConfigs {
-		myConfig{
-			storeFile file("gradle.keystore")
-			storePassword "gradle"
-			keyAlias "gradle"
-			keyPassword "gradle"
-		}
-	}
+
 
 	buildTypes {
 		release {
-			signingConfig  signingConfigs.myConfig
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
