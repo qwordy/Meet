@@ -193,10 +193,12 @@ public class UserBehaviourSummary {
 					Math.round(sim * 100),
 					Math.round(appSim * 100),
 					Math.round(timeSim * 100));
+			Log.d("Meet", "Compare" + str);
 			return str;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Log.d("Meet", "Compare fail");
 		return "获取相似度失败";
 	}
 
@@ -208,7 +210,9 @@ public class UserBehaviourSummary {
 		int count = 0;
 		for (Object pkg : list0)
 			if (set.contains(pkg)) count++;
-		return (double) count / (list0.size() + list.size() - count);
+		int totalSize = list0.size() + list.size() - count;
+		if (totalSize == 0) return 0;
+		return (double) count / totalSize;
 	}
 
 	private double compareTimes(JSONArray list) {
@@ -224,6 +228,7 @@ public class UserBehaviourSummary {
 		for (Object time : list)
 			model += Math.pow((double) time, 2);
 		model = Math.sqrt(model);
+		if (model0 == 0 || model == 0) return 0;
 		return product / model0 / model;
 	}
 }
