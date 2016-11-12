@@ -1,6 +1,4 @@
-git add *.sh
-git add README
-git add -A code
+git add -A .
 git commit -m "$*"
 git push origin master
 
